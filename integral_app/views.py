@@ -46,4 +46,3 @@ def product_detailed(request):
     :return:
     '''
     return render(request, 'integral_app/Product-detailed.html')
-

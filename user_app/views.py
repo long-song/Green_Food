@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from user_app.models import UserInfo
-from user_app.froms import UserForm,RegisterForm
+from user_app.froms import UserForm, RegisterForm
 import datetime
 
 
@@ -42,6 +42,7 @@ def login(request):
     else:
         login_form = UserForm()
         return render(request, 'user_app/Login.html', locals())
+
 
 def registered(request):
     '''
@@ -100,6 +101,7 @@ def logout(request):
     # del request.session['user_name']
     return redirect("index")
 
+
 def user(request):
     '''
     访问我的订单
@@ -107,6 +109,8 @@ def user(request):
     :return:
     '''
     return render(request, 'user_app/user.html')
+
+
 def user_info(request):
     '''
     访问个人信息
@@ -114,6 +118,8 @@ def user_info(request):
     :return:
     '''
     return render(request, 'user_app/user_info.html')
+
+
 def user_password(request):
     '''
     访问修改密码
@@ -121,6 +127,8 @@ def user_password(request):
     :return:
     '''
     return render(request, 'user_app/user_Password.html')
+
+
 def user_collect(request):
     '''
     访问我的收藏
@@ -128,6 +136,8 @@ def user_collect(request):
     :return:
     '''
     return render(request, 'user_app/user_Collect.html')
+
+
 def user_address(request):
     '''
     访问收货地址管理

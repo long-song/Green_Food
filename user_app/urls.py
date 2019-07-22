@@ -1,11 +1,8 @@
 from django.contrib import admin
 from django.urls import path, include
 from user_app import views
-import sys
-sys.setrecursionlimit(1000000)
+
 urlpatterns = [
-    path('integral_app/', include('integral_app.urls')),  # 添加integral_app的urls
-    path('shop_app/', include('shop_app.urls')),  # 添加shop_app的urls
     path('index/', views.index, name='index'),  # 访问首页路由
     path('login/', views.login, name='login'),  # 访问登录界面路由
     path('registered/', views.registered, name='registered'),  # 访问注册界面路由

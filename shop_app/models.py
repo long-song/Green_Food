@@ -1,6 +1,8 @@
 from django.db import models
-from user_app.models import UserInfo,User_order,Adress
+from user_app.models import UserInfo, User_order, Adress
 from integral_app.models import Pro_sku
+
+
 # Create your models here.
 
 # 购物车CartInfo
@@ -9,8 +11,8 @@ from integral_app.models import Pro_sku
 # pros 商品（关联Pro_sku）
 # ccount 数量（数量）
 class CartInfo(models.Model):
-    user = models.ForeignKey(UserInfo, db_column='user_id',on_delete=models.CASCADE)
-    pros = models.ForeignKey(Pro_sku, db_column='good_id',on_delete=models.CASCADE)
+    user = models.ForeignKey(UserInfo, db_column='user_id', on_delete=models.CASCADE)
+    pros = models.ForeignKey(Pro_sku, db_column='good_id', on_delete=models.CASCADE)
     ccount = models.IntegerField('数量', db_column='cart_count')
 
     def __str__(self):
@@ -33,4 +35,3 @@ class Order(models.Model):
 
     def __str__(self):
         return self.orderNo
-

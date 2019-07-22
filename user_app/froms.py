@@ -18,7 +18,7 @@ class RegisterForm(forms.Form):
     password1 = forms.CharField(label="密码", max_length=256, min_length=6,
                                 error_messages={'required': '密码不能为空.', 'min_length': "至少6位"},
                                 widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-    password2 = forms.CharField(label="确认密码",max_length=256, min_length=6,
+    password2 = forms.CharField(label="确认密码", max_length=256, min_length=6,
                                 error_messages={'required': '密码不能为空.', 'min_length': "至少6位"},
                                 widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     phone = forms.IntegerField(label='手机号')

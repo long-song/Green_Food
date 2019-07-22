@@ -1,5 +1,6 @@
 from django.shortcuts import render
 
+
 # Create your views here.
 
 def Orders(request):
@@ -9,6 +10,7 @@ def Orders(request):
     :return:
     '''
     return render(request, 'shop_app/Orders.html')
+
 
 def shopping_cart(request):
     '''
