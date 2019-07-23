@@ -22,19 +22,19 @@
 <div class="top_header">
     <em class="left_img"></em>
     <div class="header clearfix" id="header">
-        <a href="#" class="logo_img"><img src="../static/images/logo.png"/></a>
+        <a href="#" class="logo_img"><img src="{% static 'images/logo.png' %}"/></a>
         <div class="header_Section">
             <div class="shortcut">
                 <ul>
                     {% if request.session.is_login %}
-                        <li class="hd_menu_tit"><em class="login_img"></em><a href="#">当前在线：{{ request.session.user_username }}</a></li>
+                        <li class="hd_menu_tit"><em class="login_img"></em><a href="{% url 'user_info' %}">当前在线：{{ request.session.user_username }}</a></li>
                         <li class="hd_menu_tit"><em class="registered_img"></em><a href="{% url 'logout' %}">注销</a></li>
                     {% else %}
                         <li class="hd_menu_tit"><em class="login_img"></em><a href="{% url 'login' %}">登录</a></li>
                         <li class="hd_menu_tit"><em class="registered_img"></em><a href="{% url 'registered' %}">注册</a></li>
                     {% endif %}
-                    <li class="hd_menu_tit"><em class="Collect_img"></em><a href="#">收藏夹</a></li>
-                    <li class="hd_menu_tit"><em class="cart_img"></em><a href="#">购物车（0）</a></li>
+                    <li class="hd_menu_tit"><em class="Collect_img"></em><a href="{% url 'user_collect' %}">收藏夹</a></li>
+                    <li class="hd_menu_tit"><em class="cart_img"></em><a href="{% url 'shopping_cart' %}">购物车</a></li>
                     <li class="hd_menu_tit list_name" data-addclass="hd_menu_hover"><a href="#">网站导航</a><em
                             class="navigation_img"></em>
 
@@ -52,12 +52,12 @@
             </div>
             <div class="nav" id="Navigation">
                 <ul class="Navigation_name">
-                    <li class=""><a href="#">首页</a></li>
+                    <li class=""><a href="{% url 'index' %}">首页</a></li>
                     <li class=""><a href="{% url 'integral' %}">所有果蔬</a></li>
                     <li class=""><a href="{% url 'group_buy' %}">活动专区</a></li>
-                    <li class=""><a href="#">水果馆</a></li>
-                    <li class=""><a href="#">蔬菜馆</a></li>
-                    <li class=""><a href="#">会员中心</a></li>
+                    <li class=""><a href="{% url 'products' %}">水果馆</a></li>
+                    <li class=""><a href="{% url 'products_list' %}">蔬菜馆</a></li>
+                    <li class=""><a href="{% url 'user_info' %}">会员中心</a></li>
                     <li class=""><a href="#">联系我们</a></li>
                 </ul>
             </div>
@@ -76,8 +76,8 @@
             </div>
             <div class="bd">
                 <ul>
-                    <li><a href="#" target="_blank"><img src="../static/images/AD_img.png"/></a></li>
-                    <li><a href="#" target="_blank"><img src="../static/images/AD_img.png"/></a></li>
+                    <li><a href="#" target="_blank"><img src="{% static 'images/AD_img.png' %}"/></a></li>
+                    <li><a href="#" target="_blank"><img src="{% static 'images/AD_img.png' %}"/></a></li>
                 </ul>
             </div>
             <a class="prev" href="javascript:void(0)"></a>
@@ -100,12 +100,12 @@
     <div class="mian">
         <div class="title_name"><a href="#" class="link_name">最新促销</a></div>
         <div class="carouFredSel">
-            <script type="text/javascript" src="../static/js/slider.js"></script>
+            <script type="text/javascript" src="{% static 'js/slider.js' %}"></script>
             <div id="center">
                 <div id="slider">
                     <div class="slide">
                         <a href="#" title="酒店会所设计" target="_blank"><img class="diapo" border="0"
-                                                                        src="../static/images/pic1.jpg"
+                                                                        src="{% static 'images/pic1.jpg' %}"
                                                                         style="opacity: 1; visibility: visible;"></a>
                         <div class="backgroundText_name">
                             <div class="product_info">
@@ -125,7 +125,7 @@
                     </div>
                     <div class="slide">
                         <a href="#" title="办公空间设计" target="_blank"><img class="diapo" border="0"
-                                                                        src="../static/images/pic2.jpg"
+                                                                        src="{% static 'images/pic2.jpg' %}"
                                                                         style="opacity: 0.7; visibility: visible;"></a>
                         <div class="backgroundText_name">
                             <div class="product_info">
@@ -145,7 +145,7 @@
                     </div>
                     <div class="slide">
                         <a href="#" title="地产样板房设计" target="_blank"><img class="diapo" border="0"
-                                                                         src="../static/images/pic3.jpg"
+                                                                         src="{% static 'images/pic3.jpg' %}"
                                                                          style="opacity: 0.7; visibility: visible;"></a>
                         <div class="backgroundText_name">
                             <div class="product_info">
@@ -165,7 +165,7 @@
                     </div>
                     <div class="slide">
                         <a href="#" title="豪宅别墅设计" target="_blank"><img class="diapo" border="0"
-                                                                        src="../static/images/pic4.jpg"
+                                                                        src="{% static 'images/pic4.jpg' %}"
                                                                         style="opacity: 0.7; visibility: visible;"></a>
                         <div class="backgroundText_name">
                             <div class="product_info">
@@ -200,8 +200,8 @@
                 <div class="title_name"></div>
                 <div class="list_title">
                     <ul>
-                        <li><h3>01</h3><a href="#">水果</a></li>
-                        <li><h3>02</h3><a href="#">蔬菜</a></li>
+                        <li><h3>01</h3><a href="{% url 'products' %}">水果</a></li>
+                        <li><h3>02</h3><a href="{% url 'products_list' %}">蔬菜</a></li>
                         <li><h3>03</h3><a href="#">干果</a></li>
                         <li><h3>04</h3><a href="#">其他</a></li>
                     </ul>
@@ -214,28 +214,28 @@
                 </div>
                 <ul class="">
                     <li class="advertising">
-                        <div class="AD1"><a href="#"><img src="../static/images/product_AD_10.png"/></a></div>
-                        <div class="AD2"><a href="#"><img src="../static/images/product_AD_14.png"/></a><a href="#"><img
-                                src="../static/images/product_AD_07.png"/></a></div>
-                        <div class="AD3"><a href="#"><img src="../static/images/product_AD_11.png"/></a></div>
+                        <div class="AD1"><a href="#"><img src="{% static 'images/product_AD_10.png' %}"/></a></div>
+                        <div class="AD2"><a href="#"><img src="{% static 'images/product_AD_14.png' %}"/></a><a href="#"><img
+                                src="{% static 'images/product_AD_07.png' %}"/></a></div>
+                        <div class="AD3"><a href="#"><img src="{% static 'images/product_AD_11.png' %}"/></a></div>
                     </li>
                     <li class="advertising">
-                        <div class="AD1"><a href="#"><img src="../static/images/product_AD_10.png"/></a></div>
-                        <div class="AD2"><a href="#"><img src="../static/images/product_AD_07.png"/></a><a href="#"><img
-                                src="../static/images/product_AD_14.png"/></a></div>
-                        <div class="AD3"><a href="#"><img src="../static/images/product_AD_11.png"/></a></div>
+                        <div class="AD1"><a href="#"><img src="{% static 'images/product_AD_10.png' %}"/></a></div>
+                        <div class="AD2"><a href="#"><img src="{% static 'images/product_AD_07.png' %}"/></a><a href="#"><img
+                                src="{% static 'images/product_AD_14.png' %}"/></a></div>
+                        <div class="AD3"><a href="#"><img src="{% static 'images/product_AD_11.png' %}"/></a></div>
                     </li>
                     <li class="advertising">
-                        <div class="AD1"><a href="#"><img src="../static/images/product_AD_10.png"/></a></div>
-                        <div class="AD2"><a href="#"><img src="../static/images/product_AD_14.png"/></a><a href="#"><img
-                                src="../static/images/product_AD_07.png"/></a></div>
-                        <div class="AD3"><a href="#"><img src="../static/images/product_AD_11.png"/></a></div>
+                        <div class="AD1"><a href="#"><img src="{% static 'images/product_AD_10.png' %}"/></a></div>
+                        <div class="AD2"><a href="#"><img src="{% static 'images/product_AD_14.png' %}"/></a><a href="#"><img
+                                src="{% static 'images/product_AD_07.png' %}"/></a></div>
+                        <div class="AD3"><a href="#"><img src="{% static 'images/product_AD_11.png' %}"/></a></div>
                     </li>
                     <li class="advertising">
-                        <div class="AD1"><a href="#"><img src="../static/images/product_AD_10.png"/></a></div>
-                        <div class="AD2"><a href="#"><img src="../static/images/product_AD_14.png"/></a><a href="#"><img
-                                src="../static/images/product_AD_07.png"/></a></div>
-                        <div class="AD3"><a href="#"><img src="../static/images/product_AD_11.png"/></a></div>
+                        <div class="AD1"><a href="#"><img src="{% static 'images/product_AD_10.png' %}"/></a></div>
+                        <div class="AD2"><a href="#"><img src="{% static 'images/product_AD_14.png' %}"/></a><a href="#"><img
+                                src="{% static 'images/product_AD_07.png' %}"/></a></div>
+                        <div class="AD3"><a href="#"><img src="{% static 'images/product_AD_11.png' %}"/></a></div>
                     </li>
                 </ul>
             </div>
@@ -262,7 +262,7 @@
                 <ul class="heros clearfix">
                     <li class="hero">
                         <a href="#" target="_blank" title="第一张图的说明">
-                            <img src="../static/images/pic1.jpg" class="thumb" alt=""/>
+                            <img src="{% static 'images/pic1.jpg' %}" class="thumb" alt=""/>
                         </a>
                         <div class="p_title_name">
                             <div class="p_recommend_info">
@@ -284,7 +284,7 @@
                     </li>
                     <li class="hero">
                         <a href="#" target="_blank" title="第三张图的说明">
-                            <img src="../static/images/pic3.jpg" class="thumb" alt=""/>
+                            <img src="{% static 'images/pic3.jpg' %}" class="thumb" alt=""/>
                         </a>
                         <div class="p_title_name">
                             <div class="p_recommend_info">
@@ -295,7 +295,7 @@
                     </li>
                     <li class="hero">
                         <a href="#" target="_blank" title="第4张图的说明">
-                            <img src="../static/images/pic4.jpg" class="thumb" alt=""/>
+                            <img src="{% static 'images/pic4.jpg' %}" class="thumb" alt=""/>
                         </a>
                         <div class="p_title_name">
                             <div class="p_recommend_info">
@@ -326,10 +326,10 @@
     <div class="footerbox">
         <div class="footer_info">
             <div class="footer_left">
-                <a href="#"><img src="../static/images/logo.png"/></a>
+                <a href="#"><img src="{% static 'images/logo.png' %}"/></a>
                 <p class="erwm">
-                    <img src="../static/images/erweim.png" width="80px" height="80px"/>
-                    <img src="../static/images/erweim.png" width="80px" height="80px"/>
+                    <img src="{% static 'images/erweim.png' %}" width="80px" height="80px"/>
+                    <img src="{% static 'images/erweim.png' %}" width="80px" height="80px"/>
                 <p>
             </div>
             <div class="helper_right clearfix">
