@@ -11,6 +11,8 @@ def index(request):
     :param request:
     :return:
     '''
+    print("获取请求方式：", request.method)
+    print("获取访问路径：", request.path)
     return render(request, 'index.html')
 
 
