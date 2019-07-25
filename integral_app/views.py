@@ -43,7 +43,7 @@ def products_list(request):
     '''
     vegetables = Pro_sku.objects.exclude(type_id=1)
 
-    return render(request, 'integral_app/Product-List.html')
+    return render(request, 'integral_app/Product-List.html',{'vegetables':vegetables})
 
 
 def product_detailed(request):
