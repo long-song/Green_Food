@@ -27,7 +27,7 @@ class UserInfo(models.Model):
     t_name = models.CharField(max_length=10,null=True,verbose_name = '真实姓名')
     gender = models.IntegerField(choices=sex,default=1,verbose_name = '性别')
     email = models.EmailField(null=True,unique=True,verbose_name = '邮箱')
-    birthday = models.DateField(auto_now=True, verbose_name='生日',null=True)
+    birthday = models.DateField(verbose_name='生日',null=True)
     up_time = models.DateTimeField(auto_now_add=True,null=True,verbose_name = '注册时间')
     allow_order = models.IntegerField(verbose_name="订单管理权限",default=0)
     allow_data = models.IntegerField(verbose_name="数据管理权限",default=0)
