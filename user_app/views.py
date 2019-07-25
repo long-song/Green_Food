@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
+from django.http import JsonResponse
 from user_app.models import UserInfo
 from user_app.froms import UserForm, RegisterForm
 import datetime
@@ -29,12 +30,14 @@ def login(request):
         if login_form.is_valid():
             username = login_form.cleaned_data['username']
             password = login_form.cleaned_data['password']
+            print(username,password)
             try:
                 user = UserInfo.objects.get(username=username)
                 if user.password == password:
                     request.session['is_login'] = True
                     request.session['user_id'] = user.id
                     request.session['user_username'] = user.username
+                    # request.session['user_head'] = user.head_img
                     return redirect('index')
                 else:
                     message = "密码不正确！"
@@ -73,7 +76,7 @@ def registered(request):
                     message = '用户已经存在，请重新选择用户名！'
                     return render(request, 'user_app/registered.html', locals())
                 else:
-                    same_phone_user = UserInfo.objects.filter(phone=None)
+                    same_phone_user = UserInfo.objects.filter(phone=phone)
                     if same_phone_user:  # 手机号唯一
                         message = '该手机号已被注册，请使用别的手机号！'
                         return render(request, 'user_app/registered.html', locals())
@@ -90,7 +93,6 @@ def registered(request):
                     return redirect('login')  # 自动跳转到登录页面
     register_form = RegisterForm()
     return render(request, 'user_app/registered.html', locals())
-
 
 def logout(request):
     if not request.session.get('is_login', None):
@@ -119,7 +121,13 @@ def user_info(request):
     :param request:
     :return:
     '''
-    return render(request, 'user_app/user_info.html')
+    if request.session.get('is_login', None):
+        a = request.session['user_id']
+        user = UserInfo.objects.get(id=a)
+        # print(user.head_img)
+        return render(request, 'user_app/user_info.html',{'user':user})
+    else:
+        return render(request, 'user_app/user_info.html')
 
 
 def user_password(request):
@@ -147,3 +155,38 @@ def user_address(request):
     :return:
     '''
     return render(request, 'user_app/user_address.html')
+
+def user_info_set(request):
+    '''
+    访问个人资料修改页面
+    :param request:
+    :return:
+    '''
+    print(request.method)
+    if request.method == "GET":
+        if request.session.get('is_login', None):
+            a = request.session['user_id']
+            user = UserInfo.objects.get(id=a)
+            print(user.head_img)
+            return render(request, 'user_app/user_info_set.html', {'user': user})
+        else:
+            return render(request, 'user_app/user_info_set.html')
+    if request.method == "POST":
+        new_username = request.POST.get('new_name')
+        new_t_name = request.POST.get('new_t_name')
+        new_gender = request.POST.get('1')
+        new_email = request.POST.get('new_email')
+        new_birthday = request.POST.get('new_birthday')
+        new_phone = request.POST.get('new_phone')
+        print(new_gender,new_username,new_birthday,new_email,new_phone,new_t_name)
+        a = request.session['user_id']
+        user = UserInfo.objects.get(id=a)
+        user.username = new_username
+        user.t_name = new_t_name
+        user.phone = new_phone
+        user.gender = new_gender
+        user.birthday = new_birthday
+        user.email = new_email
+        user.save()
+        return render(request, 'user_app/user_info.html',{'user':user})
+    return render(request, 'user_app/user_info_set.html')

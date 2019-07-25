@@ -83,7 +83,7 @@
             <form class="form-control" action="{% url 'registered' %}" method="post">
                 <div class="u_register">
                     {% if message %}
-                        <div class="alert alert-warning">{{ message }}</div>
+                        <div class="alert alert-warning" style="text-align: center;color: red;height: 20px">{{ message }}</div>
                     {% endif %}
 
                     {% csrf_token %}
@@ -91,7 +91,8 @@
                         <li><label class="name">手机号码：</label><input required="required" name="phone" type="text"
                                                                     class="text_Add"
                                                                     pattern="^1([38]\d|5[0-35-9]|7[3678])\d{8}$"
-                                                                    placeholder="请输入您的手机号"></li>
+                                                                    placeholder="请输入您的手机号"
+                                                                    ></li>
                         <li><label class="name">用户名称：</label><input name="username" type="text" class="text_Add"></li>
                         <li><label class="name">设置密码：</label><input required="required" name="password1" type="password"
                                                                     class="text_Add"
