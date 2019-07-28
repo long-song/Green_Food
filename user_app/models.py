@@ -51,6 +51,7 @@ class Adress(models.Model):
     aname = models.CharField(verbose_name='收货人', max_length=50, null=False)
     ads = models.CharField(verbose_name='地址', max_length=300, null=False)
     aphone = models.CharField(verbose_name='电话', max_length=20, null=False)
+    user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.aname
