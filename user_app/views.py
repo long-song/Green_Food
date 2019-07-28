@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from user_app.models import UserInfo
 from user_app.froms import UserForm, RegisterForm
+import json
 import datetime
-
 
 # Create your views here.
 def index(request):
@@ -16,59 +16,13 @@ def index(request):
     print("获取访问路径：", request.path)
     return render(request, 'index.html')
 
-import random
-from aliyunsdkcore.client import AcsClient
-from aliyunsdkcore.request import CommonRequest
-
-'''发送短信(手机,6位验证码)'''
-def send_sms(phone, code):
-    client = AcsClient('LTAIEx3Gbdbceg2C', 'MsCoWUm3x2iXaIcvtqhQLi9yj6nHxX', 'cn-hangzhou')
-
-    code = "{'code':%s}" % (code)
-    request = CommonRequest()
-    request.set_accept_format('json')
-    request.set_domain('dysmsapi.aliyuncs.com')
-    request.set_method('POST')
-    request.set_protocol_type('https')  # https | http
-    request.set_version('2017-05-25')
-    request.set_action_name('SendSms')
-
-    request.add_query_param('RegionId', 'cn-hangzhou')
-    request.add_query_param('PhoneNumbers', phone)
-    request.add_query_param('SignName', '北网实训组')
-    request.add_query_param('TemplateCode', 'SMS_165745016')
-    request.add_query_param('TemplateParam', code)
-
-    response = client.do_action(request) # 开始向手机发送验证码
-    # python2:  print(response)
-    print(str(response, encoding='utf-8'))
-
-    return str(response, encoding='utf-8')
-
-# 生成验证码函数
-def get_code(n=6, alpha=True):
-    """
-    生成随机验证码
-    :param n: 代表生成几位验证码
-    :param alpha: True表示生成带有字母的  False不带字母的
-    :return:
-    """
-    s = ''  # 创建字符串变量,存储生成的验证码
-    for i in range(n):  # 通过for循环控制验证码位数
-        num = random.randint(0, 9)  # 生成随机数字0-9
-        if alpha:  # 需要字母验证码,不用传参,如果不需要字母的,关键字alpha=False
-            upper_alpha = chr(random.randint(65, 90)) # chr()：将数字转换成对应的ASCII值
-            lower_alpha = chr(random.randint(97, 122))
-            num = random.choice([num, upper_alpha, lower_alpha])
-        s = s + str(num)
-    return s
-
 # 登录验证函数
 def login_required(view_func):
     """
     登录装饰器函数
     :return:
     """
+
     # print('login_required=',view_func)
     def wrapper(request, *args, **kwargs):
         if not request.session.has_key('is_login'):
@@ -78,43 +32,70 @@ def login_required(view_func):
 
     return wrapper
 
+
 # 登录函数
+from commom_phone.code import *
+from commom_phone.phone_num4 import *
+
+# 获取手机号发送验证码
+# 在发送ajax的post请求时解决跨网站请求
+from django.views.decorators.csrf import csrf_exempt
+@csrf_exempt
+def phone_code(request):
+    '''
+    获取手机号发送验证码
+    :param request:
+    :return:
+    '''
+    if request.method == "POST":
+        phone = request.POST.get('phone')
+        phone_n = phone_num(phone)
+        if phone_n != '请输入正确的手机号':
+            code = get_code(6, False)
+            print(code)
+            send_sms(phone, code)
+            request.session['code'] = code
+            message = "OK"
+            return JsonResponse({'message':message})
+        else:
+            print(1)
+            message = "手机号不正确"
+            return JsonResponse({'message':message})
+
+
 def login(request):
     '''
         访问登录页面
         :param request:
         :return:
         '''
-    if request.method == "GET":
-        code = get_code(6 , False)
-        send_sms('15103455631', code)
-        print(code)
-        request.session['code'] = code
-        return render(request, 'user_app/Login.html')
+    if request.session.has_key('is_login'):
+        return redirect('user_info')
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
         var_code = request.POST.get('var_code')
-        code = request.session['code']
-        print(username,password,var_code)
-        if var_code == code:
-            try:
-                user = UserInfo.objects.get(username=username)
-                if user.password == password:
+        code = request.session.get('code')
+        try:
+            user = UserInfo.objects.get(username=username)
+            if user.password == password:
+                if var_code == code:
                     request.session['is_login'] = True
                     request.session['user_id'] = user.id
                     request.session['user_username'] = user.username
                     # request.session['user_head'] = user.head_img
                     return redirect('index')
                 else:
-                    message = "密码不正确！"
-            except:
-                message = "用户不存在！"
-        else:
-            message = "验证码不正确！"
-        return render(request, 'user_app/Login.html', locals())
+                    message = "验证码不正确！"
+            else:
+                message = "密码不正确！"
+        except:
+            # print(1)
+            message = "用户不存在！"
+        return render(request, 'user_app/Login.html',locals())
     else:
         return render(request, 'user_app/Login.html', locals())
+
 
 # 注册函数
 def registered(request):
@@ -159,6 +140,7 @@ def registered(request):
     register_form = RegisterForm()
     return render(request, 'user_app/registered.html', locals())
 
+
 # 注销函数
 @login_required
 def logout(request):
@@ -169,6 +151,7 @@ def logout(request):
     # del request.session['user_name']
     return redirect("index")
 
+
 # 我的订单函数
 @login_required
 def user(request):
@@ -178,6 +161,7 @@ def user(request):
     :return:
     '''
     return render(request, 'user_app/user.html')
+
 
 # 个人信息函数
 @login_required
@@ -190,7 +174,8 @@ def user_info(request):
     a = request.session['user_id']
     user = UserInfo.objects.get(id=a)
     # print(user.head_img)
-    return render(request, 'user_app/user_info.html',{'user':user})
+    return render(request, 'user_app/user_info.html', {'user': user})
+
 
 # 修改密码函数
 @login_required
@@ -202,6 +187,7 @@ def user_password(request):
     '''
     return render(request, 'user_app/user_Password.html')
 
+
 # 我的收藏函数
 @login_required
 def user_collect(request):
@@ -212,6 +198,7 @@ def user_collect(request):
     '''
     return render(request, 'user_app/user_Collect.html')
 
+
 # 我的地址管理函数
 @login_required
 def user_address(request):
@@ -221,6 +208,7 @@ def user_address(request):
     :return:
     '''
     return render(request, 'user_app/user_address.html')
+
 
 # 个人资料修改函数
 @login_required
@@ -242,7 +230,7 @@ def user_info_set(request):
         new_email = request.POST.get('new_email')
         new_birthday = request.POST.get('new_birthday')
         new_phone = request.POST.get('new_phone')
-        print(new_gender,new_username,new_birthday,new_email,new_phone,new_t_name)
+        print(new_gender, new_username, new_birthday, new_email, new_phone, new_t_name)
         a = request.session['user_id']
         user = UserInfo.objects.get(id=a)
         user.username = new_username
@@ -252,5 +240,5 @@ def user_info_set(request):
         user.birthday = new_birthday
         user.email = new_email
         user.save()
-        return render(request, 'user_app/user_info.html',{'user':user})
+        return render(request, 'user_app/user_info.html', {'user': user})
     return render(request, 'user_app/user_info_set.html')

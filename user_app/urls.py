@@ -5,6 +5,7 @@ from user_app import views
 urlpatterns = [
     path('index/', views.index, name='index'),  # 访问首页路由
     path('login/', views.login, name='login'),  # 访问登录界面路由
+    path('phone_code/', views.phone_code, name='phone_code'), # 获取手机号发送验证码
     path('registered/', views.registered, name='registered'),  # 访问注册界面路由
     path('logout/', views.logout, name='logout'),  # 访问注销路由
     path('captcha/', include('captcha.urls')),  # 访问验证码路由
