@@ -14,7 +14,83 @@
     <script src="{% static 'js/jquery.foucs.js' %}" type="text/javascript"></script>
     <script src="http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=402727"></script>
     <title>登陆</title>
+    <script>
+        $(function () {
+            $("#phone_num").blur(function () {
+                var phone = $("#phone_num").val();
+                var reg = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+                if (reg.test(phone)) {
+                    function settime(obj) {
+                        if (countdown == 0) {
+                            obj.removeAttribute("disabled");
+                            obj.value = "免费获取验证码";
+                            countdown = 60;
+                            return;
+                        } else {
+                            obj.setAttribute("disabled", true);
+                            obj.value = "重新发送(" + countdown + ")";
+                            countdown--;
+                        }
+                        setTimeout(function () {
+                                settime(obj)
+                            }
+                            , 1000)
+                    }
+                    $(function () {
+                        $('#forcode').click(function () {
+                            phone_num = $("#phone_num").val();
+                            $.post('{% url 'phone_code' %}', {'phone': phone_num},
+                                function (data) {
+                                    if (data.message == 'OK') {
+                                        alert('手机验证码已发送，请注意查收！')
+                                    }else{
+                                        alert(data.message)
+                                    }
+                                })
+                        })
+                    })
+                } else {
+                    $("#Error_phone").text("请输入正确手机号。");
+                }
+            })
+        });
+    </script>
+    <!--发送按钮倒计时代码-->
+{#    <script type="text/javascript">#}
+{#        var countdown = 60;#}
+{##}
+{#        function settime(obj) {#}
+{#            if (countdown == 0) {#}
+{#                obj.removeAttribute("disabled");#}
+{#                obj.value = "免费获取验证码";#}
+{#                countdown = 60;#}
+{#                return;#}
+{#            } else {#}
+{#                obj.setAttribute("disabled", true);#}
+{#                obj.value = "重新发送(" + countdown + ")";#}
+{#                countdown--;#}
+{#            }#}
+{#            setTimeout(function () {#}
+{#                    settime(obj)#}
+{#                }#}
+{#                , 1000)#}
+{#        }#}
+{##}
+{#    </script>#}
 
+    <!--向后台通过ajax发送手机号码数据-->
+    {#    <script>#}
+    {#        $(function (){$('#forcode').click(function () {#}
+    {#            phone_num = $("#phone_num").val();#}
+    {#            $.post('{% url 'phone_code' %}',{'phone':phone_num},#}
+    {#            function (data) {#}
+    {#                if (data.message=='OK'){#}
+    {#                    alert('手机验证码已发送，请注意查收！')#}
+    {#                 }#}
+    {#alert(data.message)   #}
+    {#            })#}
+    {#        })})#}
+    {#    </script>#}
 </head>
 
 <body>
@@ -27,13 +103,15 @@
             <div class="shortcut">
                 <ul>
                     {% if request.session.is_login %}
-                        <li class="hd_menu_tit"><em class="login_img"></em><a href="#">当前在线：{{ request.session.user_username }}</a></li>
+                        <li class="hd_menu_tit"><em class="login_img"></em><a
+                                href="#">当前在线：{{ request.session.user_username }}</a></li>
                         <li class="hd_menu_tit"><em class="registered_img"></em><a href="{% url 'logout' %}">注销</a></li>
                     {% else %}
                         <li class="hd_menu_tit"><em class="login_img"></em><a href="{% url 'login' %}">登录</a></li>
-                        <li class="hd_menu_tit"><em class="registered_img"></em><a href="{% url 'registered' %}">注册</a></li>
+                        <li class="hd_menu_tit"><em class="registered_img"></em><a href="{% url 'registered' %}">注册</a>
+                        </li>
                     {% endif %}
-                    <li class="hd_menu_tit"><em class="Collect_img"></em><a href="#">收藏夹</a></li>
+                    <li class="hd_menu_tit"><em class="Collect_img"></em><a href="{% url 'user_collect' %}">收藏夹</a></li>
                     <li class="hd_menu_tit"><em class="cart_img"></em><a href="#">购物车（0）</a></li>
                     <li class="hd_menu_tit list_name" data-addclass="hd_menu_hover"><a href="#">网站导航</a><em
                             class="navigation_img"></em>
@@ -52,13 +130,13 @@
             </div>
             <div class="nav" id="Navigation">
                 <ul class="Navigation_name">
-                    <li class=""><a herf="#">首页</a></li>
-                    <li class=""><a herf="#">所有果蔬</a></li>
-                    <li class=""><a herf="#">活动专区</a></li>
-                    <li class=""><a herf="#">水果馆</a></li>
-                    <li class=""><a herf="#">蔬菜馆</a></li>
-                    <li class=""><a herf="#">会员中心</a></li>
-                    <li class=""><a herf="#">联系我们</a></li>
+                    <li class=""><a href="{% url 'index' %}">首页</a></li>
+                    <li class=""><a href="{% url 'integral' %}">所有果蔬</a></li>
+                    <li class=""><a href="{% url 'group_buy' %}">活动专区</a></li>
+                    <li class=""><a href="{% url 'products' %}">水果馆</a></li>
+                    <li class=""><a href="{% url 'products_list' %}">蔬菜馆</a></li>
+                    <li class=""><a href="{% url 'user_info' %}">会员中心</a></li>
+                    <li class=""><a href="#">联系我们</a></li>
                 </ul>
             </div>
             <script>$("#Navigation").slide({titCell: ".Navigation_name li"});</script>
@@ -71,21 +149,37 @@
 <div class="Inside_pages clearfix">
     <!--登录样式-->
     <div class="login">
-        <div class="style_login clearfix">
+        <div class="style_login clearfix" style="height: 445px">
             <form class="form-control" action="{% url 'login' %}" method="post">
                 <div class="layout">
-                {% csrf_token %}
+                    {% if message %}
+                        <div class="alert alert-warning"
+                             style="text-align: center;color: red;height: 20px">{{ message }}</div>
+                    {% endif %}
+                    {% csrf_token %}
                     <div class="login_title">登录</div>
                     <div class="item item-fore1"><label for="loginname" class="login-label name-label"></label><input
-                            name="username" type="text" class="text" placeholder="请输入用户" id="loginname" required="required"></div>
+                            name="username" type="text" class="text" placeholder="请输入用户" id="loginname"
+                            required="required"></div>
                     <div class="item item-fore2"><label for="nloginpwd" class="login-label pwd-label"></label><input
-                            name="password" type="password" class="text" placeholder="用户密码" id="nloginpwd" required="required"></div>
-                    {% if message %}
-                        <div class="alert alert-warning" style="color: red;font-size: larger;text-align: center">{{ message }}</div>
-                    {% endif %}
-                <div class="item item-fore2" style="height: 48px">{{ login_form.captcha }}</div>
-{#                    <div class="auto-login"><label class="auto-label"><input type="checkbox" id="rememberMe"><span>记住账号和密码</span></label>#}
-{#                    </div>#}
+                            name="password" type="password" class="text" placeholder="用户密码" id="nloginpwd"
+                            required="required"></div>
+                    <div class="item item-fore2" style="height: 48px"><input id="phone_num"
+                                                                             name="phone" type="text"
+                                                                             placeholder="请输入手机号……"
+                                                                             style="height: 42px;width: 200px;"
+                                                                             pattern="^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$"
+                                                                             required="required"><span
+                            id="Error_phone"></span></div>
+                    <div class="item item-fore2" style="height: 48px"><input
+                            name="var_code" type="text" required="required" placeholder="请填写验证码"
+                            style="height: 42px;width: 200px;"><input
+                            type="button" id="forcode"
+                            onclick="settime(this)"
+                            value="免费获取验证码"
+                            class="btn btn-success"></div>
+                    {#                    <div class="auto-login"><label class="auto-label"><input type="checkbox" id="rememberMe"><span>记住账号和密码</span></label>#}
+                    {#                    </div>#}
                     <div class="login-btn"><input type="submit" value="登&nbsp;&nbsp;录" class="btn_login"></div>
                     <div class="login_link"><a href="{% url 'registered' %}">免费注册</a> | <a href="#">忘记密码</a></div>
                 </div>

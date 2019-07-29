@@ -23,11 +23,12 @@ class UserInfo(models.Model):
     username = models.CharField(max_length=15,unique=True,verbose_name = '用户名')
     password = models.CharField(max_length=256,verbose_name = '密码')
     phone = models.CharField(unique=True,max_length=11,verbose_name = '手机号')
-    head_img = models.ImageField(upload_to='static/images',default='static/images/product_img_17.png',verbose_name = '头像')
+    head_img = models.ImageField(upload_to='static/images',default='images/product_img_17.png',verbose_name = '头像')
     t_name = models.CharField(max_length=10,null=True,verbose_name = '真实姓名')
     gender = models.IntegerField(choices=sex,default=1,verbose_name = '性别')
     email = models.EmailField(null=True,unique=True,verbose_name = '邮箱')
-    up_time = models.DateTimeField(auto_now_add=True,verbose_name = '注册时间')
+    birthday = models.DateField(verbose_name='生日',null=True)
+    up_time = models.DateTimeField(auto_now_add=True,null=True,verbose_name = '注册时间')
     allow_order = models.IntegerField(verbose_name="订单管理权限",default=0)
     allow_data = models.IntegerField(verbose_name="数据管理权限",default=0)
     superuser = models.IntegerField(verbose_name="超级管理员", default=0)
@@ -51,6 +52,8 @@ class Adress(models.Model):
     ads = models.CharField(verbose_name='地址', max_length=300, null=False)
     aphone = models.CharField(verbose_name='电话', max_length=20, null=False)
     user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+    area = models.CharField(verbose_name='地区',max_length=50,null=True)
+    postcode = models.CharField(verbose_name='邮编', max_length=20, null=True)
 
     def __str__(self):
         return self.aname

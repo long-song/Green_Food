@@ -13,6 +13,35 @@
     <script src="{% static 'js/common_js.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/jquery.foucs.js' %}" type="text/javascript"></script>
     <title>个人资料</title>
+    <style>
+        .col-md-6 {
+            width: 500px;
+            height: 500px;
+            font-size: 15px;
+            font-family: "微软雅黑 Light";
+            letter-spacing: 8px;
+        }
+
+        .row1 {
+            width: 500px;
+            height: 120px;
+        }
+
+        .row {
+            width: 500px;
+            height: 50px;
+        }
+
+        .text-right1 {
+            width: 500px;
+            height: 100px;
+        }
+
+        .text-right {
+            width: 500px;
+            height: 50px;
+        }
+    </style>
 </head>
 
 <body>
@@ -20,14 +49,21 @@
 <div class="top_header">
     <em class="left_img"></em>
     <div class="header clearfix" id="header">
-        <a href="#" class="logo_img"><img src="../../static/images/logo.png"/></a>
+        <a href="#" class="logo_img"><img src="{% static 'images/logo.png' %}"/></a>
         <div class="header_Section">
             <div class="shortcut">
                 <ul>
-                    <li class="hd_menu_tit"><em class="login_img"></em><a href="#">登录</a></li>
-                    <li class="hd_menu_tit"><em class="registered_img"></em><a href="#">注册</a></li>
-                    <li class="hd_menu_tit"><em class="Collect_img"></em><a href="#">收藏夹</a></li>
-                    <li class="hd_menu_tit"><em class="cart_img"></em><a href="#">购物车（0）</a></li>
+                    {% if request.session.is_login %}
+                        <li class="hd_menu_tit"><em class="login_img"></em><a
+                                href="{% url 'user_info' %}">当前在线：{{ request.session.user_username }}</a></li>
+                        <li class="hd_menu_tit"><em class="registered_img"></em><a href="{% url 'logout' %}">注销</a></li>
+                    {% else %}
+                        <li class="hd_menu_tit"><em class="login_img"></em><a href="{% url 'login' %}">登录</a></li>
+                        <li class="hd_menu_tit"><em class="registered_img"></em><a href="{% url 'registered' %}">注册</a>
+                        </li>
+                    {% endif %}
+                    <li class="hd_menu_tit"><em class="Collect_img"></em><a href="{% url 'user_collect' %}">收藏夹</a></li>
+                    <li class="hd_menu_tit"><em class="cart_img"></em><a href="{% url 'shopping_cart' %}">购物车</a></li>
                     <li class="hd_menu_tit list_name" data-addclass="hd_menu_hover"><a href="#">网站导航</a><em
                             class="navigation_img"></em>
 
@@ -45,13 +81,13 @@
             </div>
             <div class="nav" id="Navigation">
                 <ul class="Navigation_name">
-                    <li class=""><a herf="#">首页</a></li>
-                    <li class=""><a herf="#">所有果蔬</a></li>
-                    <li class=""><a herf="#">活动专区</a></li>
-                    <li class=""><a herf="#">水果馆</a></li>
-                    <li class=""><a herf="#">蔬菜馆</a></li>
-                    <li class=""><a herf="#">会员中心</a></li>
-                    <li class=""><a herf="#">联系我们</a></li>
+                    <li class=""><a href="{% url 'index' %}">首页</a></li>
+                    <li class=""><a href="{% url 'integral' %}">所有果蔬</a></li>
+                    <li class=""><a href="{% url 'group_buy' %}">活动专区</a></li>
+                    <li class=""><a href="{% url 'products' %}">水果馆</a></li>
+                    <li class=""><a href="{% url 'products_list' %}">蔬菜馆</a></li>
+                    <li class=""><a href="{% url 'user_info' %}">会员中心</a></li>
+                    <li class=""><a href="#">联系我们</a></li>
                 </ul>
             </div>
             <script>$("#Navigation").slide({titCell: ".Navigation_name li"});</script>
@@ -72,70 +108,91 @@
         </div>
     </div>
 </div>
-<!--用户中心-->
-<div class="Inside_pages clearfix">
+{% if request.session.is_login %}
+    <!--用户中心-->
+    <div class="Inside_pages clearfix">
     <div class="clearfix user">
         <div class="user_left">
             <div class="user_info">
-                <div class="Head_portrait"><img src="../../static/images/product_img_17.png" width="80px" height="80px"/>
+                <div class="Head_portrait"><img src="{% static user.head_img.url %}" width="80px"
+                                                height="80px"/>
                     <!--头像区域--></div>
-                <div class="user_name">用户蜜甘草<a href="#">[个人资料]</a></div>
+                <div class="user_name">{{ request.session.user_username }}<a href="#">[个人资料]</a></div>
             </div>
             <ul class="Section">
-                <li><a href="#"><em></em><span>我的订单</span></a></li>
-                <li><a href="#"><em></em><span>个人信息</span></a></li>
-                <li><a href="#"><em></em><span>修改密码</span></a></li>
-                <li><a href="#"><em></em><span>我的评论</span></a></li>
-                <li><a href="#"><em></em><span>我的收藏</span></a></li>
-                <li><a href="#"><em></em><span>收货地址管理</span></a></li>
+                <li><a href="{% url 'user' %}"><em></em><span>我的订单</span></a></li>
+                <li><a href="{% url 'user_info' %}"><em></em><span>个人信息</span></a></li>
+                <li><a href="{% url 'user_password' %}"><em></em><span>修改密码</span></a></li>
+                <li><a href="{% url 'user_collect' %}"><em></em><span>我的评论</span></a></li>
+                <li><a href="{% url 'user_collect' %}"><em></em><span>我的收藏</span></a></li>
+                <li><a href="{% url 'user_address' %}"><em></em><span>收货地址管理</span></a></li>
             </ul>
         </div>
+
         <div class="user_right">
             <div class="user_Borders">
                 <div class="title_name">
-                    <span class="name">个人信息设置</span>
+                    <span class="name">个人信息</span>
                 </div>
                 <div class="about_user_info">
-                    <form id="form1" name="form1" method="post" action="">
-                        <div class="user_layout">
-                            <ul>
-                                <li><label class="user_title_name">用户头像：</label></li>
-                                <li><label class="user_title_name">用户昵称：</label><input name="" type="text"
-                                                                                       class="add_text"/><em>*</em></li>
-                                <li><label class="user_title_name">真实姓名：</label><input name="" type="text"
-                                                                                       class="add_text"/><em>*</em></li>
-                                <li><label class="user_title_name">用户性别：</label>
-                                    <label class="sex"> <input type="radio" name="RadioGroup1" value="1"
-                                                               id="RadioGroup1_0"/><span>男</span></label>
-                                    <label class="sex"><input type="radio" name="RadioGroup1" value="2"
-                                                              id="RadioGroup1_1"/><span>女</span></label>
-                                    <em>*</em>
-                                </li>
-                                <li><label class="user_title_name">手&nbsp;机&nbsp;号：</label><input name="" type="text"
-                                                                                                  class="add_text"/><em>*</em>
-                                </li>
-                                <li><label class="user_title_name">邮箱地址：</label><input name="" type="text"
-                                                                                       class="add_text"/><em>*</em></li>
-                            </ul>
-                            <div class="operating_btn"><input name="name" type="submit" value="提交" class="submit—btn"/>
+                    <div class="user_layout">
+                        <div class="col-md-6">
+                            <div class="row1">
+                                <div class="text-right1"><span>用户头像:<img
+                                        src="{% static user.head_img.url %}" width="80px"
+                                        height="80px"/></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="text-right"><span>用户名:{{ user.username }}</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="text-right"><span>真实姓名:{{ user.t_name }}</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="text-right"><span>性别:{{ user.gender }}</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="text-right"><span>邮箱:{{ user.email }}</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="text-right"><span>生日:{{ user.birthday }}</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="text-right"><span>电话:{{ user.phone }}</span></div>
+                            </div>
+                            <div class="row">
+                                <a href="{% url 'user_info_set' %}">
+                                    <button class="set">编辑我的信息</button>
+                                </a>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
-</div>
+{% else %}
+    <div class="Inside_pages clearfix">
+    <div class="clearfix user" style="height: 250px">
+        <div class="user_left">
+
+                暂时还未有用户登录……
+
+        </div>
+    </div>
+    </div>
+{% endif %}
 <!--底部样式-->
 <div class="footer">
     <div class="footer_img_bg"></div>
     <div class="footerbox">
         <div class="footer_info">
             <div class="footer_left">
-                <a href="#"><img src="../../static/images/logo.png"/></a>
+                <a href="#"><img src="{% static 'images/logo.png' %}"/></a>
                 <p class="erwm">
-                    <img src="../../static/images/erweim.png" width="80px" height="80px"/>
-                    <img src="../../static/images/erweim.png" width="80px" height="80px"/>
+                    <img src="{% static 'images/erweim.png' %}" width="80px" height="80px"/>
+                    <img src="{% static 'images/erweim.png' %}" width="80px" height="80px"/>
                 <p>
             </div>
             <div class="helper_right clearfix">

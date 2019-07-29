@@ -1,0 +1,223 @@
+{% load static %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="{% static 'css/css.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'css/common.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" type="text/css"/>
+    <script src="{% static 'js/jquery.min.1.8.2.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/jquery.SuperSlide.2.1.1.js' %}" type="text/javascript"></script>
+    <script type="text/javascript" src="{% static 'js/slider.js' %}"></script>
+    <script src="{% static 'js/common_js.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/jquery.foucs.js' %}" type="text/javascript"></script>
+    <title>个人资料</title>
+    <style>
+        .col-md-6 {
+            width: 500px;
+            height: 500px;
+            font-size: 15px;
+            font-family: "微软雅黑 Light";
+            letter-spacing: 8px;
+        }
+
+        .row1 {
+            width: 500px;
+            height: 120px;
+        }
+
+        .row {
+            width: 500px;
+            height: 50px;
+        }
+
+        .text-right1 {
+            width: 500px;
+            height: 100px;
+        }
+
+        .text-right {
+            width: 500px;
+            height: 50px;
+        }
+    </style>
+</head>
+
+<body>
+<!--顶部样式-->
+<div class="top_header">
+    <em class="left_img"></em>
+    <div class="header clearfix" id="header">
+        <a href="#" class="logo_img"><img src="{% static 'images/logo.png' %}"/></a>
+        <div class="header_Section">
+            <div class="shortcut">
+                <ul>
+                    {% if request.session.is_login %}
+                        <li class="hd_menu_tit"><em class="login_img"></em><a
+                                href="{% url 'user_info' %}">当前在线：{{ request.session.user_username }}</a></li>
+                        <li class="hd_menu_tit"><em class="registered_img"></em><a href="{% url 'logout' %}">注销</a></li>
+                    {% else %}
+                        <li class="hd_menu_tit"><em class="login_img"></em><a href="{% url 'login' %}">登录</a></li>
+                        <li class="hd_menu_tit"><em class="registered_img"></em><a href="{% url 'registered' %}">注册</a>
+                        </li>
+                    {% endif %}
+                    <li class="hd_menu_tit"><em class="Collect_img"></em><a href="{% url 'user_collect' %}">收藏夹</a></li>
+                    <li class="hd_menu_tit"><em class="cart_img"></em><a href="{% url 'shopping_cart' %}">购物车</a></li>
+                    <li class="hd_menu_tit list_name" data-addclass="hd_menu_hover"><a href="#">网站导航</a><em
+                            class="navigation_img"></em>
+
+                        <div class="hd_menu_list">
+                            <span class="wire"></span>
+                            <ul>
+                                <li><a href="#">常见问题</a></li>
+                                <li><a href="#">在线退换货</a></li>
+                                <li><a href="#">在线投诉</a></li>
+                                <li><a href="#">配送范围</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="nav" id="Navigation">
+                <ul class="Navigation_name">
+                    <li class=""><a href="{% url 'index' %}">首页</a></li>
+                    <li class=""><a href="{% url 'integral' %}">所有果蔬</a></li>
+                    <li class=""><a href="{% url 'group_buy' %}">活动专区</a></li>
+                    <li class=""><a href="{% url 'products' %}">水果馆</a></li>
+                    <li class=""><a href="{% url 'products_list' %}">蔬菜馆</a></li>
+                    <li class=""><a href="{% url 'user_info' %}">会员中心</a></li>
+                    <li class=""><a href="#">联系我们</a></li>
+                </ul>
+            </div>
+            <script>$("#Navigation").slide({titCell: ".Navigation_name li"});</script>
+        </div>
+    </div>
+    <em class="right_img"></em>
+</div>
+<!---->
+<div><a href="#"><img src="../../static/images/AD_page_img_02.png" width="100%"/></a></div>
+<!--位置-->
+<div class="Bread_crumbs">
+    <div class="Inside_pages clearfix">
+        <div class="right Search">
+            <form>
+                <input name="" type="text" class="Search_Box"/>
+                <input name="" type="button" name="" class="Search_btn"/>
+            </form>
+        </div>
+    </div>
+</div>
+{% if request.session.is_login %}
+    <!--用户中心-->
+    <div class="Inside_pages clearfix">
+        <div class="clearfix user">
+            <div class="user_left">
+                <div class="user_info">
+                    <div class="Head_portrait"><img src="{% static user.head_img.url %}" width="80px"
+                                                    height="80px"/>
+                        <!--头像区域--></div>
+                    <div class="user_name">{{ request.session.user_username }}<a href="#">[个人资料]</a></div>
+                </div>
+                <ul class="Section">
+                    <li><a href="{% url 'user' %}"><em></em><span>我的订单</span></a></li>
+                    <li><a href="{% url 'user_info' %}"><em></em><span>个人信息</span></a></li>
+                    <li><a href="{% url 'user_password' %}"><em></em><span>修改密码</span></a></li>
+                    <li><a href="{% url 'user_collect' %}"><em></em><span>我的评论</span></a></li>
+                    <li><a href="{% url 'user_collect' %}"><em></em><span>我的收藏</span></a></li>
+                    <li><a href="{% url 'user_address' %}"><em></em><span>收货地址管理</span></a></li>
+                </ul>
+            </div>
+            <div class="user_right">
+                <div class="user_Borders">
+                    <div class="title_name">
+                        <span class="name">个人信息</span>
+                    </div>
+                    <div class="about_user_info">
+                        <div class="user_layout">
+                            <div class="col-md-6">
+                                <form action="{% url 'user_info_set' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="row1">
+                                        <div class="text-right1"><span>用户头像:<img
+                                                src="{% static user.head_img.url %}" width="80px"
+                                                height="80px"/></span></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="text-right"><span>用户名:<input type="text" value="{{ user.username }}"
+                                                                                 name="new_name"></span></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="text-right"><span>真实姓名:<input type="text" value="{{ user.t_name }}"
+                                                                                 name="new_t_name"></span></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="text-right"><span>性别:<input id="man" type="radio" checked="checked" name="1" value="1"/>男
+                                            <input id="woman" type="radio"  name="1" value="2"/>女</span></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="text-right"><span>邮箱:<input type="text" value="{{ user.email }}"
+                                                                                name="new_email"></span></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="text-right"><span>生日:<input type="text" value="{{ user.birthday|date:'Y-m-d' }}"
+                                                                                name="new_birthday"></span></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="text-right"><span>电话:<input type="text" value="{{ user.phone }}"
+                                                                                name="new_phone"></span></div>
+                                    </div>
+                                    <div class="operating_btn"><input type="submit" value="提交"
+                                                                      class="submit—btn"/>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="Inside_pages clearfix">
+        暂时还未有用户登录……
+    </div>
+{% endif %}
+<!--底部样式-->
+<div class="footer">
+    <div class="footer_img_bg"></div>
+    <div class="footerbox">
+        <div class="footer_info">
+            <div class="footer_left">
+                <a href="#"><img src="{% static 'images/logo.png' %}"/></a>
+                <p class="erwm">
+                    <img src="{% static 'images/erweim.png' %}" width="80px" height="80px"/>
+                    <img src="{% static 'images/erweim.png' %}" width="80px" height="80px"/>
+                <p>
+            </div>
+            <div class="helper_right clearfix">
+                <dl>
+                    <dt><em class="guide"></em>新手指南</dt>
+                    <dd><a href="#">实名认证</a></dd>
+                    <dd><a href="#">找回密码</a></dd>
+                </dl>
+                <dl>
+                    <dt><em class="h_about"></em>关于我们</dt>
+                    <dd><a href="#">关于我们</a></dd>
+                    <dd><a href="#">政策服务</a></dd>
+                    <dd><a href="#">常见问题</a></dd>
+                </dl>
+                <dl>
+                    <dt><em class="h_conact"></em>联系我们</dt>
+                    <dd><a href="#">联系我们</a></dd>
+                    <dd><a href="#">在线客服</a></dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class=" Copyright ">
+        @2015 四川莆田特色馆版权所有
+    </div>
+</div>
+</body>
+</html>

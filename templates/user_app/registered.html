@@ -34,15 +34,15 @@
                 <ul>
                     {% if request.session.is_login %}
                         <li class="hd_menu_tit"><em class="login_img"></em><a
-                                href="#">当前在线：{{ request.session.user_username }}</a></li>
+                                href="{% url 'user_info' %}">当前在线：{{ request.session.user_username }}</a></li>
                         <li class="hd_menu_tit"><em class="registered_img"></em><a href="{% url 'logout' %}">注销</a></li>
                     {% else %}
                         <li class="hd_menu_tit"><em class="login_img"></em><a href="{% url 'login' %}">登录</a></li>
                         <li class="hd_menu_tit"><em class="registered_img"></em><a href="{% url 'registered' %}">注册</a>
                         </li>
                     {% endif %}
-                    <li class="hd_menu_tit"><em class="Collect_img"></em><a href="#">收藏夹</a></li>
-                    <li class="hd_menu_tit"><em class="cart_img"></em><a href="#">购物车（0）</a></li>
+                    <li class="hd_menu_tit"><em class="Collect_img"></em><a href="{% url 'user_collect' %}">收藏夹</a></li>
+                    <li class="hd_menu_tit"><em class="cart_img"></em><a href="{% url 'shopping_cart' %}">购物车</a></li>
                     <li class="hd_menu_tit list_name" data-addclass="hd_menu_hover"><a href="#">网站导航</a><em
                             class="navigation_img"></em>
 
@@ -60,13 +60,13 @@
             </div>
             <div class="nav" id="Navigation">
                 <ul class="Navigation_name">
-                    <li class=""><a herf="#">首页</a></li>
-                    <li class=""><a herf="#">所有果蔬</a></li>
-                    <li class=""><a herf="#">活动专区</a></li>
-                    <li class=""><a herf="#">水果馆</a></li>
-                    <li class=""><a herf="#">蔬菜馆</a></li>
-                    <li class=""><a herf="#">会员中心</a></li>
-                    <li class=""><a herf="#">联系我们</a></li>
+                    <li class=""><a href="{% url 'index' %}">首页</a></li>
+                    <li class=""><a href="{% url 'integral' %}">所有果蔬</a></li>
+                    <li class=""><a href="{% url 'group_buy' %}">活动专区</a></li>
+                    <li class=""><a href="{% url 'products' %}">水果馆</a></li>
+                    <li class=""><a href="{% url 'products_list' %}">蔬菜馆</a></li>
+                    <li class=""><a href="{% url 'user_info' %}">会员中心</a></li>
+                    <li class=""><a href="#">联系我们</a></li>
                 </ul>
             </div>
             <script>$("#Navigation").slide({titCell: ".Navigation_name li"});</script>
@@ -83,15 +83,15 @@
             <form class="form-control" action="{% url 'registered' %}" method="post">
                 <div class="u_register">
                     {% if message %}
-                        <div class="alert alert-warning">{{ message }}</div>
+                        <div class="alert alert-warning" style="text-align: center;color: red;height: 20px">{{ message }}</div>
                     {% endif %}
-
                     {% csrf_token %}
                     <ul>
                         <li><label class="name">手机号码：</label><input required="required" name="phone" type="text"
                                                                     class="text_Add"
-                                                                    pattern="^1([38]\d|5[0-35-9]|7[3678])\d{8}$"
-                                                                    placeholder="请输入您的手机号"></li>
+                                                                    pattern="^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$"
+                                                                    placeholder="请输入您的手机号……"
+                                                                    ></li>
                         <li><label class="name">用户名称：</label><input name="username" type="text" class="text_Add"></li>
                         <li><label class="name">设置密码：</label><input required="required" name="password1" type="password"
                                                                     class="text_Add"
@@ -110,20 +110,20 @@
                     </div>
                 </div>
             </form>
-{#            <script type="text/javascript">#}
-{#                /*1.oninput:监听当前指定元素内容的改变，只要内容改变（添加内容，删除内容）就会触发这个事件*/#}
-{#                document.getElementById("").oninput = function () {#}
-{#                    console.log("oninput:" + this.value);#}
-{#                };#}
-{#                /*2.oninvalid:当验证不通过时触发  setcustomValidity 设置默认提示信息*/#}
-{#                document.getElementById("userPhone").oninvalid = function () {#}
-{#                    this.setCustomValidity("请输入合法的11位手机号");#}
-{#                };#}
-{#                /*onkeyup:当键盘弹起的时候触发：每一个键的弹起都会出发一次*/#}
-{#                document.getElementById("userName").onkeyup = function () {#}
-{#                    console.log("onkeyup:" + this.value);#}
-{#                };#}
-{#            </script>#}
+            {#            <script type="text/javascript">#}
+            {#                /*1.oninput:监听当前指定元素内容的改变，只要内容改变（添加内容，删除内容）就会触发这个事件*/#}
+            {#                document.getElementById("").oninput = function () {#}
+            {#                    console.log("oninput:" + this.value);#}
+            {#                };#}
+            {#                /*2.oninvalid:当验证不通过时触发  setcustomValidity 设置默认提示信息*/#}
+            {#                document.getElementById("userPhone").oninvalid = function () {#}
+            {#                    this.setCustomValidity("请输入合法的11位手机号");#}
+            {#                };#}
+            {#                /*onkeyup:当键盘弹起的时候触发：每一个键的弹起都会出发一次*/#}
+            {#                document.getElementById("userName").onkeyup = function () {#}
+            {#                    console.log("onkeyup:" + this.value);#}
+            {#                };#}
+            {#            </script>#}
         </div>
         <div class="register_img"><img src="{% static 'images/Register_img.png' %}"/></div>
     </div>

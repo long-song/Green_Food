@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from integral_app.models import *
+from shop_app.models import *
+from user_app.models import *
 
 
 # Create your views here.
@@ -27,7 +30,9 @@ def products(request):
     :param request:
     :return:
     '''
-    return render(request, 'integral_app/Products.html')
+    fruits = Pro_sku.objects.exclude(type_id=2)
+
+    return render(request, 'integral_app/Products.html',{'fruits':fruits})
 
 
 def products_list(request):
@@ -36,7 +41,9 @@ def products_list(request):
     :param request:
     :return:
     '''
-    return render(request, 'integral_app/Product-List.html')
+    vegetables = Pro_sku.objects.exclude(type_id=1)
+
+    return render(request, 'integral_app/Product-List.html',{'vegetables':vegetables})
 
 
 def product_detailed(request):
