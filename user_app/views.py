@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
+from django.db.models import F,Q
 from user_app.models import UserInfo
 from user_app.froms import UserForm, RegisterForm
-import json
 import datetime
 
 # Create your views here.
@@ -77,7 +77,7 @@ def login(request):
         var_code = request.POST.get('var_code')
         code = request.session.get('code')
         try:
-            user = UserInfo.objects.get(username=username)
+            user = UserInfo.objects.get(Q(username=username)|Q(phone=username))
             if user.password == password:
                 if var_code == code:
                     request.session['is_login'] = True
