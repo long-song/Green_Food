@@ -167,7 +167,7 @@
 {#                                                  height="400px"/></a>#}
                         <div class="product_name"><h2>{{ foo.name }}</h2><span>{{ foo.name }}</span></div>
                         <div class="product_price">
-                            <div class="price"><label>商城价：</label>{{ foo.price }} <b>元</b></div>
+                            <div class="price"><label>商城价：</label>{{ foo.price }} <b>元/{{ foo.size }}</b></div>
                             <div class="jyScore-fra"><span><em style="width:60px;"></em></span><b>4.5</b><a
                                 href="#">{{ foo.comments }}</a></div>
                         </div>
@@ -210,12 +210,8 @@
 
             <!--信息展示-->
             <div class="mainListRight" id="status1">
-                <ul class="fixed_bar" style="">
-                    {% for foo in detail_all %}
-                        <li class="status_on active"><a href="#status1">产品介绍</a><p style="font-size: 15px ;text-align: center">{{ foo.describe }}</p></li>
-                    {% endfor %}
-
-
+                <ul class="fixed_bar" >
+                    <li class="status_on active"><a href="#status1">产品介绍</a></li>
                     <li class="status_on"><a href="#status2">商品评价<span>(0)</span></a></li>
                     <li class="status_on"><a href="#shbz">售后服务</a></li>
                     <div class="statusBtn" style="display: none;"><a href="javascript:addToCart_bak(77)"
