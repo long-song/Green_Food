@@ -52,6 +52,8 @@ class Adress(models.Model):
     ads = models.CharField(verbose_name='地址', max_length=300, null=False)
     aphone = models.CharField(verbose_name='电话', max_length=20, null=False)
     user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+    area = models.CharField(verbose_name='地区',max_length=50,null=True)
+    postcode = models.CharField(verbose_name='邮编', max_length=20, null=True)
 
     def __str__(self):
         return self.aname

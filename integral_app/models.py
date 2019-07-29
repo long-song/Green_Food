@@ -20,6 +20,8 @@ class Pro_sku(models.Model):
     '''
     image = models.ImageField(upload_to='static/images', default='images/product_AD_07.png', null=True, verbose_name='商品图片')
     name = models.CharField(max_length=50, verbose_name='商品名(规格)')
+    describe = models.CharField(max_length=600, verbose_name='产品介绍',null=True)
+    size = models.CharField(max_length=10, default='500g', verbose_name='产品规格')
     title = models.CharField(max_length=100, verbose_name='标签')
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='本店价')
     cost_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='市场价')
