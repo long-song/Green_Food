@@ -85,46 +85,20 @@
         <!--列表样式-->
         <div class="integral_p_list">
             <ul class="list_style">
-                <li class="clearfix">
-                    <div class="product_lists clearfix">
-                        <a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                        <p class="title_p_name">浦江多汁红提</p>
-                        <p class="title_Profile">绿色有机天然无污染</p>
-                        <p class="price"><b>￥</b>13.5</p>
-                        <p class="btn_style"><a href="javascript;('')" class="buy_btn"></a><a href="javascript;('')"
+                {% for foo in own %}
+                    <li class="clearfix">
+                        <div class="product_lists clearfix">
+                            <a href="{% url "product_detailed" %}?id={{ foo.id }}"><img src="{{ foo.image }}"/></a>
+                            <p class="title_p_name">{{ foo.name }}</p>
+                            <p class="title_Profile">{{ foo.title }}</p>
+                            <p class="price"><b>￥</b>{{ foo.price }}</p>
+                            <p class="btn_style"><a href="javascript;('')" class="buy_btn"></a><a href="javascript;('')"
                                                                                               class="Join_btn"></a></p>
-                    </div>
-                </li>
-                <li class="clearfix">
-                    <div class="product_lists clearfix">
-                        <a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                        <p class="title_p_name">浦江多汁红提</p>
-                        <p class="title_Profile">绿色有机天然无污染</p>
-                        <p class="price"><b>￥</b>13.5</p>
-                        <p class="btn_style"><a href="javascript;('')" class="buy_btn"></a><a href="javascript;('')"
-                                                                                              class="Join_btn"></a></p>
-                    </div>
-                </li>
-                <li class="clearfix">
-                    <div class="product_lists clearfix">
-                        <a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                        <p class="title_p_name">浦江多汁红提</p>
-                        <p class="title_Profile">绿色有机天然无污染</p>
-                        <p class="price"><b>￥</b>13.5</p>
-                        <p class="btn_style"><a href="javascript;('')" class="buy_btn"></a><a href="javascript;('')"
-                                                                                              class="Join_btn"></a></p>
-                    </div>
-                </li>
-                <li class="clearfix">
-                    <div class="product_lists clearfix">
-                        <a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                        <p class="title_p_name">浦江多汁红提</p>
-                        <p class="title_Profile">绿色有机天然无污染</p>
-                        <p class="price"><b>￥</b>13.5</p>
-                        <p class="btn_style"><a href="javascript;('')" class="buy_btn"></a><a href="javascript;('')"
-                                                                                              class="Join_btn"></a></p>
-                    </div>
-                </li>
+                        </div>
+                    </li>
+
+                {% endfor %}
+
             </ul>
         </div>
     </div>

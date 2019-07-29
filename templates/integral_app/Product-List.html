@@ -102,7 +102,7 @@
 
                     <li class="clearfix">
                     <div class="product_lists clearfix">
-                        <a href="#"><img src="{{ foo.image }}"/></a>
+                        <a href="{% url "product_detailed" %}"><img src="{{ foo.image }}"/></a>
                         <p class="title_p_name">{{ foo.name }}</p>
                         <p class="title_Profile">{{ foo.title }}</p>
                         <p class="price"><b>￥</b>{{ foo.price }}</p>

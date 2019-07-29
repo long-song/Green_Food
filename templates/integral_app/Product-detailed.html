@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
     <link href="{% static 'css/css.css' %}" rel="stylesheet" type="text/css"/>
     <link href="{% static 'css/common.css' %}" rel="stylesheet" type="text/css"/>
     <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" type="text/css"/>
@@ -84,66 +85,44 @@
 </div>
 <!--商品详细介绍-->
 <div class="Inside_pages clearfix">
-    <div class="left_style">
-        <div class="title_img_p"><img src="../../static/images/p_vegetables_img.png"/></div>
+    <div class="left_style" style="width:18%;">
+        <div class="title_img_p"><img src="../../static/images/logo_small.png" style="margin-left: 27px"/></div>
         <div class="ranking">
             <div class="ranking_title"><span>销量</span>排行</div>
             <ul class="ranking_list">
-                <li class="">
-                    <em class="ranking_label">1</em>
-                    <a href="#" class="img"> <img src="../../static/images/product_img_17.png" width="100px"
+                {% for sale in sales %}
+                    <li class="">
+                    <em class="ranking_label" style="height: 26px;">{{ forloop.counter }}</em>
+                        <a href="#" class="img"> <img src="{{ sale.image }}" width="100px"
                                                   height="100px"/></a>
-                    <p class="ranking_name">浦江特产绿豌豆天然无污染</p>
-                    <p class="price"><b>￥</b>12.54</p>
-                    <p><a href="#">立即查看< </a></p>
-                </li>
-                <li class="">
-                    <em class="ranking_label">2</em>
-                    <a href="#" class="img"> <img src="../../static/images/product_img_17.png" width="100px"
-                                                  height="100px"/></a>
-                    <p class="ranking_name">浦江特产绿豌豆天然无污染</p>
-                    <p class="price"><b>￥</b>12.54</p>
-                    <p><a href="#">立即查看< </a></p>
-                </li>
-                <li class="">
-                    <em class="ranking_label">3</em>
-                    <a href="#" class="img"> <img src="../../static/images/product_img_17.png" width="100px"
-                                                  height="100px"/></a>
-                    <p class="ranking_name">浦江特产绿豌豆天然无污染</p>
-                    <p class="price"><b>￥</b>12.54</p>
-                    <p><a href="#">立即查看< </a></p>
-                </li>
-                <li class="">
-                    <em class="ranking_label">4</em>
-                    <a href="#" class="img"> <img src="../../static/images/product_img_17.png" width="100px"
-                                                  height="100px"/></a>
-                    <p class="ranking_name">浦江特产绿豌豆天然无污染</p>
-                    <p class="price"><b>￥</b>12.54</p>
-                    <p><a href="#">立即查看< </a></p>
-                </li>
-                <li class="">
-                    <em class="ranking_label">5</em>
-                    <a href="#" class="img"> <img src="../../static/images/product_img_17.png" width="100px"
-                                                  height="100px"/></a>
-                    <p class="ranking_name">浦江特产绿豌豆天然无污染</p>
-                    <p class="price"><b>￥</b>12.54</p>
-                    <p><a href="#">立即查看< </a></p>
-                </li>
+                        <p class="ranking_name">{{ sale.name }}</p>
+                        <p class="price"><b>￥</b>{{ sale.price }}</p>
+                        <p><a href="#">立即查看< </a></p>
+                    </li>
+                {% endfor %}
             </ul>
         </div>
     </div>
     <!--详细介绍样式-->
-    <div class="right_style">
-        <div class="pro_detailed">
-            <div class="Details_style clearfix" id="goodsInfo">
-                <div class="mod_picfold clearfix">
-                    <div class="clearfix" id="detail_main_img">
-                        <div class="layout_wrap">
-                            <!--相册样式-->
+    <div class="right_style" style="margin-top: 18px;width: 80%;">
+        <div class="right_top">
+            <img src="../../static/images/12.jpg" alt="" style="width: 1024px;height: 140px;">
+        </div>
+        <div class="pro_detailed" style="margin-left: 0;">
+            <div class="Details_style clearfix" id="goodsInfo" >
+                <div class="mod_picfold clearfix" style="height: 400px;">
+                    {% for foo in detail_all %}
+                        <div class="clearfix" id="detail_main_img" style="height: 330px;">
+                        <div class="layout_wrap" style="margin: 120px 100px">
+                            <a href=""><img src="{{ foo.image }}" alt=""></a>
                         </div>
                     </div>
-                    <div class="Sharing">
-                        <div class="bdsharebuttonbox right">
+
+                    {% endfor %}
+
+
+                    <div class="Sharing" style="line-height: 280px">
+                        <div class="bdsharebuttonbox right" style="margin-top: 125px">
                             <a href="#" class="bds_more" data-cmd="more"></a>
                             <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
                             <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
@@ -180,53 +159,63 @@
                     </div>
                 </div>
                 <!--购买信息-->
-                <div class="Buying_info">
-                    <div class="product_name"><h2>浦江特产绿豌豆天然无污染</h2><span>浦江特产绿豌豆天然无污染</span></div>
-                    <div class="product_price">
-                        <div class="price"><label>商城价：</label>￥234.00 <b>元/箱</b></div>
-                        <div class="jyScore-fra"><span><em style="width:60px;"></em></span><b>4.5</b><a
-                                href="#">共有16条评论</a></div>
-                    </div>
-                    <div class="productDL">
-                        <dl>
-                            <dt>品种：</dt>
-                            <dd class="left">
-                                <div class="item  selected"><b></b><a href="#none" title="金晕">芹川</a></div>
-                                <div class="item"><b></b><a href="#none" title="芹川">芹川</a></div>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>包装：</dt>
-                            <dd class="left">
-                                <div class="item  selected"><b></b><a href="#none" title="小礼盒">小礼盒</a></div>
-                                <div class="item"><b></b><a href="#none" title="普通包装">普通包装</a></div>
-                                <div class="item"><b></b><a href="#none" title="大礼盒">大礼盒</a></div>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>数量：</dt>
-                            <dd class="left">
-                                <div class="Numbers">
-                                    <a href="javascript:void(0);" onclick="updatenum('del');" class="jian  ">-</a>
-                                    <input id="number" name="number" type="text" value="1" class="number_text">
-                                    <a href="javascript:void(0);" onclick="updatenum('del');" class="jia  ">+</a>
-                                </div>
-                            </dd>
-                            <dd class="left Quantity">(库存：30000)</dd>
-                        </dl>
-                    </div>
-                    <div class="product_Quantity">销量：3440</div>
-                    <div class="operating">
-                        <a href="#" class="buy_btn"></a>
-                        <a href="#" class="Join_btn"></a>
-                        <a href="#" class="Collect_btn"></a>
-                    </div>
+
+
+                <div class="Buying_info" style="margin-left:80px;margin-top: 50px">
+                    {% for foo in detail_all %}
+{#                        <a href="#"> <img src="{{ foo.image }}" width="400px"#}
+{#                                                  height="400px"/></a>#}
+                        <div class="product_name"><h2>{{ foo.name }}</h2><span>{{ foo.name }}</span></div>
+                        <div class="product_price">
+                            <div class="price"><label>商城价：</label>{{ foo.price }} <b>元</b></div>
+                            <div class="jyScore-fra"><span><em style="width:60px;"></em></span><b>4.5</b><a
+                                href="#">{{ foo.comments }}</a></div>
+                        </div>
+                        <div class="productDL" style="height: 150px;">
+                            <dl>
+                                <dt>品种：</dt>
+                                <dd class="left">
+                                    <div class="item"><b></b><a href="#" title="">{{ foo.name }}</a></div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>包装：</dt>
+                                <dd class="left">
+                                    <div class="item  selected"><b></b><a href="#none" title="小礼盒">小礼盒</a></div>
+                                    <div class="item"><b></b><a href="#none" title="普通包装">普通包装</a></div>
+                                    <div class="item"><b></b><a href="#none" title="大礼盒">大礼盒</a></div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>数量：</dt>
+                                <dd class="left">
+                                    <div class="Numbers">
+                                        <a href="javascript:void(0);" onclick="updatenum('del');" class="jian  ">-</a>
+                                        <input id="number" name="number" type="text" value="1" class="number_text">
+                                        <a href="javascript:void(0);" onclick="updatenum('del');" class="jia  ">+</a>
+                                    </div>
+                                </dd>
+                                <dd class="left Quantity">(库存：{{ foo.stock }})</dd>
+                            </dl>
+                        </div>
+                        <div class="product_Quantity">销量：{{ foo.sales }}</div>
+                        <div class="operating">
+                            <a href="#" class="buy_btn"></a>
+                            <a href="#" class="Join_btn"></a>
+                            <a href="#" class="Collect_btn" style="width: 100px;"></a>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
+
             <!--信息展示-->
             <div class="mainListRight" id="status1">
                 <ul class="fixed_bar" style="">
-                    <li class="status_on active"><a href="#status1">产品介绍</a></li>
+                    {% for foo in detail_all %}
+                        <li class="status_on active"><a href="#status1">产品介绍</a><p style="font-size: 15px ;text-align: center">{{ foo.describe }}</p></li>
+                    {% endfor %}
+
+
                     <li class="status_on"><a href="#status2">商品评价<span>(0)</span></a></li>
                     <li class="status_on"><a href="#shbz">售后服务</a></li>
                     <div class="statusBtn" style="display: none;"><a href="javascript:addToCart_bak(77)"

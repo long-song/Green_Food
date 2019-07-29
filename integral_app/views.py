@@ -21,7 +21,8 @@ def integral(request):
     :param request:
     :return:
     '''
-    return render(request, 'integral_app/integral.html')
+    own = Pro_sku.objects.all()
+    return render(request, 'integral_app/integral.html', {'own': own})
 
 
 def products(request):
@@ -52,4 +53,7 @@ def product_detailed(request):
     :param request:
     :return:
     '''
-    return render(request, 'integral_app/Product-detailed.html')
+    sales = Pro_sku.objects.filter().order_by('-sales', )
+    addres_id = request.GET.get("id")
+    detail_all = Pro_sku.objects.filter(id=addres_id)
+    return render(request, 'integral_app/Product-detailed.html', {'sales': sales[:5], 'detail_all': detail_all})
