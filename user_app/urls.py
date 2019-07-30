@@ -16,4 +16,7 @@ urlpatterns = [
     path('user_address/', views.user_address, name='user_address'),  # 访问收货地址管理路由
     path('user_info_set/', views.user_info_set, name='user_info_set'),  # 访问收货地址管理路由
     path('new_head/', views.new_head, name='new_head'),  # 访问个人信息路由
+    path('user_address_add/', views.user_address_add, name='user_address_add'),  # 访问增加收货地址
+    path('user_address_delete/<int:id>/', views.user_address_delete, name='user_address_delete'),
+    path('user_address_change/<int:id>', views.user_address_change, name='user_address_change')
 ]

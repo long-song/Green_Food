@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
+from user_app.models import *
 from django.db.models import F,Q
 from user_app.models import UserInfo
 from user_app.froms import UserForm, RegisterForm
@@ -232,8 +233,93 @@ def user_address(request):
     访问收货地址管理
     :param request:
     :return:
+
     '''
-    return render(request, 'user_app/user_address.html')
+    if request.method == "GET":
+        a = request.session['user_id']
+        user = UserInfo.objects.get(id=a)
+        # addre = Adress.objects.get(user_id=a)
+        addres = Adress.objects.filter(user_id=a)
+        # print(addre.postcode)
+        return render(request, 'user_app/user_address.html', {'user': user,'addres':addres})
+
+def  user_address_add(request):
+    """
+    增加用户地址
+    :param request:
+    :return:
+    """
+    if request.method == "GET":
+        a = request.session['user_id']
+        user = UserInfo.objects.get(id=a)
+        addre = Adress.objects.filter(user_id=a)
+        # print(user.head_img)
+        return render(request, 'user_app/user_address_add.html', {'user': user})
+    if request.method == "POST":
+        a = request.session['user_id']
+        new_aname = request.POST.get('new_aname')
+        new_area = request.POST.get('new_area')
+        new_postcode = request.POST.get('new_postcode')
+        new_aphone = request.POST.get('new_aphone')
+        new_ads = request.POST.get('new_ads')
+        addre1 = Adress(aname=new_aname,area=new_area,postcode=new_postcode,
+                        aphone=new_aphone,ads=new_ads,user_id=a)
+        addre1.save()
+        print(new_aname, new_area, new_postcode, new_aphone, new_ads)
+
+
+        return redirect('user_address')
+    return render(request, 'user_app/user_address_add.html')
+
+
+
+def  user_address_change(request,id):
+    """
+    修改用户地址
+    :param request:
+    :return:
+    """
+
+
+    if request.method == "GET":
+        a = request.session['user_id']
+        user = UserInfo.objects.get(id=a)
+        addre2 = Adress.objects.get(pk=id)
+        # print(user.head_img)
+        return render(request, 'user_app/user_address_change.html', {'addre2': addre2,"user":user})
+    if request.method == "POST":
+        a = request.session['user_id']
+        new_aname = request.POST.get('new_aname')
+        new_area = request.POST.get('new_area')
+        new_postcode = request.POST.get('new_postcode')
+        new_aphone = request.POST.get('new_aphone')
+        new_ads = request.POST.get('new_ads')
+        addre2 = Adress.objects.get(id=id)
+        addre2.aname = new_aname
+        addre2.area = new_area
+        addre2.postcode = new_postcode
+        addre2.aphone = new_aphone
+        addre2.ads = new_ads
+        addre2.user_id = a
+        addre2.save()
+        user = UserInfo.objects.get(id=a)
+        addres = Adress.objects.filter(user_id=a)
+        print(new_aname, new_area, new_postcode, new_aphone, new_ads)
+
+        return render(request, 'user_app/user_address.html', {'user': user, 'addres': addres,'id':addre2.id})
+
+
+def  user_address_delete(request,id):
+    """
+    删除用户地址
+    :param request:
+    :return:
+    """
+    addre3 = Adress.objects.get(pk=id)
+    addre3.delete()
+
+
+    return redirect('user_address')
 
 
 # 个人资料修改函数
