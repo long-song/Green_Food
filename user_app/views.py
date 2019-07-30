@@ -32,11 +32,8 @@ def login_required(view_func):
 
     return wrapper
 
-
-# 登录函数
-from commom_phone.code import *
-from commom_phone.phone_num4 import *
-
+from common.code import *
+from common.phone_num4 import *
 # 获取手机号发送验证码
 # 在发送ajax的post请求时解决跨网站请求
 from django.views.decorators.csrf import csrf_exempt
@@ -62,7 +59,7 @@ def phone_code(request):
             message = "手机号不正确"
             return JsonResponse({'message':message})
 
-
+# 登录函数
 def login(request):
     '''
         访问登录页面
@@ -153,6 +150,8 @@ def logout(request):
 
 
 # 我的订单函数
+# 导入生成唯一订单号函数
+from common.orderNo import get_order_code
 @login_required
 def user(request):
     '''
@@ -160,7 +159,12 @@ def user(request):
     :param request:
     :return:
     '''
-    return render(request, 'user_app/user.html')
+    a = request.session['user_id']
+    user = UserInfo.objects.get(id=a)
+    if request.method == 'GET':
+        order_No = get_order_code()
+        return render(request, 'user_app/user.html', locals())
+    return render(request, 'user_app/user.html',locals())
 
 
 # 个人信息函数
@@ -185,7 +189,28 @@ def user_password(request):
     :param request:
     :return:
     '''
-    return render(request, 'user_app/user_Password.html')
+    a = request.session['user_id']
+    user = UserInfo.objects.get(id=a)
+    if request.method=="POST":
+        old_pwd = request.POST.get('old_pwd')
+        new_pwd = request.POST.get('new_pwd')
+        new_pwd1 = request.POST.get('new_pwd1')
+        if old_pwd==user.password:
+            if new_pwd != old_pwd:
+                if new_pwd == new_pwd1:
+                    user.password = new_pwd
+                    user.save()
+                    request.session.flush()
+                    message = '您已成功修改密码，请重新登录！'
+                    return render(request,'user_app/Login.html',{'meaasge':message})
+                else:
+                    message = '两次新密码输入不一致！'
+            else:
+                message = '新密码不能与原密码相同'
+        else:
+            message = '原密码输入错误！'
+        return render(request, 'user_app/user_Password.html', locals())
+    return render(request, 'user_app/user_Password.html', {'user': user})
 
 
 # 我的收藏函数
@@ -242,3 +267,4 @@ def user_info_set(request):
         user.save()
         return render(request, 'user_app/user_info.html', {'user': user})
     return render(request, 'user_app/user_info_set.html')
+
