@@ -83,9 +83,10 @@
         <!--左侧菜单栏样式-->
         <div class="user_left">
             <div class="user_info">
-                <div class="Head_portrait"><img src='{% static user.head_img.url %}'  width="80px" height="80px"/>
+                <div class="Head_portrait"><img src="{% static user.head_img.url %}" width="80px"
+                                                height="80px"/>
                     <!--头像区域--></div>
-                <div class="user_name">{{ user.username }}<a href="#">[个人资料]</a></div>
+                <div class="user_name">{{ request.session.user_username }}<a href="{% url 'user_info' %}">[个人资料]</a></div>
             </div>
             <ul class="Section">
                 <li><a href="{% url 'user' %}"><em></em><span>我的订单</span></a></li>
