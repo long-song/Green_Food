@@ -15,4 +15,5 @@ urlpatterns = [
     path('user_collect/', views.user_collect, name='user_collect'),  # 访问我的收藏路由
     path('user_address/', views.user_address, name='user_address'),  # 访问收货地址管理路由
     path('user_info_set/', views.user_info_set, name='user_info_set'),  # 访问收货地址管理路由
+    path('new_head/', views.new_head, name='new_head'),  # 访问个人信息路由
 ]

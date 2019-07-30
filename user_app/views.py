@@ -4,6 +4,7 @@ from django.db.models import F,Q
 from user_app.models import UserInfo
 from user_app.froms import UserForm, RegisterForm
 import datetime
+from django.conf import settings
 
 # Create your views here.
 def index(request):
@@ -268,3 +269,45 @@ def user_info_set(request):
         return render(request, 'user_app/user_info.html', {'user': user})
     return render(request, 'user_app/user_info_set.html')
 
+# 修改头像函数
+@login_required
+def new_head(request):
+    '''
+    访问个人资料修改页面
+    :param request:
+    :return:
+    '''
+    if request.method == "GET":
+        a = request.session['user_id']
+        user = UserInfo.objects.get(id=a)
+        # print(user.head_img)
+        return render(request, 'user_app/new_head.html', {'user': user})
+    if request.method == "POST":
+        new_head = request.FILES['new_head']
+        print('new_head=',new_head)
+        print(new_head.chunks)
+        new_username = request.POST.get('new_name')
+        new_t_name = request.POST.get('new_t_name')
+        new_gender = request.POST.get('1')
+        new_email = request.POST.get('new_email')
+        new_birthday = request.POST.get('new_birthday')
+        new_phone = request.POST.get('new_phone')
+        save_path = '%s/%s'%(settings.MEDIA_ROOT, new_head)
+        with open(save_path, 'wb') as f:
+            # 3. 获取上传文件的内容并写入创建的文件中
+            for content in new_head.chunks():
+                f.write(content)
+                print('OK')
+        print(new_gender, new_username, new_birthday, new_email, new_phone, new_t_name)
+        a = request.session['user_id']
+        user = UserInfo.objects.get(id=a)
+        user.head_img = 'media/%s'%(new_head)
+        user.username = new_username
+        user.t_name = new_t_name
+        user.phone = new_phone
+        user.gender = new_gender
+        user.birthday = new_birthday
+        user.email = new_email
+        user.save()
+        return render(request, 'user_app/user_info.html', {'user': user})
+    return render(request, 'user_app/new_head.html')
