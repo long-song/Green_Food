@@ -17,7 +17,7 @@
 
 <body>
 <!--顶部样式-->
-<div class="top_header">
+<div class="top_header" style="position:relative">
     <em class="left_img"></em>
     <div class="header clearfix" id="header">
         <a href="#" class="logo_img"><img src="{% static 'images/logo.png' %}"/></a>
@@ -83,9 +83,10 @@
         <!--左侧菜单栏样式-->
         <div class="user_left">
             <div class="user_info">
-                <div class="Head_portrait"><img src="{% static 'images/product_img_17.png' %}" width="80px" height="80px"/>
+                <div class="Head_portrait"><img src="{% static user.head_img.url %}" width="80px"
+                                                height="80px"/>
                     <!--头像区域--></div>
-                <div class="user_name">用户蜜甘草<a href="#">[个人资料]</a></div>
+                <div class="user_name">{{ request.session.user_username }}<a href="{% url 'user_info' %}">[个人资料]</a></div>
             </div>
             <ul class="Section">
                 <li><a href="{% url 'user' %}"><em></em><span>我的订单</span></a></li>
@@ -97,38 +98,13 @@
             </ul>
         </div>
         <!--右侧内容样式-->
-        <div class="user_right">
-            <div class="user_Borders">
-                <div class="title_name">
-                    <span class="name">地址管理</span>
-                </div>
-                <div class="about_user_info">
-                    <form id="form1" name="form1" method="post" action="">
-                        <div class="user_layout">
-                            <ul>
-                                <li><label class="user_title_name">收件人姓名：</label><input name="" type="text"
-                                                                                        class="add_text"><em>*</em></li>
-                                <li><label class="user_title_name">省&nbsp;市&nbsp;区：</label><em>*</em></li>
-                                <li><label class="user_title_name">收货地址：</label><input name="" type="text"
-                                                                                       class="add_text"><em>*</em></li>
-                                <li><label class="user_title_name">邮&nbsp;&nbsp;&nbsp;&nbsp;编：</label><input name=""
-                                                                                                             type="text"
-                                                                                                             class="add_text"><em>*</em>
-                                </li>
-                                <li><label class="user_title_name">手&nbsp;机&nbsp;号：</label><input name="" type="text"
-                                                                                                  class="add_text"><em>*</em>
-                                </li>
-                                <li><label class="user_title_name">固定电话：</label><input name="" type="text"
-                                                                                       class="add_text"></li>
-                            </ul>
-                            <div class="operating_btn"><input name="name" type="submit" value="确认" class="submit—btn">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <!--地址列表-->
-                <div class="Address_List">
-                    <div class="title_name"><span class="name">用户地址列表</span></div>
+
+    </div>
+</div>
+<div class="Address_List" style= "position: absolute;top: 273px;left: 261px ">
+                    <div class="title_name"><span class="name">用户地址列表<form action="{% url 'user_address_add' %}" >
+        <input type="submit" value="添加" style="width:85px;height:41px;border-radius: 20px;position: relative;top:-41px;left: 126px">
+    </form></span></div>
                     <div class="list">
                         <table>
                             <thead>
@@ -139,30 +115,24 @@
                             <td class="list_name_title4">收货地址</td>
                             <td class="list_name_title5">操作</td>
                             </thead>
+                            {% for addres1 in addres %}
+
+
 
                             <tr>
-                                <td>小组</td>
-                                <td>四川成都五华区</td>
-                                <td>601022</td>
-                                <td>12345678909</td>
-                                <td>产业业务宝贵机会</td>
-                                <td><a href="#">修改</a><a href="#">删除</a></td>
+                                <td>{{ addres1.aname }}</td>
+                                <td>{{ addres1.area }}</td>
+                                <td>{{ addres1.postcode }}</td>
+                                <td>{{ addres1.aphone }}</td>
+                                <td>{{ addres1.ads }}</td>
+                                <td><a href="{% url 'user_address_change' id=addres1.id %}">修改</a><a href="{% url 'user_address_delete' id=addres1.id  %}">删除</a></td>
                             </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
+                            {% endfor %}
+
                         </table>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 <!--底部样式-->
 <div class="footer">
     <div class="footer_img_bg"></div>

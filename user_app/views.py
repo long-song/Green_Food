@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
+from user_app.models import *
+from django.db.models import F,Q
 from user_app.models import UserInfo
 from user_app.froms import UserForm, RegisterForm
-import json
 import datetime
+from django.conf import settings
 
 # Create your views here.
 def index(request):
@@ -32,11 +34,8 @@ def login_required(view_func):
 
     return wrapper
 
-
-# 登录函数
-from commom_phone.code import *
-from commom_phone.phone_num4 import *
-
+from common.code import *
+from common.phone_num4 import *
 # 获取手机号发送验证码
 # 在发送ajax的post请求时解决跨网站请求
 from django.views.decorators.csrf import csrf_exempt
@@ -62,7 +61,7 @@ def phone_code(request):
             message = "手机号不正确"
             return JsonResponse({'message':message})
 
-
+# 登录函数
 def login(request):
     '''
         访问登录页面
@@ -77,7 +76,7 @@ def login(request):
         var_code = request.POST.get('var_code')
         code = request.session.get('code')
         try:
-            user = UserInfo.objects.get(username=username)
+            user = UserInfo.objects.get(Q(username=username)|Q(phone=username))
             if user.password == password:
                 if var_code == code:
                     request.session['is_login'] = True
@@ -153,6 +152,8 @@ def logout(request):
 
 
 # 我的订单函数
+# 导入生成唯一订单号函数
+from common.orderNo import get_order_code
 @login_required
 def user(request):
     '''
@@ -160,7 +161,12 @@ def user(request):
     :param request:
     :return:
     '''
-    return render(request, 'user_app/user.html')
+    a = request.session['user_id']
+    user = UserInfo.objects.get(id=a)
+    if request.method == 'GET':
+        order_No = get_order_code()
+        return render(request, 'user_app/user.html', locals())
+    return render(request, 'user_app/user.html',locals())
 
 
 # 个人信息函数
@@ -185,7 +191,28 @@ def user_password(request):
     :param request:
     :return:
     '''
-    return render(request, 'user_app/user_Password.html')
+    a = request.session['user_id']
+    user = UserInfo.objects.get(id=a)
+    if request.method=="POST":
+        old_pwd = request.POST.get('old_pwd')
+        new_pwd = request.POST.get('new_pwd')
+        new_pwd1 = request.POST.get('new_pwd1')
+        if old_pwd==user.password:
+            if new_pwd != old_pwd:
+                if new_pwd == new_pwd1:
+                    user.password = new_pwd
+                    user.save()
+                    request.session.flush()
+                    message = '您已成功修改密码，请重新登录！'
+                    return render(request,'user_app/Login.html',{'meaasge':message})
+                else:
+                    message = '两次新密码输入不一致！'
+            else:
+                message = '新密码不能与原密码相同'
+        else:
+            message = '原密码输入错误！'
+        return render(request, 'user_app/user_Password.html', locals())
+    return render(request, 'user_app/user_Password.html', {'user': user})
 
 
 # 我的收藏函数
@@ -206,8 +233,93 @@ def user_address(request):
     访问收货地址管理
     :param request:
     :return:
+
     '''
-    return render(request, 'user_app/user_address.html')
+    if request.method == "GET":
+        a = request.session['user_id']
+        user = UserInfo.objects.get(id=a)
+        # addre = Adress.objects.get(user_id=a)
+        addres = Adress.objects.filter(user_id=a)
+        # print(addre.postcode)
+        return render(request, 'user_app/user_address.html', {'user': user,'addres':addres})
+
+def  user_address_add(request):
+    """
+    增加用户地址
+    :param request:
+    :return:
+    """
+    if request.method == "GET":
+        a = request.session['user_id']
+        user = UserInfo.objects.get(id=a)
+        addre = Adress.objects.filter(user_id=a)
+        # print(user.head_img)
+        return render(request, 'user_app/user_address_add.html', {'user': user})
+    if request.method == "POST":
+        a = request.session['user_id']
+        new_aname = request.POST.get('new_aname')
+        new_area = request.POST.get('new_area')
+        new_postcode = request.POST.get('new_postcode')
+        new_aphone = request.POST.get('new_aphone')
+        new_ads = request.POST.get('new_ads')
+        addre1 = Adress(aname=new_aname,area=new_area,postcode=new_postcode,
+                        aphone=new_aphone,ads=new_ads,user_id=a)
+        addre1.save()
+        print(new_aname, new_area, new_postcode, new_aphone, new_ads)
+
+
+        return redirect('user_address')
+    return render(request, 'user_app/user_address_add.html')
+
+
+
+def  user_address_change(request,id):
+    """
+    修改用户地址
+    :param request:
+    :return:
+    """
+
+
+    if request.method == "GET":
+        a = request.session['user_id']
+        user = UserInfo.objects.get(id=a)
+        addre2 = Adress.objects.get(pk=id)
+        # print(user.head_img)
+        return render(request, 'user_app/user_address_change.html', {'addre2': addre2,"user":user})
+    if request.method == "POST":
+        a = request.session['user_id']
+        new_aname = request.POST.get('new_aname')
+        new_area = request.POST.get('new_area')
+        new_postcode = request.POST.get('new_postcode')
+        new_aphone = request.POST.get('new_aphone')
+        new_ads = request.POST.get('new_ads')
+        addre2 = Adress.objects.get(id=id)
+        addre2.aname = new_aname
+        addre2.area = new_area
+        addre2.postcode = new_postcode
+        addre2.aphone = new_aphone
+        addre2.ads = new_ads
+        addre2.user_id = a
+        addre2.save()
+        user = UserInfo.objects.get(id=a)
+        addres = Adress.objects.filter(user_id=a)
+        print(new_aname, new_area, new_postcode, new_aphone, new_ads)
+
+        return render(request, 'user_app/user_address.html', {'user': user, 'addres': addres,'id':addre2.id})
+
+
+def  user_address_delete(request,id):
+    """
+    删除用户地址
+    :param request:
+    :return:
+    """
+    addre3 = Adress.objects.get(pk=id)
+    addre3.delete()
+
+
+    return redirect('user_address')
 
 
 # 个人资料修改函数
@@ -242,3 +354,46 @@ def user_info_set(request):
         user.save()
         return render(request, 'user_app/user_info.html', {'user': user})
     return render(request, 'user_app/user_info_set.html')
+
+# 修改头像函数
+@login_required
+def new_head(request):
+    '''
+    访问个人资料修改页面
+    :param request:
+    :return:
+    '''
+    if request.method == "GET":
+        a = request.session['user_id']
+        user = UserInfo.objects.get(id=a)
+        # print(user.head_img)
+        return render(request, 'user_app/new_head.html', {'user': user})
+    if request.method == "POST":
+        new_head = request.FILES['new_head']
+        print('new_head=',new_head)
+        print(new_head.chunks)
+        new_username = request.POST.get('new_name')
+        new_t_name = request.POST.get('new_t_name')
+        new_gender = request.POST.get('1')
+        new_email = request.POST.get('new_email')
+        new_birthday = request.POST.get('new_birthday')
+        new_phone = request.POST.get('new_phone')
+        save_path = '%s/%s'%(settings.MEDIA_ROOT, new_head)
+        with open(save_path, 'wb') as f:
+            # 3. 获取上传文件的内容并写入创建的文件中
+            for content in new_head.chunks():
+                f.write(content)
+                print('OK')
+        print(new_gender, new_username, new_birthday, new_email, new_phone, new_t_name)
+        a = request.session['user_id']
+        user = UserInfo.objects.get(id=a)
+        user.head_img = 'media/%s'%(new_head)
+        user.username = new_username
+        user.t_name = new_t_name
+        user.phone = new_phone
+        user.gender = new_gender
+        user.birthday = new_birthday
+        user.email = new_email
+        user.save()
+        return render(request, 'user_app/user_info.html', {'user': user})
+    return render(request, 'user_app/new_head.html')

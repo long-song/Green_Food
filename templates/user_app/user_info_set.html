@@ -136,7 +136,7 @@
                     <div class="about_user_info">
                         <div class="user_layout">
                             <div class="col-md-6">
-                                <form action="{% url 'user_info_set' %}" method="post">
+                                <form action="{% url 'user_info_set' %}" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <div class="row1">
                                         <div class="text-right1"><span>用户头像:<img
@@ -145,22 +145,25 @@
                                     </div>
                                     <div class="row">
                                         <div class="text-right"><span>用户名:<input type="text" value="{{ user.username }}"
-                                                                                 name="new_name"></span></div>
+                                                                                 name="new_name"></span>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="text-right"><span>真实姓名:<input type="text" value="{{ user.t_name }}"
-                                                                                 name="new_t_name"></span></div>
+                                                                                  name="new_t_name"></span></div>
                                     </div>
                                     <div class="row">
-                                        <div class="text-right"><span>性别:<input id="man" type="radio" checked="checked" name="1" value="1"/>男
-                                            <input id="woman" type="radio"  name="1" value="2"/>女</span></div>
+                                        <div class="text-right"><span>性别:<input id="man" type="radio" checked="checked"
+                                                                                name="1" value="1"/>男
+                                            <input id="woman" type="radio" name="1" value="2"/>女</span></div>
                                     </div>
                                     <div class="row">
                                         <div class="text-right"><span>邮箱:<input type="text" value="{{ user.email }}"
                                                                                 name="new_email"></span></div>
                                     </div>
                                     <div class="row">
-                                        <div class="text-right"><span>生日:<input type="text" value="{{ user.birthday|date:'Y-m-d' }}"
+                                        <div class="text-right"><span>生日:<input type="text"
+                                                                                value="{{ user.birthday|date:'Y-m-d' }}"
                                                                                 name="new_birthday"></span></div>
                                     </div>
                                     <div class="row">

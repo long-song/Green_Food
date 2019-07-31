@@ -12,7 +12,7 @@
     <script type="text/javascript" src="{% static 'js/slider.js' %}"></script>
     <script src="{% static 'js/common_js.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/jquery.foucs.js' %}" type="text/javascript"></script>
-    <title>我的收藏</title>
+    <title>用户地址管理</title>
 </head>
 
 <body>
@@ -77,7 +77,7 @@
         </div>
     </div>
 </div>
-<!--用户中心(收藏)-->
+<!--用户中心(地址管理界面)-->
 <div class="Inside_pages clearfix">
     <div class="clearfix user">
         <!--左侧菜单栏样式-->
@@ -99,103 +99,34 @@
         </div>
         <!--右侧内容样式-->
         <div class="user_right">
-            <div class="user_Borders clearfix">
+            <div class="user_Borders">
                 <div class="title_name">
-                    <span class="name">用户收藏</span>
+                    <span class="name">添加地址</span>
                 </div>
-                <!--收藏样式-->
-                <div class="Collect">
-                    <ul class="Collect_list">
-                        <li>
-                            <div class="Collect_pro_name">
-                                <a href="#" class="delete_Collect"></a>
-                                <p class="img center"><a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                                </p>
-                                <p><a href="#">天然绿色多汁香甜无污染水蜜桃</a></p>
-                                <p class="Collect_Standard">礼盒装</p>
-                                <p class="Collect_price">￥234</p>
+                <div class="about_user_info">
+                    <form id="form1" name="form1" method="post" action="{% url 'user_address_change' id=addre2.id %}">
+                        {% csrf_token %}
+                        <div class="user_layout">
+                            <ul>
+                                <li><label class="user_title_name">收件人姓名：</label><input name="new_aname" type="text" value="{{ addre2.aname }}"
+                                                                                        class="add_text"><em>*</em></li>
+                                <li><label class="user_title_name">地&nbsp;&nbsp;&nbsp;区：</label><input name="new_area" type="text"
+                                                                                        class="add_text" value="{{ addre2.area }}"><em>*</em></li>
+                                <li><label class="user_title_name">收货地址：</label><input name="new_ads" type="text"
+                                                                                       class="add_text" value="{{ addre2.ads }}"><em>*</em></li>
+                                <li><label class="user_title_name">邮&nbsp;&nbsp;&nbsp;&nbsp;编：</label><input name="new_postcode"
+                                                                                                             type="text" value="{{ addre2.postcode }}"
+                                                                                                             class="add_text"><em>*</em>
+                                </li>
+                                <li><label class="user_title_name">手&nbsp;机&nbsp;号：</label><input name="new_aphone" type="text"
+                                                                                                  class="add_text" value="{{ addre2.aphone }}"><em>*</em>
+                                </li>
+
+                            </ul>
+                            <div class="operating_btn"><input name="name" type="submit" value="确认" class="submit—btn">
                             </div>
-                        </li>
-                        <li>
-                            <div class="Collect_pro_name">
-                                <a href="#" class="delete_Collect"></a>
-                                <p class="img center"><a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                                </p>
-                                <p><a href="#">天然绿色多汁香甜无污染水蜜桃</a></p>
-                                <p class="Collect_Standard">礼盒装</p>
-                                <p class="Collect_price">￥234</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="Collect_pro_name">
-                                <a href="#" class="delete_Collect"></a>
-                                <p class="img center"><a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                                </p>
-                                <p><a href="#">天然绿色多汁香甜无污染水蜜桃</a></p>
-                                <p class="Collect_Standard">礼盒装</p>
-                                <p class="Collect_price">￥234</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="Collect_pro_name">
-                                <a href="#" class="delete_Collect"></a>
-                                <p class="img center"><a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                                </p>
-                                <p><a href="#">天然绿色多汁香甜无污染水蜜桃</a></p>
-                                <p class="Collect_Standard">礼盒装</p>
-                                <p class="Collect_price">￥234</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="Collect_pro_name">
-                                <a href="#" class="delete_Collect"></a>
-                                <p class="img center"><a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                                </p>
-                                <p><a href="#">天然绿色多汁香甜无污染水蜜桃</a></p>
-                                <p class="Collect_Standard">礼盒装</p>
-                                <p class="Collect_price">￥234</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="Collect_pro_name">
-                                <a href="#" class="delete_Collect"></a>
-                                <p class="img center"><a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                                </p>
-                                <p><a href="#">天然绿色多汁香甜无污染水蜜桃</a></p>
-                                <p class="Collect_Standard">礼盒装</p>
-                                <p class="Collect_price">￥234</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="Collect_pro_name">
-                                <a href="#" class="delete_Collect"></a>
-                                <p class="img center"><a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                                </p>
-                                <p><a href="#">天然绿色多汁香甜无污染水蜜桃</a></p>
-                                <p class="Collect_Standard">礼盒装</p>
-                                <p class="Collect_price">￥234</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="Collect_pro_name">
-                                <a href="#" class="delete_Collect"></a>
-                                <p class="img center"><a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                                </p>
-                                <p><a href="#">天然绿色多汁香甜无污染水蜜桃</a></p>
-                                <p class="Collect_Standard">礼盒装</p>
-                                <p class="Collect_price">￥234</p>
-                            </div>
-                        </li>
-                    </ul>
-                    <!--分页-->
-                    <div class="pages_Collect clearfix">
-                        <a href="#" class="on">《</a>
-                        <a href="#">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">》</a>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -239,3 +170,4 @@
 </div>
 </body>
 </html>
+
