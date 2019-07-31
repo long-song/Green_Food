@@ -9,6 +9,13 @@ def Orders(request):
     :param request:
     :return:
     '''
+    if request.method=='POST':
+        info = request.POST.get('price')
+        num = request.POST.get('num')
+        oprice = request.POST.get('oprice')
+        p_id = request.POST.get('p_id')
+        print('单价=',info,'数量=',num,'总价=',oprice,'id=',p_id)
+        return render(request, 'shop_app/Orders.html',locals())
     return render(request, 'shop_app/Orders.html')
 
 
