@@ -132,4 +132,4 @@ STATICFILES_DIRS = [
 # 设置上传文件的保存目录
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
 
-# MEDIA_URL = "/media/"  # 跟STATIC_URL类似，指定用户可以通过这个路径找到文件
+MEDIA_URL = "/media/"  # 跟STATIC_URL类似，指定用户可以通过这个路径找到文件

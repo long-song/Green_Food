@@ -119,7 +119,8 @@
                 <div class="Head_portrait"><img src="{% static user.head_img.url %}" width="80px"
                                                 height="80px"/>
                     <!--头像区域--></div>
-                <div class="user_name">{{ request.session.user_username }}<a href="{% url 'user_info' %}">[个人资料]</a></div>
+                <div class="user_name">{{ request.session.user_username }}<a href="{% url 'user_info' %}"
+                                                                             style="color: orange">[个人资料]</a></div>
             </div>
             <ul class="Section">
                 <li><a href="{% url 'user' %}"><em></em><span>我的订单</span></a></li>
@@ -143,7 +144,7 @@
                                 <div class="text-right1"><span>用户头像:<img
                                         src="{% static user.head_img.url %}" width="80px"
                                         height="80px"/></span><a href="{% url 'new_head' %}">
-                                    <button style="background:url({% static 'images/xiangji1.png' %});width: 30px;height: 30px;border: 0 "></button>
+                                    <button style="background:url({% static 'images/xiangji1.png' %});width: 30px;height: 30px;border: 0;cursor:pointer "></button>
                                 </a></div>
                             </div>
                             <div class="row">
@@ -166,7 +167,10 @@
                             </div>
                             <div class="row">
                                 <a href="{% url 'user_info_set' %}">
-                                    <button class="set">编辑我的信息</button>
+                                    <button class="set"
+                                            style="background: orange;border: 0;font-family: '微软雅黑 Light';width: 100px;height: 30px;letter-spacing: 3px;text-align: center;cursor:pointer">
+                                        更新信息
+                                    </button>
                                 </a>
                             </div>
                         </div>
@@ -178,13 +182,11 @@
     </div>
 {% else %}
     <div class="Inside_pages clearfix">
-    <div class="clearfix user" style="height: 250px">
-        <div class="user_left">
-
+        <div class="clearfix user" style="height: 250px">
+            <div class="user_left">
                 暂时还未有用户登录……
-
+            </div>
         </div>
-    </div>
     </div>
 {% endif %}
 <!--底部样式-->
