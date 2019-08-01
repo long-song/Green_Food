@@ -5,6 +5,7 @@ from django.db.models import F,Q
 from user_app.models import UserInfo
 from user_app.froms import UserForm, RegisterForm
 import datetime
+from integral_app.models import *
 from django.conf import settings
 
 # Create your views here.
@@ -223,7 +224,32 @@ def user_collect(request):
     :param request:
     :return:
     '''
-    return render(request, 'user_app/user_Collect.html')
+    a = request.session['user_id']
+    user = UserInfo.objects.get(id=a)
+    pro_id = request.GET.get("id")
+    fav = request.GET.get("fav")
+    if pro_id != None:
+        if fav == "1":
+            pro = Pro_sku.objects.get(id=pro_id)
+            collect = Collect.objects.create()
+            collect.pro_id = pro_id
+            collect.image = pro.image
+            collect.name = pro.name
+            collect.size = pro.size
+            collect.title = pro.title
+            collect.price = pro.price
+            collect.user_id = a
+            collect.save()
+            collect1 = Collect.objects.filter(user=a)
+            return render(request, 'user_app/user_Collect.html', {'user': user, 'col': collect1,'fav':fav})
+        else:
+            collect = Collect.objects.filter(user=a,pro_id=pro_id)
+            collect.delete()
+            collect1 = Collect.objects.filter(user=a)
+            return render(request, 'user_app/user_Collect.html', {'user': user, 'col': collect1, 'fav': fav})
+    else:
+        collect1 = Collect.objects.filter(user_id=a)
+        return render(request, 'user_app/user_Collect.html',{'user':user,'col':collect1})
 
 
 # 我的地址管理函数
@@ -274,14 +300,12 @@ def  user_address_add(request):
 
 
 # 修改用户地址
-def  user_address_change(request,id):
+def user_address_change(request,id):
     """
     修改用户地址
     :param request:
     :return:
     """
-
-
     if request.method == "GET":
         a = request.session['user_id']
         user = UserInfo.objects.get(id=a)
@@ -310,7 +334,7 @@ def  user_address_change(request,id):
         return render(request, 'user_app/user_address.html', {'user': user, 'addres': addres,'id':addre2.id})
 
 # 删除用户地址
-def  user_address_delete(request,id):
+def user_address_delete(request,id):
     """
     删除用户地址
     :param request:
@@ -318,8 +342,6 @@ def  user_address_delete(request,id):
     """
     addre3 = Adress.objects.get(pk=id)
     addre3.delete()
-
-
     return redirect('user_address')
 
 

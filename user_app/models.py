@@ -93,7 +93,12 @@ class User_order(models.Model):
     def __str__(self):
         return self.orderNo
 
-# # 收藏表
-# class Collect(models.Model):
-#     user = models.ForeignKey(UserInfo,on_delete=models.CASCADE)
-#     product = models.ForeignKey(Pro_sku,on_delete=models.CASCADE)
+# 收藏表
+class Collect(models.Model):
+    pro_id = models.IntegerField(null=True, verbose_name='商品id',unique=True)
+    image = models.ImageField(null=True,verbose_name='商品图片')
+    name = models.CharField(max_length=50, verbose_name='商品名(规格)')
+    size = models.CharField(max_length=10, default='500g', verbose_name='产品规格')
+    title = models.CharField(max_length=100, verbose_name='标签')
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='单价',default=40.00)
+    user = models.ForeignKey(UserInfo,on_delete=models.CASCADE,null=True)

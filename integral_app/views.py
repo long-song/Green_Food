@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from integral_app.models import *
 from shop_app.models import *
 from user_app.models import *
@@ -57,7 +57,19 @@ def product_detailed(request):
     '''
     sales = Pro_sku.objects.filter().order_by('-sales')
     addres_id = request.GET.get("id")
+    fav0 = request.GET.get('fav')
     detail_all = Pro_sku.objects.filter(id=addres_id)
+    if request.session.has_key('is_login'):
+        a = request.session['user_id']
+        col = Collect.objects.filter(user=a, pro_id=addres_id)
+        if fav0 == "0":
+            col.delete()
+            return render(request, 'integral_app/Product-detailed.html',
+                          {'sales': sales[:5], 'detail_all': detail_all, 'p_id': addres_id})
+        if col:
+            fav = "已收藏"
+            return render(request, 'integral_app/Product-detailed.html',
+                          {'sales': sales[:5], 'detail_all': detail_all, 'p_id': addres_id,'fav':fav})
     return render(request, 'integral_app/Product-detailed.html', {'sales': sales[:5], 'detail_all': detail_all,'p_id':addres_id})
 
 
