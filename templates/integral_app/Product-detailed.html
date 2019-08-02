@@ -215,76 +215,81 @@
                             <div class="operating">
                                 <a href="{% url "Orders" %}"><input id="information" value="立即购买"
                                                                     style="color: #ffffff; width: 130px; height: 50px;background: #ee1526;font-size: 20px;border-radius: 5px"></a>
-                                <a href="{% url "shopping_cart" %}"><input id='shop_cart' value="加入购物车"
-                                                                           style="color: #ffffff; width: 130px; height: 50px;background: #fe9c3f;font-size: 20px;border-radius: 5px"></a>
                                 {% if fav %}
-                                    <a href="{% url "product_detailed" %}?id={{ foo.id }}&fav=0"><img src="{% static 'images/fav1.jpg' %}" alt="取消收藏" style="width: 53px;height: 53px;" title="取消收藏"></a>
+                                    <a href="{% url "product_detailed" %}?id={{ foo.id }}&fav=0"><img
+                                            src="{% static 'images/fav1.jpg' %}" alt="取消收藏"
+                                            style="width: 53px;height: 53px;" title="取消收藏"></a>
                                 {% else %}
-                                    <a href="{% url "user_collect" %}?id={{ foo.id }}&fav=1"><img src="{% static 'images/fav.jpg' %}" alt="收藏" style="width: 53px;height: 53px;" title="收藏"></a>
+                                    <a href="{% url "user_collect" %}?id={{ foo.id }}&fav=1"><img
+                                            src="{% static 'images/fav.jpg' %}" alt="收藏"
+                                            style="width: 53px;height: 53px;" title="收藏"></a>
                                 {% endif %}
                             </div>
+                            <input type="button" id='shop_cart'
+                                   style="color: #ffffff; width: 130px; height: 50px;background: #fe9c3f;font-size: 20px;border-radius: 5px"
+                                   value="加入购物车" onclick="f">
                         {% endfor %}
                     </form>
                 </div>
 
             </div>
             {# 立即购买进入确认订单界面js #}
+            {#            <script>#}
+            {#                $('#information').click(function () {#}
+            {#                    var price = $(".price>em").text();#}
+            {#                    var num_show = $(".number_text").val();#}
+            {#                    var oprice = $(".total>em").text();#}
+            {#                    var p_id = {{ p_id }};#}
+            {#                    $.post('{% url 'Orders' %}', {'price': price, 'num': num_show, 'oprice': oprice, 'p_id': p_id},#}
+            {#                        function () {#}
+            {#                            alert('提交信息成功，请确认订单！')#}
+            {#                        })#}
+            {#                });#}
+            {#            </script>#}
+            {#             加入购物车js #}
             <script>
-                $('#information').click(function () {
-                    var price = $(".price>em").text();
-                    var num_show = $(".number_text").val();
-                    var oprice = $(".total>em").text();
-                    var p_id = {{ p_id }};
-                    $.post('{% url 'Orders' %}', {'price': price, 'num': num_show, 'oprice': oprice, 'p_id': p_id},
-                        function () {
-                            alert('提交信息成功，请确认订单！')
-                        })
-                });
-            </script>
-            {# 加入购物车js #}
-            <script>
-                $('#shop_cart').click(function () {
-                    var price = $(".price>em").text();
-                    var num_show = $(".number_text").val();
-                    var oprice = $(".total>em").text();
-                    var p_id = {{ p_id }};
-                    $.post('{% url 'shopping_cart' %}', {
-                            'price': price,
-                            'num': num_show,
-                            'oprice': oprice,
-                            'p_id': p_id
-                        },
-                        function (data) {
-                            if (data.message = 'OK') {
-                                alert('已加入购物车！')
-                            } else {
-                                alert('加入购物车失败！')
-                            }
-                        })
-                });
+                $(function f() {
+                    $('#shop_cart').click(function () {
+                        num = $('.number_text').val();
+                        price = $(".total>em").text();
+                        p_id = {{ p_id }};
+                        $.post('{% url 'add' %}', {
+                                'p_id': p_id,
+                                'count': num,
+                                'price': price
+                            },
+                            function (data) {
+                                if (data.message = 'OK') {
+                                    alert('已加入购物车！')
+                                } else {
+                                    alert('加入购物车失败！')
+                                }
+                            })
+                    })
+                })
             </script>
             {# 收藏js #}
-{#            <script>#}
-{#                $('#collect').click(function () {#}
-{#                    var price = $(".price>em").text();#}
-{#                    var num_show = $(".number_text").val();#}
-{#                    var oprice = $(".total>em").text();#}
-{#                    var p_id = {{ p_id }};#}
-{#                    $.post('{% url 'user_collect' %}', {#}
-{#                            'price': price,#}
-{#                            'num': num_show,#}
-{#                            'oprice': oprice,#}
-{#                            'p_id': p_id#}
-{#                        },#}
-{#                        function (data) {#}
-{#                            if (data.message = 'OK') {#}
-{#                                $('#collect').val('已收藏！')#}
-{#                            } else {#}
-{#                                alert('收藏失败')#}
-{#                            }#}
-{#                        })#}
-{#                });#}
-{#            </script>#}
+            {#            <script>#}
+            {#                $('#collect').click(function () {#}
+            {#                    var price = $(".price>em").text();#}
+            {#                    var num_show = $(".number_text").val();#}
+            {#                    var oprice = $(".total>em").text();#}
+            {#                    var p_id = {{ p_id }};#}
+            {#                    $.post('{% url 'user_collect' %}', {#}
+            {#                            'price': price,#}
+            {#                            'num': num_show,#}
+            {#                            'oprice': oprice,#}
+            {#                            'p_id': p_id#}
+            {#                        },#}
+            {#                        function (data) {#}
+            {#                            if (data.message = 'OK') {#}
+            {#                                $('#collect').val('已收藏！')#}
+            {#                            } else {#}
+            {#                                alert('收藏失败')#}
+            {#                            }#}
+            {#                        })#}
+            {#                });#}
+            {#            </script>#}
             {# 数量加减改变总价js #}
             <script>
                 $("#add").click(function () {
