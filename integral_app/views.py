@@ -14,6 +14,7 @@ def group_buy(request):
     :param request:
     :return:
     '''
+
     return render(request, 'integral_app/Group_buy.html')
 
 
@@ -34,7 +35,6 @@ def products(request):
     :return:
     '''
     fruits = Pro_sku.objects.exclude(type_id=2)
-
     return render(request, 'integral_app/Products.html', {'fruits': fruits})
 
 

@@ -12,6 +12,8 @@ class Pro_Type(models.Model):
 
     def __str__(self):
         return self.title
+    class Meta:
+        verbose_name = '商品分类'
 
 
 class Pro_sku(models.Model):
@@ -31,6 +33,7 @@ class Pro_sku(models.Model):
     comments = models.IntegerField(default=0, verbose_name='评价数')
     is_putaway = models.BooleanField(default=True, verbose_name='是否上架销售')
 
+
     class Meta:
         db_table = 'Pro_sku'
         verbose_name = '商品SKU'
@@ -49,6 +52,8 @@ class Pro_discass(models.Model):
     dis_content = models.CharField(max_length=200, verbose_name="评论内容")
     dis_user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name = '评论表'
 
 # 评论回复表
 # reply_dis : 回复的目标评论
@@ -59,6 +64,8 @@ class Reply_dis(models.Model):
     reply_content = models.CharField(max_length=200, verbose_name="回复内容")
     reply_user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name = '回复表'
 
 class Group_buy(models.Model):
     '''

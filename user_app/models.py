@@ -38,10 +38,10 @@ class UserInfo(models.Model):
     def __str__(self):
         return self.username
 
-    # class Meta:
-    #     ordering = ['up_time']
-    #     verbose_name = '用户'
-    #     verbose_name_plural = '用户'
+    class Meta:
+        # ordering = ['up_time']
+        verbose_name = '用户'
+        verbose_name_plural = '用户'
 
 
 # 地址表 Adress
@@ -61,7 +61,10 @@ class Adress(models.Model):
     def __str__(self):
         return self.aname
 
-
+    class Meta:
+        # ordering = ['up_time']
+        verbose_name = '地址管理'
+        verbose_name_plural = '地址管理'
 # 订单信息表 User_order
 # orderNo 订单号
 # orderdetail(商品，数量，单价，描述)
@@ -92,7 +95,10 @@ class User_order(models.Model):
 
     def __str__(self):
         return self.orderNo
-
+    class Meta:
+        # ordering = ['up_time']
+        verbose_name = '订单管理'
+        verbose_name_plural = '订单管理'
 # 收藏表
 class Collect(models.Model):
     pro_id = models.IntegerField(null=True, verbose_name='商品id',unique=True)
@@ -102,3 +108,7 @@ class Collect(models.Model):
     title = models.CharField(max_length=100, verbose_name='标签')
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='单价',default=40.00)
     user = models.ForeignKey(UserInfo,on_delete=models.CASCADE,null=True)
+    class Meta:
+        # ordering = ['up_time']
+        verbose_name = '收藏管理'
+        verbose_name_plural = '收藏管理'
