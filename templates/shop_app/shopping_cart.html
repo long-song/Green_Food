@@ -16,6 +16,24 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <title>购物车</title>
 </head>
+<script>
+    function cart_del(cart_id) {
+        del = confirm('确定删除');
+        {#            cart_id = $(this).parents('.cart_list_td').attr('id');#}
+        {#            alert(cart_id);#}
+        if (del) {
+            $.get('/shop_app/delete' + cart_id + '/', function (data) {
+                {#                    alert(data.ok);#}
+                if (data.ok == 1) {
+                    //删掉哪一行 商品  界面元素
+                    {#                        alert('删除');#}
+                    $('ul').remove('#' + cart_id);
+                    total();
+                }
+            })
+        }
+    }
+</script>
 
 <body>
 <!--顶部样式-->
@@ -101,14 +119,15 @@
                 {% for cart in carts %}
                     <tr>
                         <td class="checkbox"><input class="check-one check" type="checkbox"/></td>
-                        <td class="goods"><img src="{{ cart.pros.image }}" alt=""/><span>{{ cart.pros.name }}</span>
+                        <td class="goods"><a href="{% url 'product_detailed' %}?id={{ cart.pros_id }}"><img
+                                src="{{ cart.pros.image }}" alt=""/><span>{{ cart.pros.name }}</span></a>
                         </td>
                         <td class="price">{{ cart.pros.price }}</td>
                         <td class="count"><span class="reduce"></span><input class="count-input" type="text"
                                                                              value="{{ cart.ccount }}"/><span
                                 class="add">+</span></td>
                         <td class="subtotal">{{ cart.cprice }}</td>
-                        <td class="operation"><span class="delete">删除</span></td>
+                        <td class="operation"><span class="delete" onclick="cart_del({{ cart.id }});">删除</span></td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -116,19 +135,18 @@
 
             <div class="foot" id="foot">
                 <label class="fl select-all"><input type="checkbox" class="check-all check"/>&nbsp;全选</label>
-                <a class="fl delete" id="deleteAll" href="javascript:;">删除</a>
-                <div class="fr closing">结 算</div>
+                <a class="fl delete" id="deleteAll" href="javascript:">删除</a>
+                <div class="fr closing"><a href="{% url 'Orders'%}">结 算</a></div>
                 <div class="fr total">合计：￥<span id="priceTotal">0.00</span></div>
                 <div class="fr selected" id="selected">已选商品<span id="selectedTotal">0</span>件<span
                         class="arrow up">︽</span><span class="arrow down">︾</span></div>
                 <div class="selected-view">
                     <div id="selectedViewList" class="clearfix">
-                        <div><img src="images/1.jpg"><span>取消选择</span></div>
+                        <div><img src="{{ cart.pros.image }}"><span>取消选择</span></div>
                     </div>
                     <span class="arrow">◆<span>◆</span></span>
                 </div>
             </div>
-
         </div>
     </div>
     <!--底部样式-->
@@ -167,5 +185,6 @@
             @2015 四川莆田特色馆版权所有
         </div>
     </div>
+</div>
 </body>
 </html>

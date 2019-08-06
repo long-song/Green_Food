@@ -1,11 +1,14 @@
 from django.shortcuts import render,redirect,reverse
 from django.http import JsonResponse
 from django.db import transaction
+from django.http import JsonResponse
+from django.shortcuts import render, HttpResponse
+
 from datetime import datetime
-# from user_app import user_decorator
-from integral_app.models import *
-from user_app.models import *
+from decimal import Decimal
+# from .models import OrderInfo, OrderDetailInfo
 from shop_app.models import *
+from user_app.models import *
 import decimal
 
 
@@ -18,14 +21,46 @@ def Orders(request):
     :param request:
     :return:
     '''
-    if request.method=='POST':
-        info = request.POST.get('price')
-        num = request.POST.get('num')
-        oprice = request.POST.get('oprice')
-        p_id = request.POST.get('p_id')
-        print('单价=',info,'数量=',num,'总价=',oprice,'id=',p_id)
-        return render(request, 'shop_app/Orders.html',locals())
-    return render(request, 'shop_app/Orders.html')
+
+    # if request.method=='GET':
+    #     uid = request.session['user_id']
+    #     uadress = Adress.objects.get(user=uid)
+    #     carts = CartInfo.objects.filter(user=uid)
+    #     # info = request.POST.get('price')
+    #     # num = request.POST.get('num')
+    #     # oprice = request.POST.get('oprice')
+    #     # p_id = request.POST.get('p_id')
+    #     # print('单价=',info,'数量=',num,'总价=',oprice,'id=',p_id)
+    #     context = {
+    #         'title':'提交订单',
+    #         'uid':uid,
+    #         'uadress':uadress,
+    #         # 'info':info,
+    #         # 'num':num,
+    #         # 'oprice':oprice,
+    #         # 'p_id':p_id,
+    #         'carts':carts
+    #     }
+    #     # return render(request, 'shop_app/Orders.html',locals())
+    if request.method == 'GET':
+        p_id = request.GET.get('p_id')
+        # order = Order.objects.create()
+        # order.pro_id = int(p_id)
+        # order.pro_id_id = int(p_id)
+        # order.oprice = info
+        # order.ocount = num
+        # order.oprices = oprice
+        # order.save()
+        # order = Order.objects.get(id=int(p_id))
+        uid = request.session['user_id']
+        uadress = Adress.objects.get(user=uid)
+        order = Pro_sku.objects.get(id = p_id)
+        # print('单价=', info, '数量=', num, '总价=', oprice, 'id=', p_id)
+        print(locals())
+        return render(request, 'shop_app/Orders.html', locals())
+    # return render(request, 'shop_app/Orders.html')
+
+
 
 
 # @user_decorator.login
@@ -97,9 +132,11 @@ def edit(request, cart_id, count):
 
 # @user_decorator.login
 def delete(request, cart_id):
+    print(cart_id)
     data = {}
     try:
         cart = CartInfo.objects.get(pk=int(cart_id))
+        cart.pros_id=cart_id
         cart.delete()
         data['ok'] = 1
     except Exception:
