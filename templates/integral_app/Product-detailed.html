@@ -213,7 +213,7 @@
                             </div>
                             <div class="product_Quantity" style="height: 15px;">销量：{{ foo.sales }}</div>
                             <div class="operating">
-                                <a href="{% url "Orders" %}"><input id="information" value="立即购买"
+                                <a href="{% url "Orders" %}?p_id={{ foo.id }}"><input id="information" value="立即购买"
                                                                     style="color: #ffffff; width: 130px; height: 50px;background: #ee1526;font-size: 20px;border-radius: 5px"></a>
                                 {% if fav %}
                                     <a href="{% url "product_detailed" %}?id={{ foo.id }}&fav=0"><img
