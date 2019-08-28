@@ -10,19 +10,22 @@ class Pro_Type(models.Model):
     desc = models.CharField('描述', max_length=200, default='商品描述')
     is_delete = models.BooleanField('删除', default=False)
 
-    def __str__(self):
-        return self.title
     class Meta:
         verbose_name = '商品分类'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.title
 
 
 class Pro_sku(models.Model):
     '''
     商品SKU基本信息表
     '''
-    image = models.ImageField(upload_to='static/images', default='images/product_AD_07.png', null=True, verbose_name='商品图片')
+    image = models.ImageField(upload_to='static/images', default='images/product_AD_07.png', null=True,
+                              verbose_name='商品图片')
     name = models.CharField(max_length=50, verbose_name='商品名(规格)')
-    describe = models.CharField(max_length=600, verbose_name='产品介绍',null=True)
+    describe = models.CharField(max_length=600, verbose_name='产品介绍', null=True)
     size = models.CharField(max_length=10, default='500g', verbose_name='产品规格')
     title = models.CharField(max_length=100, verbose_name='标签')
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='本店价')
@@ -32,7 +35,6 @@ class Pro_sku(models.Model):
     type = models.ForeignKey(Pro_Type, on_delete=models.CASCADE)
     comments = models.IntegerField(default=0, verbose_name='评价数')
     is_putaway = models.BooleanField(default=True, verbose_name='是否上架销售')
-
 
     class Meta:
         db_table = 'Pro_sku'
@@ -54,6 +56,8 @@ class Pro_discass(models.Model):
 
     class Meta:
         verbose_name = '评论表'
+        verbose_name_plural = verbose_name
+
 
 # 评论回复表
 # reply_dis : 回复的目标评论
@@ -66,6 +70,8 @@ class Reply_dis(models.Model):
 
     class Meta:
         verbose_name = '回复表'
+        verbose_name_plural = verbose_name
+
 
 class Group_buy(models.Model):
     '''

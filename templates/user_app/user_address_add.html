@@ -1,172 +1,148 @@
+{% extends 'user_app/new_head.html' %}
 {% load static %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link href="{% static 'css/css.css' %}" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'css/common.css' %}" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" type="text/css"/>
-    <script src="{% static 'js/jquery.min.1.8.2.js' %}" type="text/javascript"></script>
-    <script src="{% static 'js/jquery.SuperSlide.2.1.1.js' %}" type="text/javascript"></script>
-    <script type="text/javascript" src="{% static 'js/slider.js' %}"></script>
-    <script src="{% static 'js/common_js.js' %}" type="text/javascript"></script>
-    <script src="{% static 'js/jquery.foucs.js' %}" type="text/javascript"></script>
-    <title>用户地址管理</title>
-</head>
+{% block title %}
+    用户地址管理
+{% endblock %}
 
-<body>
-<!--顶部样式-->
-<div class="top_header">
-    <em class="left_img"></em>
-    <div class="header clearfix" id="header">
-        <a href="#" class="logo_img"><img src="{% static 'images/logo.png' %}"/></a>
-        <div class="header_Section">
-            <div class="shortcut">
-                <ul>
-                    {% if request.session.is_login %}
-                        <li class="hd_menu_tit"><em class="login_img"></em><a href="{% url 'user_info' %}">当前在线：{{ request.session.user_username }}</a></li>
-                        <li class="hd_menu_tit"><em class="registered_img"></em><a href="{% url 'logout' %}">注销</a></li>
-                    {% else %}
-                        <li class="hd_menu_tit"><em class="login_img"></em><a href="{% url 'login' %}">登录</a></li>
-                        <li class="hd_menu_tit"><em class="registered_img"></em><a href="{% url 'registered' %}">注册</a></li>
-                    {% endif %}
-                    <li class="hd_menu_tit"><em class="Collect_img"></em><a href="{% url 'user_collect' %}">收藏夹</a></li>
-                    <li class="hd_menu_tit"><em class="cart_img"></em><a href="{% url 'shopping_cart' %}">购物车</a></li>
-                    <li class="hd_menu_tit list_name" data-addclass="hd_menu_hover"><a href="#">网站导航</a><em
-                            class="navigation_img"></em>
-
-                        <div class="hd_menu_list">
-                            <span class="wire"></span>
-                            <ul>
-                                <li><a href="#">常见问题</a></li>
-                                <li><a href="#">在线退换货</a></li>
-                                <li><a href="#">在线投诉</a></li>
-                                <li><a href="#">配送范围</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
+{% block body %}
+    <!--有关下拉框的值获取与联动-->
+    <script>
+        $(function () {
+            //发起ajax请求,获取所有省级地区信息
+            //获取信息，使用get
+            //涉及到信息修改，使用post
+            $.get('{% url 'province' %}', function (data) {
+                my_province = $("#province"); //得到省份控件对象
+                provinces = data.infos;
+                // index:代表集合中元素的下标
+                //item:代表当前遍历到的对象
+                $.each(provinces, function (index, item) {
+                    my_province.append("<option value=" + item.parentid + ">" + item.cityname + "</option>")
+                });
+            });
+            //给province的select控件绑定事件：
+            // 当选择内容发生变化后自动触发的事件:onchange,
+            // 但是在jquery中绑定事件时需要把前面的on去掉
+            $("#province").click(function () {
+                province_id = $("#province").val(); //获取选中对象的省份id的值
+                var city = $("#city"); //获取城市的下拉列表框
+                var county = $("#county"); //获取区县控件对象
+                county.empty();
+                city.empty();
+                $.post('{% url 'city' %}', {'p_id': province_id}, function (data) {
+                    cities = data.infos;
+                    {#address.val(data.address);#}
+                    {#city.empty(); //清空所有的option#}
+                    $.each(cities, function (index, item) {
+                        console.log(index);
+                        console.log(item);
+                        city.append("<option value=" + item.parentid + ">" + item.cityname + "</option>")
+                    })
+                });
+            });
+            //给city的select控件绑定事件：
+            $("#city").click(function () {
+                city_id = $(this).val(); //获取城市id
+                {#province_id = $("#province").val(); //得到省份#}
+                //alert('city_id='+city_id)
+                var county = $("#county"); //获取区县控件对象
+                county.empty();
+                $.post("{% url 'county' %}", {'p_id': city_id,}, function (data) {
+                    dises = data.infos; //获取所有区县组成的列表
+                    {#address.val(data.address);#}
+                    {#area.empty();#}
+                    $.each(dises, function (index, item) {
+                        console.log(index);
+                        console.log(item);
+                        county.append("<option value=" + item.parentid + ">" + item.cityname + "</option>")
+                    })
+                })
+            });
+        })
+    </script>
+    <style>
+        #parent select {
+            border: none;
+            padding-left: 10px;
+            width: 120px;
+            height: 33px;
+            {#float: left;#}
+            {#-webkit-appearance: none; /* Safari 和 Chrome */#}
+            {#-moz-appearance: none; /* Firefox */#}
+            background: #eeeeee;
+            font-size: 15px;
+        }
+    </style>
+    <!--位置-->
+    <div class="Bread_crumbs">
+        <div class="Inside_pages clearfix">
+            <div class="right Search">
+                <form>
+                    <input name="" type="text" class="Search_Box"/>
+                    <input name="" type="button" name="" class="Search_btn"/>
+                </form>
             </div>
-            <div class="nav" id="Navigation">
-                <ul class="Navigation_name">
-                    <li class=""><a href="{% url 'index' %}">首页</a></li>
-                    <li class=""><a href="{% url 'integral' %}">所有果蔬</a></li>
-                    <li class=""><a href="{% url 'group_buy' %}">活动专区</a></li>
-                    <li class=""><a href="{% url 'products' %}">水果馆</a></li>
-                    <li class=""><a href="{% url 'products_list' %}">蔬菜馆</a></li>
-                    <li class=""><a href="{% url 'user_info' %}">会员中心</a></li>
-                    <li class=""><a href="#">联系我们</a></li>
-                </ul>
-            </div>
-            <script>$("#Navigation").slide({titCell: ".Navigation_name li"});</script>
         </div>
     </div>
-    <em class="right_img"></em>
-</div>
-<!---->
-<div><a href="#"><img src="../../static/images/AD_page_img_02.png" width="100%"/></a></div>
-<!--位置-->
-<div class="Bread_crumbs">
+    <!--用户中心(地址管理界面)-->
     <div class="Inside_pages clearfix">
-        <div class="right Search">
-            <form>
-                <input name="" type="text" class="Search_Box"/>
-                <input name="" type="button" name="" class="Search_btn"/>
-            </form>
-        </div>
-    </div>
-</div>
-<!--用户中心(地址管理界面)-->
-<div class="Inside_pages clearfix">
-    <div class="clearfix user">
-        <!--左侧菜单栏样式-->
-        <div class="user_left">
-            <div class="user_info">
-                <div class="Head_portrait"><img src="{% static user.head_img.url %}" width="80px"
-                                                height="80px"/>
-                    <!--头像区域--></div>
-                <div class="user_name">{{ request.session.user_username }}<a href="{% url 'user_info' %}" style="color: orange">[个人资料]</a></div>
-            </div>
-            <ul class="Section">
-                <li><a href="{% url 'user' %}"><em></em><span>我的订单</span></a></li>
-                <li><a href="{% url 'user_info' %}"><em></em><span>个人信息</span></a></li>
-                <li><a href="{% url 'user_password' %}"><em></em><span>修改密码</span></a></li>
-                <li><a href="{% url 'user_collect' %}"><em></em><span>我的评论</span></a></li>
-                <li><a href="{% url 'user_collect' %}"><em></em><span>我的收藏</span></a></li>
-                <li><a href="{% url 'user_address' %}"><em></em><span>收货地址管理</span></a></li>
-            </ul>
-        </div>
-        <!--右侧内容样式-->
-        <div class="user_right">
-            <div class="user_Borders">
-                <div class="title_name">
-                    <span class="name">添加地址</span>
+        <div class="clearfix user">
+            <!--左侧菜单栏样式-->
+            <div class="user_left">
+                <div class="user_info">
+                    <div class="Head_portrait"><img src="{% static user.head_img.url %}" width="80px"
+                                                    height="80px"/>
+                        <!--头像区域--></div>
+                    <div class="user_name">{{ request.session.user_username }}<a href="{% url 'user_info' %}"
+                                                                                 style="color: orange">[个人资料]</a></div>
                 </div>
-                <div class="about_user_info">
-                    <form id="form1" name="form1" method="post" action="{% url 'user_address_add' %}">
-                        {% csrf_token %}
-                        <div class="user_layout">
-                            <ul>
-                                <li><label class="user_title_name">收件人姓名：</label><input name="new_aname" type="text"
-                                                                                        class="add_text"><em>*</em></li>
-                                <li><label class="user_title_name">地&nbsp;&nbsp;&nbsp;区：</label><input name="new_area" type="text"
-                                                                                        class="add_text"><em>*</em></li>
-                                <li><label class="user_title_name">收货地址：</label><input name="new_ads" type="text"
-                                                                                       class="add_text"><em>*</em></li>
-                                <li><label class="user_title_name">邮&nbsp;&nbsp;&nbsp;&nbsp;编：</label><input name="new_postcode"
-                                                                                                             type="text"
-                                                                                                             class="add_text"><em>*</em>
-                                </li>
-                                <li><label class="user_title_name">手&nbsp;机&nbsp;号：</label><input name="new_aphone" type="text"
-                                                                                                  class="add_text"><em>*</em>
-                                </li>
+                <ul class="Section">
+                    <li><a href="{% url 'user' %}"><em></em><span>我的订单</span></a></li>
+                    <li><a href="{% url 'user_info' %}"><em></em><span>个人信息</span></a></li>
+                    <li><a href="{% url 'user_password' %}"><em></em><span>修改密码</span></a></li>
+                    <li><a href="{% url 'user_collect' %}"><em></em><span>我的评论</span></a></li>
+                    <li><a href="{% url 'user_collect' %}"><em></em><span>我的收藏</span></a></li>
+                    <li><a href="{% url 'user_address' %}"><em></em><span>收货地址管理</span></a></li>
+                </ul>
+            </div>
+            <!--右侧内容样式-->
+            <div class="user_right">
+                <div class="user_Borders">
+                    <div class="title_name">
+                        <span class="name">添加地址</span>
+                        <span style="color: red">{% if errmsg %}{{ errmsg }}{% endif %}</span>
+                    </div>
+                    <div class="about_user_info">
+                        <form id="form1" name="form1" method="post" action="{% url 'user_address_add' %}">
+                            {% csrf_token %}
+                            <div class="user_layout">
+                                <ul>
+                                    <li><label class="user_title_name">收件人姓名：</label><input name="new_aname" type="text"
+                                                                                            class="add_text"><em>*</em>
+                                    </li>
+                                    <li><label class="user_title_name">地&nbsp;&nbsp;&nbsp;区：</label>
+                                        <div id="parent">
+                                            <select name="province" id="province"></select>
+                                            <select name="city" id="city"></select>
+                                            <select name="county" id="county"></select></div>
+                                    </li>
+                                    <li><label class="user_title_name">收货地址：</label><input name="new_ads" type="text"
+                                                                                           class="add_text"><em>*</em>
+                                    </li>
+                                    <li><label class="user_title_name">手&nbsp;机&nbsp;号：</label><input name="new_aphone"
+                                                                                                      type="text"
+                                                                                                      class="add_text"><em>*</em>
+                                    </li>
 
-                            </ul>
-                            <div class="operating_btn"><input name="name" type="submit" value="确认" class="submit—btn">
+                                </ul>
+                                <div class="operating_btn"><input name="name" type="submit" value="确认"
+                                                                  class="submit—btn">
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!--底部样式-->
-<div class="footer">
-    <div class="footer_img_bg"></div>
-    <div class="footerbox">
-        <div class="footer_info">
-            <div class="footer_left">
-                <a href="#"><img src="{% static 'images/logo.png' %}"/></a>
-                <p class="erwm">
-                    <img src="{% static 'images/erweim.png' %}" width="80px" height="80px"/>
-                    <img src="{% static 'images/erweim.png' %}" width="80px" height="80px"/>
-                <p>
-            </div>
-            <div class="helper_right clearfix">
-                <dl>
-                    <dt><em class="guide"></em>新手指南</dt>
-                    <dd><a href="#">实名认证</a></dd>
-                    <dd><a href="#">找回密码</a></dd>
-                </dl>
-                <dl>
-                    <dt><em class="h_about"></em>关于我们</dt>
-                    <dd><a href="#">关于我们</a></dd>
-                    <dd><a href="#">政策服务</a></dd>
-                    <dd><a href="#">常见问题</a></dd>
-                </dl>
-                <dl>
-                    <dt><em class="h_conact"></em>联系我们</dt>
-                    <dd><a href="#">联系我们</a></dd>
-                    <dd><a href="#">在线客服</a></dd>
-                </dl>
-            </div>
-        </div>
-    </div>
-    <div class=" Copyright ">
-        @2015 四川莆田特色馆版权所有
-    </div>
-</div>
-</body>
-</html>
+{% endblock %}

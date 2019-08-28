@@ -16,13 +16,13 @@ class CartInfo(models.Model):
     user = models.ForeignKey(UserInfo, models.DO_NOTHING)
     cprice = models.DecimalField(max_digits=10, decimal_places=2)
 
-
-    def __str__(self):
-        return self.user
     class Meta:
         # ordering = ['up_time']
         verbose_name = '购物车'
-        verbose_name_plural = '购物车'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.user
 
 
 # 订单详情表Order
@@ -37,7 +37,9 @@ class Order(models.Model):
     oprices = models.DecimalField(max_digits=8, decimal_places=2)
     pro_id = models.ForeignKey(Pro_sku, models.DO_NOTHING)
     oadress = models.ForeignKey(Adress, models.DO_NOTHING, blank=True, null=True)
+
     class Meta:
         # ordering = ['up_time']
         verbose_name = '确认订单管理'
-        verbose_name_plural = '确认订单管理'
+        verbose_name_plural = verbose_name
+

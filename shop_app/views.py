@@ -1,69 +1,35 @@
-from django.shortcuts import render,redirect,reverse
+from django.shortcuts import render,redirect,reverse,HttpResponse
 from django.http import JsonResponse
-from django.db import transaction
 from django.http import JsonResponse
-from django.shortcuts import render, HttpResponse
-
-from datetime import datetime
-from decimal import Decimal
-# from .models import OrderInfo, OrderDetailInfo
 from shop_app.models import *
 from user_app.models import *
+from user_app.views import login_required
 import decimal
 
 
 
 # Create your views here.
-
+@login_required
 def Orders(request):
     '''
     访问确认订单页面
     :param request:
     :return:
     '''
-
-    # if request.method=='GET':
-    #     uid = request.session['user_id']
-    #     uadress = Adress.objects.get(user=uid)
-    #     carts = CartInfo.objects.filter(user=uid)
-    #     # info = request.POST.get('price')
-    #     # num = request.POST.get('num')
-    #     # oprice = request.POST.get('oprice')
-    #     # p_id = request.POST.get('p_id')
-    #     # print('单价=',info,'数量=',num,'总价=',oprice,'id=',p_id)
-    #     context = {
-    #         'title':'提交订单',
-    #         'uid':uid,
-    #         'uadress':uadress,
-    #         # 'info':info,
-    #         # 'num':num,
-    #         # 'oprice':oprice,
-    #         # 'p_id':p_id,
-    #         'carts':carts
-    #     }
-    #     # return render(request, 'shop_app/Orders.html',locals())
     if request.method == 'GET':
         p_id = request.GET.get('p_id')
-        # order = Order.objects.create()
-        # order.pro_id = int(p_id)
-        # order.pro_id_id = int(p_id)
-        # order.oprice = info
-        # order.ocount = num
-        # order.oprices = oprice
-        # order.save()
-        # order = Order.objects.get(id=int(p_id))
         uid = request.session['user_id']
-        uadress = Adress.objects.get(user=uid)
-        order = Pro_sku.objects.get(id = p_id)
-        # print('单价=', info, '数量=', num, '总价=', oprice, 'id=', p_id)
-        print(locals())
+        order = Pro_sku.objects.get(id=p_id)
+        # 获取默认地址，如果没有则重定向到添加地址页面
+        try:
+            uadress = Adress.objects.get(user=uid,is_default=True)
+        except:
+            return redirect('user_address_add')
         return render(request, 'shop_app/Orders.html', locals())
-    # return render(request, 'shop_app/Orders.html')
 
 
 
-
-# @user_decorator.login
+@login_required
 def shopping_cart(request):
     if request.method == 'GET':
         uid = request.session['user_id']
@@ -80,7 +46,7 @@ def shopping_cart(request):
         return render(request, 'shop_app/shopping_cart.html', context)
 
 
-# @user_decorator.login
+@login_required
 def add(request):
     uid = request.session['user_id']
     if request.method == 'POST':
@@ -117,7 +83,7 @@ def add(request):
     #     return redirect(reverse("shop_app:cart"))
 
 
-# @user_decorator.login
+@login_required
 def edit(request, cart_id, count):
     data = {}
     try:
@@ -130,7 +96,8 @@ def edit(request, cart_id, count):
     return JsonResponse(data)
 
 
-# @user_decorator.login
+@login_required
+# 删除购物车记录
 def delete(request, cart_id):
     print(cart_id)
     data = {}

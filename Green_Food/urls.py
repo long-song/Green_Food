@@ -19,6 +19,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('integral_app/', include('integral_app.urls')),  # 添加integral_app的urls
-    path('user_app/', include('user_app.urls')),  # 添加user_app的urls
+    path('', include('user_app.urls')),  # 添加user_app的urls
     path('shop_app/', include('shop_app.urls'))  # 添加shop_app的urls
 ]

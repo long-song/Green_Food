@@ -25,7 +25,7 @@ class UserInfo(models.Model):
     username = models.CharField(max_length=15, unique=True, verbose_name='用户名')
     password = models.CharField(max_length=256, verbose_name='密码')
     phone = models.CharField(unique=True, max_length=11, verbose_name='手机号')
-    head_img = models.ImageField(upload_to='static/images', default='images/product_img_17.png', verbose_name='头像')
+    head_img = models.ImageField(upload_to='static/images', default='images/QQ图片20190822180730.jpg', verbose_name='头像')
     t_name = models.CharField(max_length=10, null=True, verbose_name='真实姓名')
     gender = models.IntegerField(choices=sex, default=1, verbose_name='性别')
     email = models.EmailField(null=True, unique=True, verbose_name='邮箱')
@@ -35,13 +35,57 @@ class UserInfo(models.Model):
     allow_data = models.IntegerField(verbose_name="数据管理权限", default=0)
     superuser = models.IntegerField(verbose_name="超级管理员", default=0)
 
+    class Meta:
+        # ordering = ['up_time']
+        verbose_name = '用户管理'
+        verbose_name_plural = verbose_name
+
     def __str__(self):
         return self.username
 
+
+class Province(models.Model):
+    province_id = models.BigIntegerField(unique=True)
+    province_name = models.CharField(max_length=32)
+
     class Meta:
-        # ordering = ['up_time']
-        verbose_name = '用户'
-        verbose_name_plural = '用户'
+        managed = False
+        db_table = 'spzx_business_position_province'
+        verbose_name = '省级管理'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.province_name
+
+
+class City(models.Model):
+    province_id = models.BigIntegerField()
+    city_id = models.BigIntegerField(unique=True)
+    city_name = models.CharField(max_length=64)
+
+    class Meta:
+        managed = False
+        db_table = 'spzx_business_position_city'
+        verbose_name = '市级管理'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.city_name
+
+
+class County(models.Model):
+    city_id = models.BigIntegerField()
+    county_id = models.BigIntegerField(unique=True)
+    county_name = models.CharField(max_length=64)
+
+    class Meta:
+        managed = False
+        db_table = 'spzx_business_position_county'
+        verbose_name = '县级管理'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.county_name
 
 
 # 地址表 Adress
@@ -53,18 +97,24 @@ class UserInfo(models.Model):
 class Adress(models.Model):
     aname = models.CharField(verbose_name='收货人', max_length=50, null=False)
     ads = models.CharField(verbose_name='地址', max_length=300, null=False)
+    province_name = models.ForeignKey('Province', on_delete=models.CASCADE, default=1)
+    city_name = models.ForeignKey('City', on_delete=models.CASCADE, default=1)
+    county_name = models.ForeignKey('County', on_delete=models.CASCADE, default=1)
     aphone = models.CharField(verbose_name='电话', max_length=20, null=False)
     user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
     area = models.CharField(verbose_name='地区', max_length=50, null=True)
     postcode = models.CharField(verbose_name='邮编', max_length=20, null=True)
-
-    def __str__(self):
-        return self.aname
+    is_default = models.BooleanField(default=False, verbose_name='是否默认')
 
     class Meta:
         # ordering = ['up_time']
         verbose_name = '地址管理'
-        verbose_name_plural = '地址管理'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.aname
+
+
 # 订单信息表 User_order
 # orderNo 订单号
 # orderdetail(商品，数量，单价，描述)
@@ -95,20 +145,24 @@ class User_order(models.Model):
 
     def __str__(self):
         return self.orderNo
+
     class Meta:
         # ordering = ['up_time']
         verbose_name = '订单管理'
-        verbose_name_plural = '订单管理'
+        verbose_name_plural = verbose_name
+
+
 # 收藏表
 class Collect(models.Model):
-    pro_id = models.IntegerField(null=True, verbose_name='商品id',unique=True)
-    image = models.ImageField(null=True,verbose_name='商品图片')
+    pro_id = models.IntegerField(null=True, verbose_name='商品id', unique=True)
+    image = models.ImageField(null=True, verbose_name='商品图片')
     name = models.CharField(max_length=50, verbose_name='商品名(规格)')
     size = models.CharField(max_length=10, default='500g', verbose_name='产品规格')
     title = models.CharField(max_length=100, verbose_name='标签')
-    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='单价',default=40.00)
-    user = models.ForeignKey(UserInfo,on_delete=models.CASCADE,null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='单价', default=40.00)
+    user = models.ForeignKey(UserInfo, on_delete=models.CASCADE, null=True)
+
     class Meta:
         # ordering = ['up_time']
         verbose_name = '收藏管理'
-        verbose_name_plural = '收藏管理'
+        verbose_name_plural = verbose_name

@@ -86,7 +86,7 @@ DATABASES = {
         'NAME': 'green_food',  # 数据库名
         'USER': 'root',  # 用户名
         'PASSWORD': 'root',  # 密码
-        'HOST': '172.16.43.27',  # 主机名
+        'HOST': '172.16.43.160',  # 主机名
         'PORT': 3306,  # 端口号
     }
 }

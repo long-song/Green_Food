@@ -299,7 +299,7 @@
                                     <div class="Numbers">
                                         <a href="javascript:" class="jian " id="minus">-
                                         </a>
-                                        <input name="number" type="text" value="1" class="number_text">
+                                        <input name="number" type="text" value="1" class="number_text" style="width: 30px;text-align: center">
                                         <a href="javascript:" class="jia " id="add">+
                                         </a>
                                     </div>
@@ -312,7 +312,8 @@
                             </tbody>
                         </table>
                         <div class="Pay_info">
-                            <label>订单留言</label><input name="" type="text" onkeyup="checkLength(this);"
+                            <label>订单留言</label>
+                            <input name="" type="text" onkeyup="checkLength(this);"
                                                       class="text_name "/> <span class="wordage">剩余字数：<span id="sy"
                                                                                                             style="color:Red;">50</span></span>
                         </div>
@@ -325,7 +326,7 @@
                                     </div></span></li>
                                     <li><label>优惠金额</label><i>￥</i><span>-23.00</span></li>
                                     <li><label>配&nbsp;&nbsp;送&nbsp;&nbsp;费</label><i>￥</i><span>0</span></li>
-                                    <li class="shiji_price"><label>实&nbsp;&nbsp;付&nbsp;&nbsp;款</label<span><div class="total" style="font-size: 20px"><i>￥</i><em
+                                    <li class="shiji_price"><label>实&nbsp;&nbsp;付&nbsp;&nbsp;款</label><span><div class="total" style="font-size: 20px"><i>￥</i><em
                                             style="color: #fd2a32">{{ order.price }}</em>元
                                     </div></span>
                                     </li>
@@ -392,7 +393,6 @@
         });
     </script>
 </div>
-
 
 </body>
 </html>

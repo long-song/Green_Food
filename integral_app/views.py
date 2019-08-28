@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from integral_app.models import *
 from shop_app.models import *
 from user_app.models import *
+from common.data_page import pagination
 # 在发送ajax的post请求时解决跨网站请求
 from django.views.decorators.csrf import csrf_exempt
 
@@ -14,8 +15,7 @@ def group_buy(request):
     :param request:
     :return:
     '''
-
-    return render(request, 'integral_app/Group_buy.html')
+    return render(request, 'integral_app/Group_buy.html',{'group_buy':'group_buy'})
 
 
 def integral(request):
@@ -24,8 +24,12 @@ def integral(request):
     :param request:
     :return:
     '''
+    page = int(request.GET.get('page'))
+    # print(page,type(page))
     own = Pro_sku.objects.all()
-    return render(request, 'integral_app/integral.html', {'own': own})
+    data_page,pages = pagination(own,page_size=8,page=page,page_type=1)
+    print(data_page,pages)
+    return render(request, 'integral_app/integral.html', {'integral':'integral','own': own,'data_page':data_page,'pages':pages})
 
 
 def products(request):
@@ -34,8 +38,10 @@ def products(request):
     :param request:
     :return:
     '''
+    page = int(request.GET.get('page'))
     fruits = Pro_sku.objects.exclude(type_id=2)
-    return render(request, 'integral_app/Products.html', {'fruits': fruits})
+    data_page, pages = pagination(fruits, page_size=8, page=page, page_type=1)
+    return render(request, 'integral_app/Products.html', {'products':'products','fruits': fruits,'data_page':data_page,'pages':pages})
 
 
 def products_list(request):
@@ -44,9 +50,10 @@ def products_list(request):
     :param request:
     :return:
     '''
+    page = int(request.GET.get('page'))
     vegetables = Pro_sku.objects.exclude(type_id=1)
-
-    return render(request, 'integral_app/Product-List.html', {'vegetables': vegetables})
+    data_page, pages = pagination(vegetables, page_size=8, page=page, page_type=1)
+    return render(request, 'integral_app/Product-List.html', {'products_list':'products_list','vegetables': vegetables,'data_page':data_page,'pages':pages})
 
 
 def product_detailed(request):

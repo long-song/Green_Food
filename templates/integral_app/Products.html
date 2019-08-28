@@ -1,128 +1,50 @@
+{% extends 'integral_app/Group_buy.html' %}
 {% load static %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link href="{% static 'css/css.css' %}" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'css/common.css' %}" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" type="text/css"/>
-    <script src="{% static 'js/jquery.min.1.8.2.js' %}" type="text/javascript"></script>
-    <script src="{% static 'js/jquery.SuperSlide.2.1.1.js' %}" type="text/javascript"></script>
-    <script type="text/javascript" src="{% static 'js/slider.js' %}"></script>
-    <script src="{% static 'js/common_js.js' %}" type="text/javascript"></script>
-    <script src="{% static 'js/jquery.foucs.js' %}" type="text/javascript"></script>
-    <title>水果馆</title>
-</head>
+{% block title %}
+    水果馆
+{% endblock %}
+{% block body %}
+    <style>
+        /* 分页样式 */
 
-<body>
-<!--顶部样式-->
-<div class="top_header">
-    <em class="left_img"></em>
-    <div class="header clearfix" id="header">
-        <a href="#" class="logo_img"><img src="{% static 'images/logo.png' %}"/></a>
-        <div class="header_Section">
-            <div class="shortcut">
-                <ul>
-                    {% if request.session.is_login %}
-                        <li class="hd_menu_tit"><em class="login_img"></em><a
-                                href="{% url 'user_info' %}">当前在线：{{ request.session.user_username }}</a></li>
-                        <li class="hd_menu_tit"><em class="registered_img"></em><a href="{% url 'logout' %}">注销</a></li>
-                    {% else %}
-                        <li class="hd_menu_tit"><em class="login_img"></em><a href="{% url 'login' %}">登录</a></li>
-                        <li class="hd_menu_tit"><em class="registered_img"></em><a href="{% url 'registered' %}">注册</a>
-                        </li>
-                    {% endif %}
-                    <li class="hd_menu_tit"><em class="Collect_img"></em><a href="{% url 'user_collect' %}">收藏夹</a></li>
-                    <li class="hd_menu_tit"><em class="cart_img"></em><a href="{% url 'shopping_cart' %}">购物车</a></li>
-                    <li class="hd_menu_tit list_name" data-addclass="hd_menu_hover"><a href="#">网站导航</a><em
-                            class="navigation_img"></em>
+        .pagenation {
+            height: 32px;
+            text-align: center;
+            font-size: 0;
+            margin: 30px auto;
+        }
 
-                        <div class="hd_menu_list">
-                            <span class="wire"></span>
-                            <ul>
-                                <li><a href="#">常见问题</a></li>
-                                <li><a href="#">在线退换货</a></li>
-                                <li><a href="#">在线投诉</a></li>
-                                <li><a href="#">配送范围</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
+        .pagenation a {
+            display: inline-block;
+            border: 1px solid #d2d2d2;
+            background-color: #f8f6f7;
+            font-size: 12px;
+            padding: 7px 10px;
+            color: #666;
+            margin: 5px
+        }
+
+        .pagenation .active {
+            background-color: #fff;
+            color: #43a200
+        }
+    </style>
+    <div class="AD_img"><a href="#"><img src="{% static 'images/AD_page_img_02.png' %}" width="100%"/></a></div>
+    <!--位置-->
+    <div class="Bread_crumbs">
+        <div class="Inside_pages clearfix">
+            <div class="left">当前位置：<a href="#">首页</a>&gt;<a href="#">水果馆</a></div>
+            <div class="right Search">
+                <form>
+                    <input name="" type="text" class="Search_Box"/>
+                    <input name="" type="button" name="" class="Search_btn"/>
+                </form>
             </div>
-            <div class="nav" id="Navigation">
-                <ul class="Navigation_name">
-                    <li class=""><a href="{% url 'index' %}">首页</a></li>
-                    <li class=""><a href="{% url 'integral' %}">所有果蔬</a></li>
-                    <li class=""><a href="{% url 'group_buy' %}">活动专区</a></li>
-                    <li class=""><a href="{% url 'products' %}">水果馆</a></li>
-                    <li class=""><a href="{% url 'products_list' %}">蔬菜馆</a></li>
-                    <li class=""><a href="{% url 'user_info' %}">会员中心</a></li>
-                    <li class=""><a href="#">联系我们</a></li>
-                </ul>
-            </div>
-            <script>$("#Navigation").slide({titCell: ".Navigation_name li"});</script>
         </div>
     </div>
-    <em class="right_img"></em>
-</div>
-<!---->
-<div class="AD_img"><a href="#"><img src="../../static/images/AD_page_img_02.png" width="100%"/></a></div>
-<!--位置-->
-<div class="Bread_crumbs">
-    <div class="Inside_pages clearfix">
-        <div class="left">当前位置：<a href="#">首页</a>&gt;<a href="#">水果馆</a></div>
-        <div class="right Search">
-            <form>
-                <input name="" type="text" class="Search_Box"/>
-                <input name="" type="button" name="" class="Search_btn"/>
-            </form>
-        </div>
-    </div>
-</div>
-<!--产品-->
-<div class="Inside_pages">
-    <!--水果馆-->
-    <div class="fruits_Forum">
-        <div class="title_style">
-            <div class="title_name"><a href="#"><img src="../../static/images/sg_pro_img_12.png"/></a></div>
-            <div class="title_info">
-                <p class="title_x_name">[健康水果小知识]</p>
-                <p class="x_info">水果是指多汁且大多数有甜味可直接生吃的植物果实，不但含有丰富的营养且能够帮助消化。水果是对部分可以食用的植物果实和种子的统称。水果有降血压、减缓衰老、减肥瘦身、皮肤保养、
-                    明目、抗癌、降低胆固醇补充维生素等保健作用。</p>
-            </div>
-            <div class="title_img"><img src="../../static/images/sg_pro_img_17.png"/></div>
-        </div>
-        <div class="list_style">
-            <ul class="clearfix">
-                {% for foo in fruits %}
-
-                    <li class="clearfix">
-                    <div class="product_lists clearfix">
-                        <a href="{% url "product_detailed" %}"><img src="{{ foo.image }}"/></a>
-                        <p class="title_p_name">{{ foo.name }}</p>
-                        <p class="title_Profile">{{ foo.title }}</p>
-                        <p class="price"><b>￥</b>{{ foo.price }}</p>
-                        <p class="btn_style"><a href="javascript;('')" class="buy_btn"></a><a href="javascript;('')"
-                                                                                              class="Join_btn"></a></p>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-    <!--蔬菜馆-->
-    <div class="vegetables_Forum">
-        <div class="title_style">
-            <div class="title_name"><a href="#"><img src="{% static 'images/vegetables_img_40.png' %}"/></a></div>
-            <div class="title_info">
-                <p class="title_x_name">[健康蔬菜小知识]</p>
-                <p class="x_info">蔬菜是指可以做菜、烹饪成为食品的一类植物或菌类，蔬菜是人们日常饮食中必不可少的食物之一。蔬菜可提供人体所必需的多种维生素和矿物质等营养物质。
-                    据国际物质粮农组织1990年统计，人体必需的VC的90%、VA的60%来自蔬菜。此外，蔬菜中还有多种多样的植物化学物质，是人们公认的对健康有效的成分，目前果蔬中的营养素可以有效预防慢性、退行性疾病的多种物质，正在被人们研究发现。</p>
-            </div>
-            <div class="title_img"><img src="{% static 'images/title_p_img_32.png' %}"/></div>
-        </div>
-        <!--其他特色馆-->
+    <!--产品-->
+    <div class="Inside_pages">
+        <!--水果馆-->
         <div class="fruits_Forum">
             <div class="title_style">
                 <div class="title_name"><a href="#"><img src="../../static/images/sg_pro_img_12.png"/></a></div>
@@ -136,134 +58,40 @@
             </div>
             <div class="list_style">
                 <ul class="clearfix">
-                    <li class="clearfix">
-                        <div class="product_lists clearfix">
-                            <a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                            <p class="title_p_name">浦江多汁红提</p>
-                            <p class="title_Profile">绿色有机天然无污染</p>
-                            <p class="price"><b>￥</b>13.5</p>
-                            <p class="btn_style"><a href="javascript;('')" class="buy_btn"></a><a href="javascript;('')"
-                                                                                                  class="Join_btn"></a>
-                            </p>
-                        </div>
-                    </li>
-                    <li class="clearfix">
-                        <div class="product_lists clearfix">
-                            <a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                            <p class="title_p_name">浦江多汁红提</p>
-                            <p class="title_Profile">绿色有机天然无污染</p>
-                            <p class="price"><b>￥</b>13.5</p>
-                            <p class="btn_style"><a href="javascript;('')" class="buy_btn"></a><a href="javascript;('')"
-                                                                                                  class="Join_btn"></a>
-                            </p>
-                        </div>
-                    </li>
-                    <li class="clearfix">
-                        <div class="product_lists clearfix">
-                            <a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                            <p class="title_p_name">浦江多汁红提</p>
-                            <p class="title_Profile">绿色有机天然无污染</p>
-                            <p class="price"><b>￥</b>13.5</p>
-                            <p class="btn_style"><a href="javascript;('')" class="buy_btn"></a><a href="javascript;('')"
-                                                                                                  class="Join_btn"></a>
-                            </p>
-                        </div>
-                    </li>
-                    <li class="clearfix">
-                        <div class="product_lists clearfix">
-                            <a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                            <p class="title_p_name">浦江多汁红提</p>
-                            <p class="title_Profile">绿色有机天然无污染</p>
-                            <p class="price"><b>￥</b>13.5</p>
-                            <p class="btn_style"><a href="javascript;('')" class="buy_btn"></a><a href="javascript;('')"
-                                                                                                  class="Join_btn"></a>
-                            </p>
-                        </div>
-                    </li>
-                    <li class="clearfix">
-                        <div class="product_lists clearfix">
-                            <a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                            <p class="title_p_name">浦江多汁红提</p>
-                            <p class="title_Profile">绿色有机天然无污染</p>
-                            <p class="price"><b>￥</b>13.5</p>
-                            <p class="btn_style"><a href="javascript;('')" class="buy_btn"></a><a href="javascript;('')"
-                                                                                                  class="Join_btn"></a>
-                            </p>
-                        </div>
-                    </li>
-                    <li class="clearfix">
-                        <div class="product_lists clearfix">
-                            <a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                            <p class="title_p_name">浦江多汁红提</p>
-                            <p class="title_Profile">绿色有机天然无污染</p>
-                            <p class="price"><b>￥</b>13.5</p>
-                            <p class="btn_style"><a href="javascript;('')" class="buy_btn"></a><a href="javascript;('')"
-                                                                                                  class="Join_btn"></a>
-                            </p>
-                        </div>
-                    </li>
-                    <li class="clearfix">
-                        <div class="product_lists clearfix">
-                            <a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                            <p class="title_p_name">浦江多汁红提</p>
-                            <p class="title_Profile">绿色有机天然无污染</p>
-                            <p class="price"><b>￥</b>13.5</p>
-                            <p class="btn_style"><a href="javascript;('')" class="buy_btn"></a><a href="javascript;('')"
-                                                                                                  class="Join_btn"></a>
-                            </p>
-                        </div>
-                    </li>
-                    <li class="clearfix">
-                        <div class="product_lists clearfix">
-                            <a href="#"><img src="../../static/images/product_img_17.png"/></a>
-                            <p class="title_p_name">浦江多汁红提</p>
-                            <p class="title_Profile">绿色有机天然无污染</p>
-                            <p class="price"><b>￥</b>13.5</p>
-                            <p class="btn_style"><a href="javascript;('')" class="buy_btn"></a><a href="javascript;('')"
-                                                                                                  class="Join_btn"></a>
-                            </p>
-                        </div>
-                    </li>
+                    {% for foo in data_page %}
+                        <li class="clearfix" style="width: 310px;">
+                            <div class="product_lists clearfix">
+                                <a href="{% url "product_detailed" %}?id={{ foo.id }}"><img src="{{ foo.image }}"/></a>
+                                <p class="title_p_name"><a
+                                        href="{% url "product_detailed" %}?id={{ foo.id }}">{{ foo.name }}</a></p>
+                                <p class="title_Profile">{{ foo.title }}</p>
+                                <p class="price"><b>￥</b>{{ foo.price }}</p><a
+                                    href="{% url "product_detailed" %}?id={{ foo.id }}" class="buy_btn"></a><a
+                                    href="javascript;('')"
+                                    class="Join_btn"></a>
+                                </p>
+                            </div>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
-        </div>
-    </div>
-    <!--底部样式-->
-    <div class="footer">
-        <div class="footer_img_bg"></div>
-        <div class="footerbox">
-            <div class="footer_info">
-                <div class="footer_left">
-                    <a href="#"><img src="{% static 'images/logo.png' %}"/></a>
-                    <p class="erwm">
-                        <img src="{% static 'images/erweim.png' %}" width="80px" height="80px"/>
-                        <img src="{% static 'images/erweim.png' %}" width="80px" height="80px"/>
-                    <p>
-                </div>
-                <div class="helper_right clearfix">
-                    <dl>
-                        <dt><em class="guide"></em>新手指南</dt>
-                        <dd><a href="#">实名认证</a></dd>
-                        <dd><a href="#">找回密码</a></dd>
-                    </dl>
-                    <dl>
-                        <dt><em class="h_about"></em>关于我们</dt>
-                        <dd><a href="#">关于我们</a></dd>
-                        <dd><a href="#">政策服务</a></dd>
-                        <dd><a href="#">常见问题</a></dd>
-                    </dl>
-                    <dl>
-                        <dt><em class="h_conact"></em>联系我们</dt>
-                        <dd><a href="#">联系我们</a></dd>
-                        <dd><a href="#">在线客服</a></dd>
-                    </dl>
-                </div>
+            <div class="pagenation">
+                {% if data_page.has_previous %}
+                    <a href="{% url 'products' %}?page={{ data_page.previous_page_number }}">&lt;上一页</a>
+                {% endif %}
+                {% for pindex in pages %}
+                    {% if pindex == data_page.number %}
+                        <a class="active">{{ pindex }}</a>
+                    {% elif pindex == '...' %}
+                        <a>{{ pindex }}</a>
+                    {% else %}
+                        <a href="{% url 'products' %}?page={{ pindex }}">{{ pindex }}</a>
+                    {% endif %}
+                {% endfor %}
+                {% if data_page.has_next %}
+                    <a href="{% url 'products' %}?page={{ data_page.next_page_number }}">下一页&gt;</a>
+                {% endif %}
             </div>
         </div>
-        <div class=" Copyright ">
-            @2015 四川莆田特色馆版权所有
-
-        </div>
     </div>
-</body>
-</html>
+{% endblock %}

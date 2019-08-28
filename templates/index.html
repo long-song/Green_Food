@@ -11,10 +11,10 @@
     <script type="text/javascript" src="{% static 'js/slider.js' %}"></script>
     <script src="{% static 'js/common_js.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/jquery.foucs.js' %}" type="text/javascript"></script>
-    <!--[if IE 7]>
+<!--[if IE 7]>
 <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css">
 <![endif]-->
-    <title>易田商城首页</title>
+    <title>{% block title %}易田商城首页{% endblock %}</title>
 </head>
 
 <body>
@@ -52,20 +52,21 @@
             </div>
             <div class="nav" id="Navigation">
                 <ul class="Navigation_name">
-                    <li class=""><a href="{% url 'index' %}">首页</a></li>
-                    <li class=""><a href="{% url 'integral' %}">所有果蔬</a></li>
-                    <li class=""><a href="{% url 'group_buy' %}">活动专区</a></li>
-                    <li class=""><a href="{% url 'products' %}">水果馆</a></li>
-                    <li class=""><a href="{% url 'products_list' %}">蔬菜馆</a></li>
-                    <li class=""><a href="{% url 'user_info' %}">会员中心</a></li>
+                    <li {% if index %} class="on" {% endif %}><a href="{% url 'index' %}">首页</a></li>
+                    <li {% if integral %} class="on" {% endif %}><a href="{% url 'integral' %}?page=1">所有果蔬</a></li>
+                    <li {% if group_buy %} class="on" {% endif %}><a href="{% url 'group_buy' %}">活动专区</a></li>
+                    <li {% if products %} class="on" {% endif %}><a href="{% url 'products' %}?page=1">水果馆</a></li>
+                    <li {% if products_list %} class="on" {% endif %}><a href="{% url 'products_list' %}?page=1">蔬菜馆</a></li>
+                    <li {% if user_info %} class="on" {% endif %}><a href="{% url 'user_info' %}">会员中心</a></li>
                     <li class=""><a href="#">联系我们</a></li>
                 </ul>
             </div>
-            <script>$("#Navigation").slide({titCell: ".Navigation_name li"});</script>
+{#            <script>$("#Navigation").slide({titCell: ".Navigation_name li"});</script>#}
         </div>
     </div>
     <em class="right_img"></em>
 </div>
+{% block body %}
 <!--幻灯片样式-->
 <div class="AD_bg_img">
     <!--幻灯片样式-->
@@ -320,9 +321,11 @@
         $.foucs({direction: 'right'});
     </script>
 </div>
+{% endblock %}
+{% block footer %}
 <!--底部样式-->
-<div class="footer">
-    <div class="footer_img_bg"></div>
+<div class="footer" style="height: 368px">
+    <div class="footer_img_bg" style="top: 0"></div>
     <div class="footerbox">
         <div class="footer_info">
             <div class="footer_left">
@@ -353,9 +356,10 @@
         </div>
     </div>
     <div class=" Copyright ">
-        @2015 四川莆田特色馆版权所有
-
+        @2019 四川浦江特色馆版权所有
     </div>
 </div>
+{% endblock %}
+
 </body>
 </html>

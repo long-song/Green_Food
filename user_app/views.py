@@ -1,12 +1,13 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, reverse
 from django.http import JsonResponse
 from user_app.models import *
-from django.db.models import F,Q
+from django.db.models import F, Q
 from user_app.models import UserInfo
 from user_app.froms import UserForm, RegisterForm
 import datetime
 from integral_app.models import *
 from django.conf import settings
+
 
 # Create your views here.
 def index(request):
@@ -17,7 +18,8 @@ def index(request):
     '''
     print("获取请求方式：", request.method)
     print("获取访问路径：", request.path)
-    return render(request, 'index.html')
+    return render(request, 'index.html', {'index': 'index'})
+
 
 # 登录验证函数
 def login_required(view_func):
@@ -35,11 +37,14 @@ def login_required(view_func):
 
     return wrapper
 
+
 from common.code import *
 from common.phone_num4 import *
 # 获取手机号发送验证码
 # 在发送ajax的post请求时解决跨网站请求
 from django.views.decorators.csrf import csrf_exempt
+
+
 @csrf_exempt
 def phone_code(request):
     '''
@@ -56,11 +61,12 @@ def phone_code(request):
             send_sms(phone, code)
             request.session['code'] = code
             message = "OK"
-            return JsonResponse({'message':message})
+            return JsonResponse({'message': message})
         else:
             print(1)
             message = "手机号不正确"
-            return JsonResponse({'message':message})
+            return JsonResponse({'message': message})
+
 
 # 登录函数
 def login(request):
@@ -77,7 +83,7 @@ def login(request):
         var_code = request.POST.get('var_code')
         code = request.session.get('code')
         try:
-            user = UserInfo.objects.get(Q(username=username)|Q(phone=username))
+            user = UserInfo.objects.get(Q(username=username) | Q(phone=username))
             if user.password == password:
                 if var_code == code:
                     request.session['is_login'] = True
@@ -92,7 +98,7 @@ def login(request):
         except:
             # print(1)
             message = "用户不存在！"
-        return render(request, 'user_app/Login.html',locals())
+        return render(request, 'user_app/Login.html', locals())
     else:
         return render(request, 'user_app/Login.html', locals())
 
@@ -155,6 +161,8 @@ def logout(request):
 # 我的订单函数
 # 导入生成唯一订单号函数
 from common.orderNo import get_order_code
+
+
 @login_required
 def user(request):
     '''
@@ -167,7 +175,7 @@ def user(request):
     if request.method == 'GET':
         order_No = get_order_code()
         return render(request, 'user_app/user.html', locals())
-    return render(request, 'user_app/user.html',locals())
+    return render(request, 'user_app/user.html', locals())
 
 
 # 个人信息函数
@@ -181,7 +189,7 @@ def user_info(request):
     a = request.session['user_id']
     user = UserInfo.objects.get(id=a)
     # print(user.head_img)
-    return render(request, 'user_app/user_info.html', {'user': user})
+    return render(request, 'user_app/user_info.html', {'user_info': 'user_info', 'user': user})
 
 
 # 修改密码函数
@@ -194,18 +202,18 @@ def user_password(request):
     '''
     a = request.session['user_id']
     user = UserInfo.objects.get(id=a)
-    if request.method=="POST":
+    if request.method == "POST":
         old_pwd = request.POST.get('old_pwd')
         new_pwd = request.POST.get('new_pwd')
         new_pwd1 = request.POST.get('new_pwd1')
-        if old_pwd==user.password:
+        if old_pwd == user.password:
             if new_pwd != old_pwd:
                 if new_pwd == new_pwd1:
                     user.password = new_pwd
                     user.save()
                     request.session.flush()
                     message = '您已成功修改密码，请重新登录！'
-                    return render(request,'user_app/Login.html',{'meaasge':message})
+                    return render(request, 'user_app/Login.html', {'meaasge': message})
                 else:
                     message = '两次新密码输入不一致！'
             else:
@@ -241,15 +249,15 @@ def user_collect(request):
             collect.user_id = a
             collect.save()
             collect1 = Collect.objects.filter(user=a)
-            return render(request, 'user_app/user_Collect.html', {'user': user, 'col': collect1,'fav':fav})
+            return render(request, 'user_app/user_Collect.html', {'user': user, 'col': collect1, 'fav': fav})
         else:
-            collect = Collect.objects.filter(user=a,pro_id=pro_id)
+            collect = Collect.objects.filter(user=a, pro_id=pro_id)
             collect.delete()
             collect1 = Collect.objects.filter(user=a)
             return render(request, 'user_app/user_Collect.html', {'user': user, 'col': collect1, 'fav': fav})
     else:
         collect1 = Collect.objects.filter(user_id=a)
-        return render(request, 'user_app/user_Collect.html',{'user':user,'col':collect1})
+        return render(request, 'user_app/user_Collect.html', {'user': user, 'col': collect1})
 
 
 # 我的地址管理函数
@@ -264,13 +272,31 @@ def user_address(request):
     if request.method == "GET":
         a = request.session['user_id']
         user = UserInfo.objects.get(id=a)
-        # addre = Adress.objects.get(user_id=a)
+        # addres = Adress.objects.get(user_id=a)
         addres = Adress.objects.filter(user_id=a)
         # print(addre.postcode)
-        return render(request, 'user_app/user_address.html', {'user': user,'addres':addres})
+        return render(request, 'user_app/user_address.html', {'user': user, 'addres': addres})
+
+
+# 设置默认地址
+def user_address_default(request, id):
+    '''
+    设置默认地址
+    :param request:
+    :return:
+    '''
+    user = request.session['user_id']
+    adress = Adress.objects.get(user=user, is_default=True)
+    adress.is_default = False
+    adress.save()
+    adress_default = Adress.objects.get(id=id)
+    adress_default.is_default = True
+    adress_default.save()
+    return redirect(reverse('user_address'))
+
 
 # 增加用户地址
-def  user_address_add(request):
+def user_address_add(request):
     """
     增加用户地址
     :param request:
@@ -283,24 +309,60 @@ def  user_address_add(request):
         # print(user.head_img)
         return render(request, 'user_app/user_address_add.html', {'user': user})
     if request.method == "POST":
-        a = request.session['user_id']
-        new_aname = request.POST.get('new_aname')
-        new_area = request.POST.get('new_area')
-        new_postcode = request.POST.get('new_postcode')
-        new_aphone = request.POST.get('new_aphone')
-        new_ads = request.POST.get('new_ads')
-        addre1 = Adress(aname=new_aname,area=new_area,postcode=new_postcode,
-                        aphone=new_aphone,ads=new_ads,user_id=a)
-        addre1.save()
-        print(new_aname, new_area, new_postcode, new_aphone, new_ads)
+        # 1.接收客户端发送过来的数据
+        user = request.session['user_id']
+        user1 = UserInfo.objects.get(id=user)
+        queryDict = request.POST
+        new_aname = queryDict.get('new_aname')
+        province = queryDict.get('province')
+        city = queryDict.get('city')
+        county = queryDict.get('county')
+        new_aphone = queryDict.get('new_aphone')
+        new_ads = queryDict.get('new_ads')
 
+        # 2.检验数据
+        if not all([new_aname, province, city, county, new_aphone, new_ads]):
+            return render(request, 'user_app/user_address_add.html',{'user':user1,'res': 0, 'errmsg': '信息输入不完整'})
+        phone_n = phone_num(new_aphone)
+        if phone_n == '请输入正确的手机号':
+            return render(request, 'user_app/user_address_add.html', {'user':user1,'res': 1, 'errmsg': '手机号输入不正确'})
 
+        # 2.1 对数据进行整理
+        province = Province.objects.get(province_id=province)
+        city = City.objects.get(city_id=city)
+        county = County.objects.get(county_id=county)
+        new_area = province.province_name + ' ' + city.city_name
+        new_postcode = str(county.county_id)[0:6]
+        # new_ads = county.county_name + ' ' + new_ads
+
+        # 3.完成具体的业务逻辑：地址的添加
+        # 如果用户已经存在默认的收货地址，添加的地址不作为默认的收货地址，否则作为默认的收货地址
+        # 判断用户的默认收货地址是否存在
+        try:
+            # adress = Adress.objects.get(user=user,is_default=True)
+            adress = Adress.objects.get(user=user, is_default=True)
+        except Adress.DoesNotExist:
+            adress = None
+
+        if adress:
+            # 存在默认收货地址
+            is_default = False
+        else:
+            # 不存在默认收货地址
+            is_default = True
+
+        # 3.1添加收货地址
+        address = Adress.objects.create(aname=new_aname, area=new_area, postcode=new_postcode,
+                                        aphone=new_aphone, ads=new_ads, user_id=user,
+                                        province_name=province, city_name=city, county_name=county,
+                                        is_default=is_default)
+        # 4.返回应答
         return redirect('user_address')
-    return render(request, 'user_app/user_address_add.html')
+
 
 
 # 修改用户地址
-def user_address_change(request,id):
+def user_address_change(request, id):
     """
     修改用户地址
     :param request:
@@ -309,32 +371,54 @@ def user_address_change(request,id):
     if request.method == "GET":
         a = request.session['user_id']
         user = UserInfo.objects.get(id=a)
-        addre2 = Adress.objects.get(pk=id)
-        # print(user.head_img)
-        return render(request, 'user_app/user_address_change.html', {'addre2': addre2,"user":user})
+        addre2 = Adress.objects.get(id=id)
+        return render(request, 'user_app/user_address_change.html', {'addre2': addre2, "user": user})
     if request.method == "POST":
-        a = request.session['user_id']
-        new_aname = request.POST.get('new_aname')
-        new_area = request.POST.get('new_area')
-        new_postcode = request.POST.get('new_postcode')
-        new_aphone = request.POST.get('new_aphone')
-        new_ads = request.POST.get('new_ads')
+        # 1.接收客户端发送过来的数据
+        user = request.session['user_id']
+        user1 = UserInfo.objects.get(id=user)
+        queryDict = request.POST
+        new_aname = queryDict.get('new_aname')
+        province = queryDict.get('province')
+        city = queryDict.get('city')
+        county = queryDict.get('county')
+        new_aphone = queryDict.get('new_aphone')
+        new_ads = queryDict.get('new_ads')
+
+        # 2.检验数据
+        if not all([new_aname, province, city, county, new_aphone, new_ads]):
+            return render(request, 'user_app/user_address_add.html', {'user': user1, 'res': 0, 'errmsg': '信息输入不完整'})
+        phone_n = phone_num(new_aphone)
+        if phone_n == '请输入正确的手机号':
+            return render(request, 'user_app/user_address_add.html', {'user': user1, 'res': 1, 'errmsg': '手机号输入不正确'})
+
+        # 2.1 对数据进行整理
+        province1 = Province.objects.get(province_id=province)
+        city1 = City.objects.get(city_id=city)
+        county1 = County.objects.get(county_id=county)
+        new_area = province1.province_name + ' ' + city1.city_name
+        new_postcode = str(county1.county_id)[0:6]
+        # new_ads = county.county_name + ' ' + new_ads
+        # 3.完成具体的业务逻辑：地址的添加
+
+        # 修改收货地址
+        print(id, type(id))
         addre2 = Adress.objects.get(id=id)
         addre2.aname = new_aname
         addre2.area = new_area
         addre2.postcode = new_postcode
         addre2.aphone = new_aphone
         addre2.ads = new_ads
-        addre2.user_id = a
+        addre2.province_name_id = province1.id
+        addre2.city_name_id = city1.id
+        addre2.county_name_id = county1.id
         addre2.save()
-        user = UserInfo.objects.get(id=a)
-        addres = Adress.objects.filter(user_id=a)
-        print(new_aname, new_area, new_postcode, new_aphone, new_ads)
+        # 4.返回应答
+        return redirect('user_address')
 
-        return render(request, 'user_app/user_address.html', {'user': user, 'addres': addres,'id':addre2.id})
 
 # 删除用户地址
-def user_address_delete(request,id):
+def user_address_delete(request, id):
     """
     删除用户地址
     :param request:
@@ -343,6 +427,57 @@ def user_address_delete(request,id):
     addre3 = Adress.objects.get(pk=id)
     addre3.delete()
     return redirect('user_address')
+
+
+# 省份管理器
+def province(request):
+    '''
+    获取省联动信息
+    :param request:
+    :param p_id:
+    :return:
+    '''
+    if request.is_ajax():
+        infos_list = []
+        infos = Province.objects.all()
+        for info in infos:
+            infos_list.append({'parentid': info.province_id, 'cityname': info.province_name})
+        return JsonResponse({'infos': infos_list})
+
+
+# 城市管理器
+def city(request):
+    '''
+    获取市联动信息
+    :param request:
+    :param p_id:
+    :return:
+    '''
+    if request.is_ajax():
+        p_id = request.POST.get('p_id')
+        print('p_id=' + p_id)
+        infos_list = []
+        infos = City.objects.filter(province_id=p_id)
+        for info in infos:
+            infos_list.append({'parentid': info.city_id, 'cityname': info.city_name})
+        return JsonResponse({'infos': infos_list, })
+
+
+# 区县管理器
+def county(request):
+    '''
+    获取区县联动信息
+    :param request:
+    :param p_id:
+    :return:
+    '''
+    if request.is_ajax():
+        p_id = request.POST.get('p_id')
+        infos_list = []
+        infos = County.objects.filter(city_id=p_id)
+        for info in infos:
+            infos_list.append({'parentid': info.county_id, 'cityname': info.county_name})
+        return JsonResponse({'infos': infos_list})
 
 
 # 个人资料修改函数
@@ -377,6 +512,7 @@ def user_info_set(request):
         user.save()
         return redirect('user_info')
     return render(request, 'user_app/user_info_set.html')
+
 
 # 修改头像函数
 @login_required
