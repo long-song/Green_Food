@@ -1,43 +1,29 @@
-{% extends 'integral_app/Group_buy.html' %}
+{% extends 'integral_app/integral.html' %}
 {% load static %}
-<script src="http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=402727"></script>
+
 {% block title %}
     商品详细介绍
 {% endblock %}
-
-{% block body %}
-    <!---->
-    <div><a href="#"><img src="../../static/images/AD_page_img_02.png" width="100%"/></a></div>
-    <!--位置-->
-    <div class="Bread_crumbs">
-        <div class="Inside_pages clearfix">
-            <div class="left">当前位置：<a href="#">产品详情</a>&gt;<a href="#">{% for foo in detail_all %}
-            {{ foo.name }}
-            {% endfor %}
-            </a></div>
-            <div class="right Search">
-                <form>
-                    <input name="" type="text" class="Search_Box"/>
-                    <input name="" type="button" name="" class="Search_btn"/>
-                </form>
-            </div>
-        </div>
-    </div>
+{% block bread %}
+商品详情
+{% endblock %}
+{% block new_body %}
+    <script src="http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=402727"></script>
     <!--商品详细介绍-->
     <div class="Inside_pages clearfix">
         <div class="left_style" style="width:18%;">
-            <div class="title_img_p"><img src="../../static/images/logo_small.png" style="margin-left: 27px"/></div>
+            <div class="title_img_p"><img src="{% static 'images/logo_small.png' %}" style="margin-left: 27px"/></div>
             <div class="ranking">
                 <div class="ranking_title"><span>销量</span>排行</div>
                 <ul class="ranking_list">
                     {% for sale in sales %}
                         <li class="">
                             <em class="ranking_label" style="height: 26px;">{{ forloop.counter }}</em>
-                            <a href="#" class="img"> <img src="{{ sale.image }}" width="100px"
-                                                          height="100px"/></a>
-                            <p class="ranking_name">{{ sale.name }}</p>
+                            <a href="?id={{ sale.id }}" class="img"><img src="{% static sale.image.url %}" width="100px"
+                                                                         height="100px"/></a>
+                            <p class="ranking_name"><a href="?id={{ sale.id }}">{{ sale.name }}</a></p>
                             <p class="price"><b>￥</b>{{ sale.price }}</p>
-                            <p><a href="#">立即查看< </a></p>
+                            <p><a href="?id={{ sale.id }}">立即查看&gt;</a></p>
                         </li>
                     {% endfor %}
                 </ul>
@@ -51,13 +37,11 @@
             <div class="pro_detailed" style="margin-left: 0;">
                 <div class="Details_style clearfix" id="goodsInfo">
                     <div class="mod_picfold clearfix" style="height: 400px;">
-                        {% for foo in detail_all %}
-                            <div class="clearfix" id="detail_main_img" style="height: 330px;">
-                                <div class="layout_wrap" style="margin: 120px 100px">
-                                    <a href=""><img src="{{ foo.image }}" alt="" width="300" height="300"></a>
-                                </div>
+                        <div class="clearfix" id="detail_main_img" style="height: 330px;">
+                            <div class="layout_wrap" style="margin: 87px 58px">
+                                <a href=""><img src="{% static sku.image.url %}" alt="" width="300" height="300"></a>
                             </div>
-                        {% endfor %}
+                        </div>
                         <div class="Sharing" style="line-height: 280px">
                             <div class="bdsharebuttonbox right" style="margin-top: 125px">
                                 <a href="#" class="bds_more" data-cmd="more"></a>
@@ -98,71 +82,71 @@
                     <!--购买信息-->
                     <div class="Buying_info" style="margin-left:80px;margin-top: 50px">
                         <form action="{% url 'Orders' %}" method="post">
-                            {% for foo in detail_all %}
-                                {#                        <a href="#"> <img src="{{ foo.image }}" width="400px"#}
-                                {#                                                  height="400px"/></a>#}
-                                <div class="product_name"><h2>{{ foo.name }}</h2><span>{{ foo.name }}</span></div>
-                                <div class="product_price">
-                                    <div class="price">
-                                        <label>商城价：</label><em>{{ foo.price }}</em><b>元/{{ foo.size }}</b>
-                                    </div>
-                                    <div class="jyScore-fra"><span><em style="width:60px;"></em></span><b>4.5</b><a
-                                            href="#">{{ foo.comments }}</a></div>
+                            {#                        <a href="#"> <img src="{{ foo.image }}" width="400px"#}
+                            {#                                                  height="400px"/></a>#}
+                            <div class="product_name"><h2>{{ sku.name }}</h2><span>{{ sku.name }}</span></div>
+                            <div class="product_price">
+                                <div class="price">
+                                    <label>商城价：</label><em>{{ sku.price }}</em><b>元/{{ sku.size }}</b>
                                 </div>
-                                <div class="productDL" style="height: 180px;">
-                                    <dl style="height: 35px;">
-                                        <dt style="font-size: 16px; line-height:35px">品种：</dt>
-                                        <dd class="left">
-                                            <div class="item"><b></b><a href="#" title="">{{ foo.name }}</a></div>
-                                        </dd>
-                                    </dl>
-                                    <dl style="height: 35px;">
-                                        <dt style="font-size: 16px; line-height:25px ">包装：</dt>
-                                        <dd class="left">
-                                            <div class="item"><input type="radio" name="select">普通包装</div>
-                                            <div class="item"><input type="radio" name="select">小礼盒</div>
-                                            <div class="item"><input type="radio" name="select">大礼盒</div>
-                                        </dd>
-                                    </dl>
-                                    <dl style="height: 35px;">
-                                        <dt style="font-size: 16px;line-height: 32px">数量：</dt>
-                                        <dd class="left">
-                                            <div class="Numbers">
-                                                <a href="javascript:" class="jian " id="minus">-
-                                                </a>
-                                                <input name="number" type="text" value="1" class="number_text">
-                                                <a href="javascript:" class="jia " id="add">+
-                                                </a>
-                                            </div>
-                                        </dd>
-                                        <dd class="left Quantity">(库存：{{ foo.stock }})</dd>
-                                    </dl>
-                                    <d1>
-                                        <dt style="font-size: 16px ; line-height: 30px;">总价：</dt>
-                                        <div class="total" style="font-size: 20px"><em
-                                                style="color: #fd2a32">{{ foo.price }}</em>元
+                                <div class="jyScore-fra"><span><em style="width:60px;"></em></span><b>4.5</b><a
+                                        href="#">{{ sku.comments }}</a></div>
+                            </div>
+                            <div class="productDL" style="height: 180px;">
+                                <dl style="height: 35px;">
+                                    <dt style="font-size: 16px; line-height:35px">品种：</dt>
+                                    <dd class="left">
+                                        <div class="item"><b></b><a href="#" title="">{{ sku.name }}</a></div>
+                                    </dd>
+                                </dl>
+{#                                <dl style="height: 35px;">#}
+{#                                    <dt style="font-size: 16px; line-height:25px ">包装：</dt>#}
+{#                                    <dd class="left">#}
+{#                                        <div class="item"><input type="radio" name="select">普通包装</div>#}
+{#                                        <div class="item"><input type="radio" name="select">小礼盒</div>#}
+{#                                        <div class="item"><input type="radio" name="select">大礼盒</div>#}
+{#                                    </dd>#}
+{#                                </dl>#}
+                                <dl style="height: 35px;">
+                                    <dt style="font-size: 16px;line-height: 32px">数量：</dt>
+                                    <dd class="left">
+                                        <div class="Numbers">
+                                            <a href="javascript:" class="jian " id="minus">-
+                                            </a>
+                                            <input name="number" type="text" value="1" class="number_text">
+                                            <a href="javascript:" class="jia " id="add">+
+                                            </a>
                                         </div>
+                                    </dd>
+                                    <dd class="left Quantity">(库存：{{ sku.stock }})</dd>
+                                </dl>
+                                <d1>
+                                    <dt style="font-size: 16px ; line-height: 30px;">总价：</dt>
+                                    <div class="total" style="font-size: 20px"><em
+                                            style="color: #fd2a32">{{ sku.price }}</em>元
+                                    </div>
 
-                                    </d1>
-                                </div>
-                                <div class="product_Quantity" style="height: 15px;">销量：{{ foo.sales }}</div>
-                                <div class="operating">
-                                    <a href="{% url "Orders" %}?p_id={{ foo.id }}"><input type="button" id="information" value="立即购买"
-                                                                                          style="color: #ffffff; width: 130px; height: 50px;background: #ee1526;font-size: 20px;border-radius: 5px"></a>
-                                    {% if fav %}
-                                        <a href="{% url "product_detailed" %}?id={{ foo.id }}&fav=0"><img
-                                                src="{% static 'images/fav1.jpg' %}" alt="取消收藏"
-                                                style="width: 53px;height: 53px;" title="取消收藏"></a>
-                                    {% else %}
-                                        <a href="{% url "user_collect" %}?id={{ foo.id }}&fav=1"><img
-                                                src="{% static 'images/fav.jpg' %}" alt="收藏"
-                                                style="width: 53px;height: 53px;" title="收藏"></a>
-                                    {% endif %}
-                                </div>
-                                <input type="button" id='shop_cart'
-                                       style="color: #ffffff; width: 130px; height: 50px;background: #fe9c3f;font-size: 20px;border-radius: 5px"
-                                       value="加入购物车" onclick="f">
-                            {% endfor %}
+                                </d1>
+                            </div>
+                            <div class="product_Quantity" style="height: 15px;">销量：{{ sku.sales }}</div>
+                            <div class="operating">
+                                <a href="{% url "Orders" %}?p_id={{ sku.id }}"><input type="button"
+                                                                                      id="information"
+                                                                                      value="立即购买"
+                                                                                      style="color: #ffffff; width: 130px; height: 50px;background: #ee1526;font-size: 20px;border-radius: 5px"></a>
+                                {% if fav %}
+                                    <a><img id="fav1"
+                                            src="{% static 'images/fav1.jpg' %}" alt="取消收藏"
+                                            style="width: 53px;height: 53px;" title="取消收藏"></a>
+                                {% else %}
+                                    <a><img id="fav"
+                                            src="{% static 'images/fav.jpg' %}" alt="收藏"
+                                            style="width: 53px;height: 53px;" title="收藏"></a>
+                                {% endif %}
+                                <a><input type="button" id='shop_cart'
+                                          style="color: #ffffff;width: 130px; height: 50px;background: #fe9c3f;font-size: 20px;border-radius: 5px"
+                                          value="加入购物车" onclick="f"></a>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -185,31 +169,26 @@
                                     }
                                 })
                         })
+                    });
+                    $(function () {
+                        var id = {{ sku.id }}
+                            $('#fav').click(function () {
+                                $.post({% url 'user_collect' %}, {'fav': 0, 'id': id},
+                                    function (data) {
+                                        alert(data.message)
+                                        window.location.reload();
+                                    }
+                                )
+                            });
+                        $('#fav1').click(function () {
+                            $.post({% url 'user_collect' %}, {'fav': 1, 'id': id},
+                                function (data) {
+                                    window.location.reload();
+                                }
+                            )
+                        })
                     })
                 </script>
-                {# 收藏js #}
-                {#            <script>#}
-                {#                $('#collect').click(function () {#}
-                {#                    var price = $(".price>em").text();#}
-                {#                    var num_show = $(".number_text").val();#}
-                {#                    var oprice = $(".total>em").text();#}
-                {#                    var p_id = {{ p_id }};#}
-                {#                    $.post('{% url 'user_collect' %}', {#}
-                {#                            'price': price,#}
-                {#                            'num': num_show,#}
-                {#                            'oprice': oprice,#}
-                {#                            'p_id': p_id#}
-                {#                        },#}
-                {#                        function (data) {#}
-                {#                            if (data.message = 'OK') {#}
-                {#                                $('#collect').val('已收藏！')#}
-                {#                            } else {#}
-                {#                                alert('收藏失败')#}
-                {#                            }#}
-                {#                        })#}
-                {#                });#}
-                {#            </script>#}
-                {# 数量加减改变总价js #}
                 <script>
                     $("#add").click(function () {
                         var num_show = $(".number_text").val();
@@ -234,11 +213,10 @@
                         var total = price * num_show;
                         $(".total>em").text(total.toFixed(2));
                     });
-                    $(function () {
-                        num_show = $(".number_text").val();
+                    $('.number_text').blur(function () {
                         var price = $(".price>em").text();
-                        price = parseFloat(price);
-                        var total = price * num_show;
+                        var count = $(this).val();
+                        var total = price * count;
                         $(".total>em").text(total.toFixed(2));
                     })
                 </script>

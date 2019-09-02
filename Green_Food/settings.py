@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'integral_app.apps.IntegralAppConfig',
     'user_app.apps.UserAppConfig',
     'shop_app.apps.ShopAppConfig',
-    'captcha'
+    'captcha',
+    'tinymce'
 ]
 
 MIDDLEWARE = [
@@ -131,5 +132,22 @@ STATICFILES_DIRS = [
 ]
 # 设置上传文件的保存目录
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
-
 MEDIA_URL = "/media/"  # 跟STATIC_URL类似，指定用户可以通过这个路径找到文件
+
+TINYMCE_DEFAULT_CONFIG = {
+    'theme': 'advanced',
+    'width': 600,
+    'height': 400,
+}
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# smtp服务器的地址
+EMAIL_HOST = 'smtp.163.com'
+# 发送邮件的默认端口就是25
+EMAIL_PORT = 25
+#发送邮件的邮箱
+EMAIL_HOST_USER = 'hhj15001252139@163.com'
+#在邮箱中设置的客户端授权密码
+EMAIL_HOST_PASSWORD = 'huangfu1105'
+#收件人看到的发件人
+EMAIL_FROM = '浦江县食品商城<hhj15001252139@163.com>'

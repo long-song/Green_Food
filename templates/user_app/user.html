@@ -3,181 +3,148 @@
 {% block title %}
     用户中心
 {% endblock %}
-{% block body %}
+{% block nav %}
     <script type="text/javascript">
-    $(document).ready(function () {
+        $(document).ready(function () {
 
-        setInterval(showTime, 1000);
+            setInterval(showTime, 1000);
 
-        function timer(obj, txt) {
-            obj.text(txt);
-        }
+            function timer(obj, txt) {
+                obj.text(txt);
+            }
 
-        function showTime() {
-            var today = new Date();
-            var weekday = new Array(7);
-            weekday[0] = "星期日";
-            weekday[1] = "星期一";
-            weekday[2] = "星期二";
-            weekday[3] = "星期三";
-            weekday[4] = "星期四";
-            weekday[5] = "星期五";
-            weekday[6] = "星期六";
-            var y = today.getFullYear() + "年";
-            var month = today.getMonth() + 1 + "月";
-            var td = today.getDate();
-            var d = weekday[today.getDay()];
-            var h = today.getHours();
-            var m = today.getMinutes();
-            var s = today.getSeconds();
-            timer($("#y"), y + month);
-            //timer($("#MH"),month);
-            timer($("h1"), td);
-            timer($("#D"), d);
-            timer($("#H"), h);
-            timer($("#M"), m);
-            timer($("#S"), s);
-        }
-    })
-</script>
-    <!--位置-->
-    <div class="Bread_crumbs">
-        <div class="Inside_pages clearfix">
-            <div class="right Search">
-                <form>
-                    <input name="" type="text" class="Search_Box"/>
-                    <input name="" type="button" name="" class="Search_btn"/>
-                </form>
+            function showTime() {
+                var today = new Date();
+                var weekday = new Array(7);
+                weekday[0] = "星期日";
+                weekday[1] = "星期一";
+                weekday[2] = "星期二";
+                weekday[3] = "星期三";
+                weekday[4] = "星期四";
+                weekday[5] = "星期五";
+                weekday[6] = "星期六";
+                var y = today.getFullYear() + "年";
+                var month = today.getMonth() + 1 + "月";
+                var td = today.getDate();
+                var d = weekday[today.getDay()];
+                var h = today.getHours();
+                var m = today.getMinutes();
+                var s = today.getSeconds();
+                timer($("#y"), y + month);
+                //timer($("#MH"),month);
+                timer($("h1"), td);
+                timer($("#D"), d);
+                timer($("#H"), h);
+                timer($("#M"), m);
+                timer($("#S"), s);
+            }
+        })
+    </script>
+    <div class="user_right">
+        <div class="user_center_style">
+            <div class="user_time">
+                <h1></h1>
+                <h4 id="D"></h4>
+                <h4 id="y"></h4>
             </div>
+            <ul class="user_center_info">
+                <li>
+                    <img src="../../static/images/user_img_05.png"/>
+                    <h4 class="Money">余额￥34</h4>
+                </li>
+                <li><img src="../../static/images/user_img_04.png"/>
+                    <a href="#">代收货（3）</a>
+                </li>
+                <li><img src="../../static/images/user_img_06.png"/>
+                    <a href="#">积分234分</a>
+                </li>
+                <li><img src="../../static/images/user_img_03.png"/>
+                    <a href="#">订单评价（5）</a>
+                </li>
+            </ul>
         </div>
-    </div>
-    <!--用户中心-->
-    <div class="Inside_pages clearfix">
-        <div class="clearfix user">
-            <div class="user_left">
-                <div class="user_info">
-                    <div class="Head_portrait"><img src="{% static user.head_img.url %}" width="80px"
-                                                    height="80px"/>
-                        <!--头像区域--></div>
-                    <div class="user_name">{{ request.session.user_username }}<a href="{% url 'user_info' %}"
-                                                                                 style="color: orange">[个人资料]</a></div>
+        <div class="Order_form">
+            <div class="user_Borders">
+                <div class="title_name">
+                    <span class="name">我的订单</span>
+                    <a href="#">更多订单&gt;&gt;</a>
                 </div>
-                <ul class="Section">
-                    <li><a href="{% url 'user' %}"><em></em><span>我的订单</span></a></li>
-                    <li><a href="{% url 'user_info' %}"><em></em><span>个人信息</span></a></li>
-                    <li><a href="{% url 'user_password' %}"><em></em><span>修改密码</span></a></li>
-                    <li><a href="{% url 'user_collect' %}"><em></em><span>我的评论</span></a></li>
-                    <li><a href="{% url 'user_collect' %}"><em></em><span>我的收藏</span></a></li>
-                    <li><a href="{% url 'user_address' %}"><em></em><span>收货地址管理</span></a></li>
-                </ul>
-            </div>
-            <div class="user_right">
-                <div class="user_center_style">
-                    <div class="user_time">
-                        <h1></h1>
-                        <h4 id="D"></h4>
-                        <h4 id="y"></h4>
-                    </div>
-                    <ul class="user_center_info">
-                        <li>
-                            <img src="../../static/images/user_img_05.png"/>
-                            <h4 class="Money">余额￥34</h4>
-                        </li>
-                        <li><img src="../../static/images/user_img_04.png"/>
-                            <a href="#">代收货（3）</a>
-                        </li>
-                        <li><img src="../../static/images/user_img_06.png"/>
-                            <a href="#">积分234分</a>
-                        </li>
-                        <li><img src="../../static/images/user_img_03.png"/>
-                            <a href="#">订单评价（5）</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="Order_form">
-                    <div class="user_Borders">
-                        <div class="title_name">
-                            <span class="name">我的订单</span>
-                            <a href="#">更多订单&gt;&gt;</a>
-                        </div>
-                        <div class="Order_form_list">
-                            <table>
-                                <thead>
-                                <td class="list_name_title0">商品</td>
-                                <td class="list_name_title1">单价(元)</td>
-                                <td class="list_name_title2">数量</td>
-                                <td class="list_name_title4">实付款(元)</td>
-                                <td class="list_name_title5">订单状态</td>
-                                <td class="list_name_title6">操作</td>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td colspan="6" class="Order_form_time">2015-12-3 订单号：445454654654654</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3">
-                                        <table class="Order_product_style">
-                                            <tr>
-                                                <td>
-                                                    <div class="product_name clearfix">
-                                                        <a href="#"><img src="../../static/images/product_img_17.png"
-                                                                         width="80px" height="80px"/></a>
-                                                        <a href="3">天然绿色多汁香甜无污染水蜜桃</a>
-                                                        <p class="specification">礼盒装20个/盒</p>
-                                                    </div>
-                                                </td>
-                                                <td>5</td>
-                                                <td>2</td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                    <td class="split_line">100</td>
-                                    <td class="split_line">已发货，待收货</td>
-                                    <td></td>
-                                </tr>
-                                </tbody>
-                                <tbody>
-                                <tr>
-                                    <td colspan="6" class="Order_form_time">2015-12-3 订单号：445454654654654</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3">
-                                        <table class="Order_product_style">
-                                            <tr>
-                                                <td>
-                                                    <div class="product_name clearfix">
-                                                        <a href="#"><img src="../../static/images/product_img_17.png"
-                                                                         width="80px" height="80px"/></a>
-                                                        <a href="3">天然绿色多汁香甜无污染水蜜桃</a>
-                                                        <p class="specification">礼盒装20个/盒</p>
-                                                    </div>
-                                                </td>
-                                                <td>5</td>
-                                                <td>2</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="product_name clearfix">
-                                                        <a href="#"><img src="../../static/images/product_img_17.png"
-                                                                         width="80px" height="80px"/></a>
-                                                        <a href="3">天然绿色多汁香甜无污染水蜜桃</a>
-                                                        <p class="specification">礼盒装20个/盒</p>
-                                                    </div>
-                                                </td>
-                                                <td>5</td>
-                                                <td>2</td>
-                                            </tr>
-                                        </table>
-                                    </td>
+                <div class="Order_form_list">
+                    <table>
+                        <thead>
+                        <td class="list_name_title0">商品</td>
+                        <td class="list_name_title1">单价(元)</td>
+                        <td class="list_name_title2">数量</td>
+                        <td class="list_name_title4">实付款(元)</td>
+                        <td class="list_name_title5">订单状态</td>
+                        <td class="list_name_title6">操作</td>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="6" class="Order_form_time">2015-12-3 订单号：445454654654654</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <table class="Order_product_style">
+                                    <tr>
+                                        <td>
+                                            <div class="product_name clearfix">
+                                                <a href="#"><img src="../../static/images/product_img_17.png"
+                                                                 width="80px" height="80px"/></a>
+                                                <a href="3">天然绿色多汁香甜无污染水蜜桃</a>
+                                                <p class="specification">礼盒装20个/盒</p>
+                                            </div>
+                                        </td>
+                                        <td>5</td>
+                                        <td>2</td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="split_line">100</td>
+                            <td class="split_line">已发货，待收货</td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                        <tbody>
+                        <tr>
+                            <td colspan="6" class="Order_form_time">2015-12-3 订单号：445454654654654</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <table class="Order_product_style">
+                                    <tr>
+                                        <td>
+                                            <div class="product_name clearfix">
+                                                <a href="#"><img src="../../static/images/product_img_17.png"
+                                                                 width="80px" height="80px"/></a>
+                                                <a href="3">天然绿色多汁香甜无污染水蜜桃</a>
+                                                <p class="specification">礼盒装20个/盒</p>
+                                            </div>
+                                        </td>
+                                        <td>5</td>
+                                        <td>2</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="product_name clearfix">
+                                                <a href="#"><img src="../../static/images/product_img_17.png"
+                                                                 width="80px" height="80px"/></a>
+                                                <a href="3">天然绿色多汁香甜无污染水蜜桃</a>
+                                                <p class="specification">礼盒装20个/盒</p>
+                                            </div>
+                                        </td>
+                                        <td>5</td>
+                                        <td>2</td>
+                                    </tr>
+                                </table>
+                            </td>
 
-                                    <td class="split_line">100</td>
-                                    <td class="split_line">已发货，待收货</td>
-                                    <td></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                            <td class="split_line">100</td>
+                            <td class="split_line">已发货，待收货</td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

@@ -3,89 +3,69 @@
 {% block title %}
     我的收藏
 {% endblock %}
-{% block body %}
-    <!--位置-->
-    <div class="Bread_crumbs">
-        <div class="Inside_pages clearfix">
-            <div class="right Search">
-                <form>
-                    <input name="" type="text" class="Search_Box"/>
-                    <input name="" type="button" name="" class="Search_btn"/>
-                </form>
+{% block nav %}
+
+    <script>
+        $(function () {
+            $('.delete_Collect').click(function () {
+                var id = $('#delete').val();
+                $.post({% url 'user_collect' %}, {'fav': 1, 'id': id},
+                    function (data) {
+                        window.location.reload();
+                    }
+                )
+            })
+        })
+    </script>
+    <!--右侧内容样式-->
+    <div class="user_right">
+        <div class="user_Borders clearfix">
+            <div class="title_name">
+                <span class="name">用户收藏</span>
+            </div>
+            <!--收藏样式-->
+            <div class="Collect">
+                {% if collect %}
+                    <ul class="Collect_list">
+                        {% for foo in collect %}
+                            <li>
+                                <div class="Collect_pro_name">
+                                    <a class="delete_Collect"><input type="hidden" id="delete"
+                                                                     value="{{ foo.pro_sku.id }}"></a>
+                                    <p class="img center"><a
+                                            href="{% url "product_detailed" %}?id={{ foo.pro_sku.id }}"><img
+                                            src="{% static foo.pro_sku.image.url %}"/></a>
+                                    </p>
+                                    <p>
+                                        <a href="{% url "product_detailed" %}?id={{ foo.pro_sku.id }}">{{ foo.pro_sku.name }}</a>
+                                    </p>
+                                    <p class="Collect_Standard">{{ foo.pro_sku.title }}</p>
+                                    <p class="Collect_price">￥{{ foo.pro_sku.price }}</p>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p style="font-size: 25px;text-align: center">收藏好干净哦！&nbsp;<img
+                            src="{% static 'images/timg.gif' %}"
+                            alt=""
+                            style="width: 41px;height: 41px;">&nbsp;快去收藏你喜欢的食品吧
+                    </p>
+
+                {% endif %}
+
+                <!--分页-->
+                {#                    <div class="pages_Collect clearfix">#}
+                {#                        <a href="#" class="on">《</a>#}
+                {#                        <a href="#">1</a>#}
+                {#                        <a href="#">2</a>#}
+                {#                        <a href="#">3</a>#}
+                {#                        <a href="#">4</a>#}
+                {#                        <a href="#">》</a>#}
+                {#                    </div>#}
             </div>
         </div>
     </div>
-    <!--用户中心(收藏)-->
-    <div class="Inside_pages clearfix">
-        <div class="clearfix user">
-            <!--左侧菜单栏样式-->
-            <div class="user_left">
-                <div class="user_info">
-                    <div class="Head_portrait"><img src="{% static user.head_img.url %}" width="80px"
-                                                    height="80px"/>
-                        <!--头像区域--></div>
-                    <div class="user_name">{{ request.session.user_username }}<a href="{% url 'user_info' %}"
-                                                                                 style="color: orange">[个人资料]</a></div>
-                </div>
-                <ul class="Section">
-                    <li><a href="{% url 'user' %}"><em></em><span>我的订单</span></a></li>
-                    <li><a href="{% url 'user_info' %}"><em></em><span>个人信息</span></a></li>
-                    <li><a href="{% url 'user_password' %}"><em></em><span>修改密码</span></a></li>
-                    <li><a href="{% url 'user_collect' %}"><em></em><span>我的评论</span></a></li>
-                    <li><a href="{% url 'user_collect' %}"><em></em><span>我的收藏</span></a></li>
-                    <li><a href="{% url 'user_address' %}"><em></em><span>收货地址管理</span></a></li>
-                </ul>
-            </div>
-            <!--右侧内容样式-->
-            <div class="user_right">
-                <div class="user_Borders clearfix">
-                    <div class="title_name">
-                        <span class="name">用户收藏</span>
-                    </div>
-                    <!--收藏样式-->
-                    <div class="Collect">
-                        {% if col %}
-                            <ul class="Collect_list">
-                                {% for foo in col %}
-                                    <li>
-                                        <div class="Collect_pro_name">
-                                            <a href="{% url "user_collect" %}?id={{ foo.pro_id }}&fav=0"
-                                               class="delete_Collect"></a>
-                                            <p class="img center"><a
-                                                    href="{% url "product_detailed" %}?id={{ foo.pro_id }}&fav={{ fav }}"><img
-                                                    src="{{ foo.image }}"/></a>
-                                            </p>
-                                            <p>
-                                                <a href="{% url "product_detailed" %}?id={{ foo.pro_id }}&fav={{ fav }}">{{ foo.name }}</a>
-                                            </p>
-                                            <p class="Collect_Standard">{{ foo.title }}</p>
-                                            <p class="Collect_price">￥{{ foo.price }}</p>
-                                        </div>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% else %}
-                            <p style="font-size: 25px;text-align: center">收藏好干净哦！&nbsp;<img
-                                    src="{% static 'images/timg.gif' %}"
-                                    alt=""
-                                    style="width: 41px;height: 41px;">&nbsp;快去收藏你喜欢的食品吧
-                            </p>
 
-                        {% endif %}
-
-                        <!--分页-->
-                        {#                    <div class="pages_Collect clearfix">#}
-                        {#                        <a href="#" class="on">《</a>#}
-                        {#                        <a href="#">1</a>#}
-                        {#                        <a href="#">2</a>#}
-                        {#                        <a href="#">3</a>#}
-                        {#                        <a href="#">4</a>#}
-                        {#                        <a href="#">》</a>#}
-                        {#                    </div>#}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 {% endblock %}
 

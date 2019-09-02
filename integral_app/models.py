@@ -22,7 +22,7 @@ class Pro_sku(models.Model):
     '''
     商品SKU基本信息表
     '''
-    image = models.ImageField(upload_to='static/images', default='images/product_AD_07.png', null=True,
+    image = models.ImageField(upload_to='static/images/vegetable', default='images/product_AD_07.png', null=True,
                               verbose_name='商品图片')
     name = models.CharField(max_length=50, verbose_name='商品名(规格)')
     describe = models.CharField(max_length=600, verbose_name='产品介绍', null=True)
@@ -34,6 +34,7 @@ class Pro_sku(models.Model):
     sales = models.IntegerField(default=0, verbose_name='销量')
     type = models.ForeignKey(Pro_Type, on_delete=models.CASCADE)
     comments = models.IntegerField(default=0, verbose_name='评价数')
+    is_index = models.BooleanField(default=False, verbose_name='是否促销首页')
     is_putaway = models.BooleanField(default=True, verbose_name='是否上架销售')
 
     class Meta:
@@ -44,6 +45,14 @@ class Pro_sku(models.Model):
     def __str__(self):
         return '%s: %s' % (self.id, self.name)
 
+# 收藏表
+class Collect(models.Model):
+    pro_sku = models.ForeignKey(Pro_sku, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(UserInfo, on_delete=models.CASCADE, null=True)
+
+    class Meta:
+        verbose_name = '收藏管理'
+        verbose_name_plural = verbose_name
 
 # 商品评论表
 # dis_pro : 评论的目标商品
@@ -87,4 +96,4 @@ class Group_buy(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return self.group_pro.name

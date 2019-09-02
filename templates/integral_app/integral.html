@@ -1,19 +1,16 @@
-{% extends 'index.html' %}
+{% extends 'integral_app/Group_buy.html' %}
 {% load static %}
 {% block title %}
     所有果蔬
 {% endblock %}
-{% block nav %}
-    <li class=""><a href="{% url 'index' %}">首页</a></li>
-    <li {% if integral %} class="on" {% endif %}><a href="{% url 'integral' %}?page=1">所有果蔬</a></li>
-    <li class=""><a href="{% url 'group_buy' %}">活动专区</a></li>
-    <li class=""><a href="{% url 'products' %}?page=1">水果馆</a></li>
-    <li class=""><a href="{% url 'products_list' %}?page=1">蔬菜馆</a></li>
-    <li class=""><a href="{% url 'user_info' %}">会员中心</a></li>
-    <li class=""><a href="#">联系我们</a></li>
-{% endblock %}
 
-{% block body %}
+{% block img %}
+    <div><a href="#"><img src="{% static 'images/AD_page_img_02.png' %}" width="100%"/></a></div>
+{% endblock %}
+{% block bread %}
+所有果蔬
+{% endblock %}
+{% block new_body %}
     <style>
         /* 分页样式 */
 
@@ -39,20 +36,6 @@
             color: #43a200
         }
     </style>
-    <!---->
-    <div><a href="#"><img src="{% static 'images/AD_page_img_02.png' %}" width="100%"/></a></div>
-    <!--位置-->
-    <div class="Bread_crumbs">
-        <div class="Inside_pages clearfix">
-            <div class="left">当前位置：<a href="#">首页</a>&gt;<a href="#">所有果蔬</a></div>
-            <div class="right Search">
-                <form>
-                    <input name="" type="text" class="Search_Box"/>
-                    <input name="" type="button" name="" class="Search_btn"/>
-                </form>
-            </div>
-        </div>
-    </div>
     <!--所有果蔬-->
     <div class="Inside_pages clearfix">
         <div class="integral_style">
@@ -61,9 +44,9 @@
             <div class="integral_p_list">
                 <ul class="list_style">
                     {% for foo in data_page %}
-                        <li class="clearfix" style="width: 310px;">
+                        <li class="clearfix" style="width: 310px;height: 400px;">
                             <div class="product_lists clearfix">
-                                <a href="{% url "product_detailed" %}?id={{ foo.id }}"><img src="{{ foo.image }}"/></a>
+                                <a href="{% url "product_detailed" %}?id={{ foo.id }}"><img src="{% static foo.image.url %}"/></a>
                                 <p class="title_p_name"><a
                                         href="{% url "product_detailed" %}?id={{ foo.id }}">{{ foo.name }}</a></p>
                                 <p class="title_Profile"><a href="#">{{ foo.title }}</a></p>
@@ -95,5 +78,5 @@
             </div>
         </div>
     </div>
-
 {% endblock %}
+

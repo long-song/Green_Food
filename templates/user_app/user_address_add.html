@@ -4,7 +4,7 @@
     用户地址管理
 {% endblock %}
 
-{% block body %}
+{% block nav %}
     <!--有关下拉框的值获取与联动-->
     <script>
         $(function () {
@@ -66,83 +66,47 @@
             padding-left: 10px;
             width: 120px;
             height: 33px;
-            {#float: left;#}
-            {#-webkit-appearance: none; /* Safari 和 Chrome */#}
-            {#-moz-appearance: none; /* Firefox */#}
             background: #eeeeee;
             font-size: 15px;
         }
     </style>
-    <!--位置-->
-    <div class="Bread_crumbs">
-        <div class="Inside_pages clearfix">
-            <div class="right Search">
-                <form>
-                    <input name="" type="text" class="Search_Box"/>
-                    <input name="" type="button" name="" class="Search_btn"/>
+    <!--右侧内容样式-->
+    <div class="user_right">
+        <div class="user_Borders">
+            <div class="title_name">
+                <span class="name">添加地址</span>
+                <span style="color: red">{% if errmsg %}{{ errmsg }}{% endif %}</span>
+            </div>
+            <div class="about_user_info">
+                <form id="form1" name="form1" method="post" action="{% url 'user_address_add' %}">
+                    {% csrf_token %}
+                    <div class="user_layout">
+                        <ul>
+                            <li><label class="user_title_name">收件人姓名：</label><input name="new_aname" type="text"
+                                                                                    class="add_text"><em>*</em>
+                            </li>
+                            <li><label class="user_title_name">地&nbsp;&nbsp;&nbsp;区：</label>
+                                <div id="parent">
+                                    <select name="province" id="province"></select>
+                                    <select name="city" id="city"></select>
+                                    <select name="county" id="county"></select></div>
+                            </li>
+                            <li><label class="user_title_name">收货地址：</label><input name="new_ads" type="text"
+                                                                                   class="add_text"><em>*</em>
+                            </li>
+                            <li><label class="user_title_name">手&nbsp;机&nbsp;号：</label><input name="new_aphone"
+                                                                                              type="text"
+                                                                                              class="add_text"><em>*</em>
+                            </li>
+
+                        </ul>
+                        <div class="operating_btn"><input name="name" type="submit" value="确认"
+                                                          class="submit—btn">
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
-    <!--用户中心(地址管理界面)-->
-    <div class="Inside_pages clearfix">
-        <div class="clearfix user">
-            <!--左侧菜单栏样式-->
-            <div class="user_left">
-                <div class="user_info">
-                    <div class="Head_portrait"><img src="{% static user.head_img.url %}" width="80px"
-                                                    height="80px"/>
-                        <!--头像区域--></div>
-                    <div class="user_name">{{ request.session.user_username }}<a href="{% url 'user_info' %}"
-                                                                                 style="color: orange">[个人资料]</a></div>
-                </div>
-                <ul class="Section">
-                    <li><a href="{% url 'user' %}"><em></em><span>我的订单</span></a></li>
-                    <li><a href="{% url 'user_info' %}"><em></em><span>个人信息</span></a></li>
-                    <li><a href="{% url 'user_password' %}"><em></em><span>修改密码</span></a></li>
-                    <li><a href="{% url 'user_collect' %}"><em></em><span>我的评论</span></a></li>
-                    <li><a href="{% url 'user_collect' %}"><em></em><span>我的收藏</span></a></li>
-                    <li><a href="{% url 'user_address' %}"><em></em><span>收货地址管理</span></a></li>
-                </ul>
-            </div>
-            <!--右侧内容样式-->
-            <div class="user_right">
-                <div class="user_Borders">
-                    <div class="title_name">
-                        <span class="name">添加地址</span>
-                        <span style="color: red">{% if errmsg %}{{ errmsg }}{% endif %}</span>
-                    </div>
-                    <div class="about_user_info">
-                        <form id="form1" name="form1" method="post" action="{% url 'user_address_add' %}">
-                            {% csrf_token %}
-                            <div class="user_layout">
-                                <ul>
-                                    <li><label class="user_title_name">收件人姓名：</label><input name="new_aname" type="text"
-                                                                                            class="add_text"><em>*</em>
-                                    </li>
-                                    <li><label class="user_title_name">地&nbsp;&nbsp;&nbsp;区：</label>
-                                        <div id="parent">
-                                            <select name="province" id="province"></select>
-                                            <select name="city" id="city"></select>
-                                            <select name="county" id="county"></select></div>
-                                    </li>
-                                    <li><label class="user_title_name">收货地址：</label><input name="new_ads" type="text"
-                                                                                           class="add_text"><em>*</em>
-                                    </li>
-                                    <li><label class="user_title_name">手&nbsp;机&nbsp;号：</label><input name="new_aphone"
-                                                                                                      type="text"
-                                                                                                      class="add_text"><em>*</em>
-                                    </li>
 
-                                </ul>
-                                <div class="operating_btn"><input name="name" type="submit" value="确认"
-                                                                  class="submit—btn">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 {% endblock %}

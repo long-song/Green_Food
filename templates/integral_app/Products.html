@@ -1,9 +1,12 @@
-{% extends 'integral_app/Group_buy.html' %}
+{% extends 'integral_app/integral.html' %}
 {% load static %}
 {% block title %}
     水果馆
 {% endblock %}
-{% block body %}
+{% block bread %}
+    水果馆
+{% endblock %}
+{% block new_body %}
     <style>
         /* 分页样式 */
 
@@ -29,19 +32,6 @@
             color: #43a200
         }
     </style>
-    <div class="AD_img"><a href="#"><img src="{% static 'images/AD_page_img_02.png' %}" width="100%"/></a></div>
-    <!--位置-->
-    <div class="Bread_crumbs">
-        <div class="Inside_pages clearfix">
-            <div class="left">当前位置：<a href="#">首页</a>&gt;<a href="#">水果馆</a></div>
-            <div class="right Search">
-                <form>
-                    <input name="" type="text" class="Search_Box"/>
-                    <input name="" type="button" name="" class="Search_btn"/>
-                </form>
-            </div>
-        </div>
-    </div>
     <!--产品-->
     <div class="Inside_pages">
         <!--水果馆-->
@@ -59,17 +49,16 @@
             <div class="list_style">
                 <ul class="clearfix">
                     {% for foo in data_page %}
-                        <li class="clearfix" style="width: 310px;">
+                        <li class="clearfix" style="width: 310px;height: 400px;">
                             <div class="product_lists clearfix">
-                                <a href="{% url "product_detailed" %}?id={{ foo.id }}"><img src="{{ foo.image }}"/></a>
+                                <a href="{% url "product_detailed" %}?id={{ foo.id }}"><img
+                                        src="{% static foo.image.url %}"/></a>
                                 <p class="title_p_name"><a
                                         href="{% url "product_detailed" %}?id={{ foo.id }}">{{ foo.name }}</a></p>
-                                <p class="title_Profile">{{ foo.title }}</p>
-                                <p class="price"><b>￥</b>{{ foo.price }}</p><a
-                                    href="{% url "product_detailed" %}?id={{ foo.id }}" class="buy_btn"></a><a
-                                    href="javascript;('')"
-                                    class="Join_btn"></a>
-                                </p>
+                                <p class="title_Profile" style="color: rosybrown">{{ foo.title }}</p>
+                                <p class="price"><b>￥</b>{{ foo.price }}</p>
+                                <a href="{% url "product_detailed" %}?id={{ foo.id }}" class="buy_btn"></a>
+                                <a class="Join_btn"></a>
                             </div>
                         </li>
                     {% endfor %}

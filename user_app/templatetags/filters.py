@@ -55,6 +55,15 @@ def county(num):
 
 
 @register.filter
-def mod_val(num, val):
-    '''判断num是否能被val整除'''
-    return num % val == 0
+def mod_val(str):
+    '''
+    将字符串以逗号分割
+    并添加到列表
+    显示前三个
+    '''
+    list = str.split(",")
+    print(list)
+    str1 = ''
+    for i in list[:2]:
+        str1 = str1+i
+    return str1

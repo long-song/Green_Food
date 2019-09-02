@@ -3,110 +3,76 @@
 {% block title %}
     用户地址管理
 {% endblock %}
-
-{% block body %}
+{% block nav %}
     <style>
-    a:hover{
-        cursor: pointer;
-        color: orangered;
-    }
+        a:hover {
+            cursor: pointer;
+            color: orangered;
+        }
     </style>
-    <!--位置-->
-    <div class="Bread_crumbs">
-        <div class="Inside_pages clearfix">
-            <div class="right Search">
-                <form>
-                    <input name="" type="text" class="Search_Box"/>
-                    <input name="" type="button" name="" class="Search_btn"/>
-                </form>
+    <!--右侧内容样式-->
+    <div class="user_right">
+        <div class="Address_List">
+            <div class="title_name">
+                <span class="name">用户地址列表</span>
+                <span><a href="{% url 'user_address_add' %}" style="font-size: 30px;text-align: center"><button
+                        style="border: 0;width: 40px;height: 40px;cursor: pointer;;line-height: 36px"
+                        title="添加地址">+</button></a></span>
             </div>
-        </div>
-    </div>
-    <!--用户中心(地址管理界面)-->
-    <div class="Inside_pages clearfix">
-        <div class="clearfix user">
-            <!--左侧菜单栏样式-->
-            <div class="user_left">
-                <div class="user_info">
-                    <div class="Head_portrait"><img src="{% static user.head_img.url %}" width="80px"
-                                                    height="80px"/>
-                        <!--头像区域--></div>
-                    <div class="user_name">{{ request.session.user_username }}<a href="{% url 'user_info' %}"
-                                                                                 style="color: orange">[个人资料]</a></div>
-                </div>
-                <ul class="Section">
-                    <li><a href="{% url 'user' %}"><em></em><span>我的订单</span></a></li>
-                    <li><a href="{% url 'user_info' %}"><em></em><span>个人信息</span></a></li>
-                    <li><a href="{% url 'user_password' %}"><em></em><span>修改密码</span></a></li>
-                    <li><a href="{% url 'user_collect' %}"><em></em><span>我的评论</span></a></li>
-                    <li><a href="{% url 'user_collect' %}"><em></em><span>我的收藏</span></a></li>
-                    <li><a href="{% url 'user_address' %}"><em></em><span>收货地址管理</span></a></li>
-                </ul>
-            </div>
-            <!--右侧内容样式-->
-            <div class="user_right">
-                <div class="Address_List">
-                    <div class="title_name">
-                        <span class="name">用户地址列表</span>
-                        <span><a href="{% url 'user_address_add' %}" style="font-size: 30px;text-align: center"><button
-                                style="border: 0;width: 40px;height: 40px;cursor: pointer;;line-height: 36px"
-                                title="添加地址">+</button></a></span>
-                    </div>
-                    <div class="list">
-                        <div class="user_layout" style="text-align: center;font-family: '微软雅黑 Light'">
-                            <p style="height: 5px;background: red"></p>
-                            {% if addres %}
-                                <table>
-                                    <thead>
-                                    <td class="list_name_title0">收件人姓名</td>
-                                    <td class="list_name_title1">地区</td>
-                                    <td class="list_name_title2">邮编</td>
-                                    <td class="list_name_title3">电话</td>
-                                    <td class="list_name_title4">收货地址</td>
-                                    <td class="list_name_title2">默认地址</td>
-                                    <td class="list_name_title5">编辑</td>
-                                    <td class="list_name_title5">删除</td>
-                                    </thead>
-                                    {% for addres1 in addres %}
-                                        <tr style="font-size: 18px;font-family: 楷体">
-                                            <td>{{ addres1.aname }}</td>
-                                            <td>{{ addres1.area }}</td>
-                                            <td>{{ addres1.postcode }}</td>
-                                            <td>{{ addres1.aphone }}</td>
-                                            <td>{{ addres1.county_name.county_name }} {{ addres1.ads }}</td>
-                                            <td>{% if addres1.is_default == 1 %}
-                                                <div style="border: 0;color: orangered">默认地址</div>
-                                            {% else %}
-                                                <div style="border: 0;"><a href="{% url 'user_address_default' id=addres1.id %}">设为默认</a></div>
-                                            {% endif %}</td>
-                                            <td><a href="{% url 'user_address_change' id=addres1.id %}"><img
-                                                    src="{% static 'images/binaji.jpg' %}"
-                                                    alt="编辑" width="20" height="20"></a>
-                                            </td>
-                                            <td><a href="{% url 'user_address_delete' id=addres1.id %}"><img
-                                                    src="{% static 'images/delete.jpg' %}"
-                                                    alt="删除" width="20" height="20"></a></td>
-                                        </tr>
-                                    {% endfor %}
-                                </table>
-                            {% else %}
-                                <table>
-                                    <thead>
-                                    <td class="list_name_title0">收件人姓名</td>
-                                    <td class="list_name_title1">地区</td>
-                                    <td class="list_name_title2">邮编</td>
-                                    <td class="list_name_title3">电话</td>
-                                    <td class="list_name_title4">收货地址</td>
-                                    <td class="list_name_title5">操作</td>
-                                    </thead>
-                                </table>
-                                <p style="font-size: 25px;">暂无地址信息,请前往添加☛<span><a href="{% url 'user_address_add' %}"
-                                                                                  style="font-size: 30px;text-align: center"><button
-                                        style="border: 0;width: 40px;height: 40px;cursor: pointer;line-height: 36px"
-                                        title="添加地址">+</button></a></span></p>
-                            {% endif %}
-                        </div>
-                    </div>
+            <div class="list">
+                <div class="user_layout" style="text-align: center;font-family: '微软雅黑 Light'">
+                    <p style="height: 5px;background: red"></p>
+                    {% if addres %}
+                        <table>
+                            <thead>
+                            <td class="list_name_title0">收件人姓名</td>
+                            <td class="list_name_title1">地区</td>
+                            <td class="list_name_title2">邮编</td>
+                            <td class="list_name_title3">电话</td>
+                            <td class="list_name_title4">收货地址</td>
+                            <td class="list_name_title2">默认地址</td>
+                            <td class="list_name_title5">编辑</td>
+                            <td class="list_name_title5">删除</td>
+                            </thead>
+                            {% for addres1 in addres %}
+                                <tr style="font-size: 18px;font-family: 楷体">
+                                    <td>{{ addres1.aname }}</td>
+                                    <td>{{ addres1.area }}</td>
+                                    <td>{{ addres1.postcode }}</td>
+                                    <td>{{ addres1.aphone }}</td>
+                                    <td>{{ addres1.county_name.county_name }} {{ addres1.ads }}</td>
+                                    <td>{% if addres1.is_default == 1 %}
+                                        <div style="border: 0;color: orangered">默认地址</div>
+                                    {% else %}
+                                        <div style="border: 0;"><a
+                                                href="{% url 'user_address_default' id=addres1.id %}">设为默认</a></div>
+                                    {% endif %}</td>
+                                    <td><a href="{% url 'user_address_change' id=addres1.id %}"><img
+                                            src="{% static 'images/binaji.jpg' %}"
+                                            alt="编辑" width="20" height="20"></a>
+                                    </td>
+                                    <td><a href="{% url 'user_address_delete' id=addres1.id %}"><img
+                                            src="{% static 'images/delete.jpg' %}"
+                                            alt="删除" width="20" height="20"></a></td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% else %}
+                        <table>
+                            <thead>
+                            <td class="list_name_title0">收件人姓名</td>
+                            <td class="list_name_title1">地区</td>
+                            <td class="list_name_title2">邮编</td>
+                            <td class="list_name_title3">电话</td>
+                            <td class="list_name_title4">收货地址</td>
+                            <td class="list_name_title5">操作</td>
+                            </thead>
+                        </table>
+                        <p style="font-size: 25px;">暂无地址信息,请前往添加☛<span><a href="{% url 'user_address_add' %}"
+                                                                          style="font-size: 30px;text-align: center"><button
+                                style="border: 0;width: 40px;height: 40px;cursor: pointer;line-height: 36px"
+                                title="添加地址">+</button></a></span></p>
+                    {% endif %}
                 </div>
             </div>
         </div>

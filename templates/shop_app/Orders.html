@@ -289,7 +289,7 @@
                             {#                            {% endfor %}#}
                             <tr>
                                 <td class="Product_info">
-                                    <a href="#"><img src="{{ order.image }}" width="100px"
+                                    <a href="#"><img src="{% static order.image.url %}" width="100px"
                                                      height="100px"/></a>
                                     <a href="#" class="product_name">{{ order.name }}</a>
                                 </td>
@@ -321,10 +321,9 @@
                         <div class="price_style">
                             <div class="right_direction">
                                 <ul>
-                                    <li><label>商品总价</label><i>￥</i><span><div class="total" style="font-size: 20px"><i>￥</i><em
+                                    <li><label>商品总价</label><span><div class="total" style="font-size: 20px"><i>￥</i><em
                                             style="color: #fd2a32">{{ order.price }}</em>元
                                     </div></span></li>
-                                    <li><label>优惠金额</label><i>￥</i><span>-23.00</span></li>
                                     <li><label>配&nbsp;&nbsp;送&nbsp;&nbsp;费</label><i>￥</i><span>0</span></li>
                                     <li class="shiji_price"><label>实&nbsp;&nbsp;付&nbsp;&nbsp;款</label><span><div class="total" style="font-size: 20px"><i>￥</i><em
                                             style="color: #fd2a32">{{ order.price }}</em>元

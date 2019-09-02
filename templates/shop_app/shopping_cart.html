@@ -58,7 +58,7 @@
                     <tr>
                         <td class="checkbox"><input class="check-one check" type="checkbox"/></td>
                         <td class="goods"><a href="{% url 'product_detailed' %}?id={{ cart.pros_id }}"><img
-                                src="{{ cart.pros.image }}" alt=""/><span>{{ cart.pros.name }}</span></a>
+                                src="{% static cart.pros.image.url %}" alt=""/><span>{{ cart.pros.name }}</span></a>
                         </td>
                         <td class="price">{{ cart.pros.price }}</td>
                         <td class="count"><span class="reduce"></span><input class="count-input" type="text"

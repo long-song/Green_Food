@@ -1,11 +1,10 @@
 {% extends 'user_app/new_head.html' %}
 {% load static %}
-<!-- 加载自定义的过滤器文件-->
 {% load filters %}
 {% block title %}
     个人资料
 {% endblock %}
-{% block body %}
+{% block nav %}
     <!--位置-->
     <style>
         .col-md-6 {
@@ -13,7 +12,7 @@
             height: 500px;
             font-size: 15px;
             font-family: "微软雅黑 Light";
-            letter-spacing: 8px;
+            letter-spacing: 6.5px;
         }
 
         .row1 {
@@ -35,95 +34,62 @@
             width: 500px;
             height: 50px;
         }
+
+        .set {
+            background: orange;
+            border: 0;
+            font-family: '微软雅黑 Light';
+            font-size: 15px;
+            padding: 7px 18px;;
+            letter-spacing: 3px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 7px
+        }
     </style>
-    <div class="Bread_crumbs">
-        <div class="Inside_pages clearfix">
-            <div class="right Search">
-                <form>
-                    <input name="" type="text" class="Search_Box"/>
-                    <input name="" type="button" name="" class="Search_btn"/>
-                </form>
+    <div class="user_right">
+        <div class="user_Borders">
+            <div class="title_name">
+                <span class="name">个人信息</span>
             </div>
-        </div>
-    </div>
-    {% if request.session.is_login %}
-
-        <!--用户中心-->
-        <div class="Inside_pages clearfix">
-        <div class="clearfix user">
-            <div class="user_left">
-                <div class="user_info">
-                    <div class="Head_portrait"><img src="{% static user.head_img.url %}" width="80px"
-                                                    height="80px"/>
-                        <!--头像区域--></div>
-                    <div class="user_name">{{ request.session.user_username }}<a href="{% url 'user_info' %}"
-                                                                                 style="color: orange">[个人资料]</a></div>
-                </div>
-                <ul class="Section">
-                    <li><a href="{% url 'user' %}"><em></em><span>我的订单</span></a></li>
-                    <li><a href="{% url 'user_info' %}"><em></em><span>个人信息</span></a></li>
-                    <li><a href="{% url 'user_password' %}"><em></em><span>修改密码</span></a></li>
-                    <li><a href="{% url 'user_collect' %}"><em></em><span>我的评论</span></a></li>
-                    <li><a href="{% url 'user_collect' %}"><em></em><span>我的收藏</span></a></li>
-                    <li><a href="{% url 'user_address' %}"><em></em><span>收货地址管理</span></a></li>
-                </ul>
-            </div>
-
-            <div class="user_right">
-                <div class="user_Borders">
-                    <div class="title_name">
-                        <span class="name">个人信息</span>
-                    </div>
-                    <div class="about_user_info">
-                        <div class="user_layout">
-                            <div class="col-md-6">
-                                <div class="row1">
-                                    <div class="text-right1"><span>用户头像:<img
-                                            src="{% static user.head_img.url %}" width="80px"
-                                            height="80px"/></span><a href="{% url 'new_head' %}">
-                                        <button style="background:url({% static 'images/xiangji1.png' %});width: 30px;height: 30px;border: 0;cursor:pointer "></button>
-                                    </a></div>
-                                </div>
-                                <div class="row">
-                                    <div class="text-right"><span>用户名:{{ user.username }}</span></div>
-                                </div>
-                                <div class="row">
-                                    <div class="text-right"><span>真实姓名:{{ user.t_name }}</span></div>
-                                </div>
-                                <div class="row">
-                                    <div class="text-right"><span>性别:{{ user.gender|mod }}</span></div>
-                                </div>
-                                <div class="row">
-                                    <div class="text-right"><span>邮箱:{{ user.email }}</span></div>
-                                </div>
-                                <div class="row">
-                                    <div class="text-right"><span>生日:{{ user.birthday }}</span></div>
-                                </div>
-                                <div class="row">
-                                    <div class="text-right"><span>电话:{{ user.phone }}</span></div>
-                                </div>
-                                <div class="row">
-                                    <a href="{% url 'user_info_set' %}">
-                                        <button class="set"
-                                                style="background: orange;border: 0;font-family: '微软雅黑 Light';width: 100px;height: 30px;letter-spacing: 3px;text-align: center;cursor:pointer">
-                                            更新信息
-                                        </button>
-                                    </a>
-                                </div>
-                            </div>
+            <div class="about_user_info">
+                <div class="user_layout">
+                    <div class="col-md-6">
+                        <div class="row1">
+                            <div class="text-right1"><span>用户头像:<img
+                                    src="{% static user.head_img.url %}" width="80px"
+                                    height="80px"/></span><a href="{% url 'new_head' %}">
+                                <button style="background:url({% static 'images/xiangji1.png' %});width: 30px;height: 30px;border: 0;cursor:pointer "></button>
+                            </a></div>
+                        </div>
+                        <div class="row">
+                            <div class="text-right"><span>用户名:{{ user.username }}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="text-right"><span>真实姓名:{{ user.t_name }}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="text-right"><span>性别:{{ user.gender|mod }}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="text-right"><span>邮箱:{{ user.email }}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="text-right"><span>生日:{{ user.birthday }}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="text-right"><span>电话:{{ user.phone }}</span></div>
+                        </div>
+                        <div class="row">
+                            <a href="{% url 'user_info_set' %}">
+                                <button class="set">
+                                    更新信息
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
-    {% else %}
-        <div class="Inside_pages clearfix">
-            <div class="clearfix user" style="height: 250px">
-                <div class="user_left">
-                    暂时还未有用户登录……
-                </div>
-            </div>
-        </div>
-    {% endif %}
+    </div>
 {% endblock %}

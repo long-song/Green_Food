@@ -1,4 +1,4 @@
-{% extends 'user_app/new_head.html' %}
+{% extends 'index.html' %}
 {% load static %}
 
 {% block title %}
@@ -58,12 +58,12 @@
             <div class="style_login clearfix" style="height: 445px">
                 <form class="form-control" action="{% url 'login' %}" method="post">
                     <div class="layout">
+                        {% csrf_token %}
+                        <div class="login_title">登录</div>
                         {% if message %}
                             <div class="alert alert-warning"
                                  style="text-align: center;color: red;height: 20px">{{ message }}</div>
                         {% endif %}
-                        {% csrf_token %}
-                        <div class="login_title">登录</div>
                         <div class="item item-fore1"><label for="loginname"
                                                             class="login-label name-label"></label><input
                                 name="username" type="text" class="text" placeholder="用户名/手机号……" id="loginname"

@@ -1,18 +1,18 @@
 {% extends 'index.html' %}
 {% load static %}
-
 {% block title %}
     商品团购
 {% endblock %}
-
 {% block body %}
-    <!---->
-    <div style="background:url(../../static/images/group_img.jpg) no-repeat; height:472px; width:100%; background-position:center"></div>
-
+    {% block img %}
+        <div style="background:url({% static 'images/group_img.jpg' %}) no-repeat; height:472px; width:100%; background-position:center"></div>
+    {% endblock %}
     <!--位置-->
     <div class="Bread_crumbs">
         <div class="Inside_pages clearfix">
-            <div class="left">当前位置：<a href="#">首页</a>&gt;<a href="#">活动专区</a></div>
+            <div class="left">当前位置：<a href="{% url 'index' %}">首页</a><a href="#">{% block bread %}
+                活动专区
+            {% endblock %}</a></div>
             <div class="right Search">
                 <form>
                     <input name="" type="text" class="Search_Box"/>
@@ -21,230 +21,153 @@
             </div>
         </div>
     </div>
+    {% block new_body %}
+        <script>
+            $(function () {
+                function timeS(num) {
+                    return ('0' + num).slice(-2);
+                }
 
-    <!--团购样式-->
-    <div class="Inside_pages clearfix">
-        <div class="Group_buy">
-            <div class="Group_title"><em></em>今日团购<span>GROUP-BUYING</span></div>
-            <div class="Group_list clearfix">
-                <div class="left_Group">
-                    <div class="Group_prodcut">
-                        <div class="clearfix">
-                            <div class="Group_info">
-                                <a href="#" class="Collect"></a>
-                                <ul>
-                                    <li class="Group_p_name"><a href="#">浦江斗志红提</a></li>
-                                    <li class="Group_p_about">绿色有机无污染水果</li>
-                                    <Li>礼盒装 500g</Li>
-                                    <li class="Group_price"><span class="Current_price"><i>￥</i>15.00</span> <span
-                                            class="Group_List">原价：18.00</span></li>
-                                    <li class="Group_p_buy">
-                                        <span class="Group_Number"><em></em>234人购买</span>
-                                        <span class="Group_button right"><a href="#" class="buy_button"></a></span>
-                                    </li>
-                                </ul>
+                function FreshTime() {
+                    //这两个是后台返回的时间戳，为了便于测试把开始时间变成当前本地的时间
+                    var attr_e = $('.Group_time').attr('end-time')
+
+                    var startTime = new Date();
+                    var endTime = new Date(attr_e);
+                    {#var endTime = parseInt(attr_e * 1000);#}
+                    var differTime = endTime.getTime() - startTime.getTime(); //两时间差
+                    var d = parseInt(differTime / (24 * 60 * 60 * 1000));
+                    var h = parseInt(differTime / (60 * 60 * 1000) % 24);
+                    var m = parseInt(differTime / (60 * 1000) % 60);
+                    var s = parseInt(differTime / 1000 % 60);
+                    var t_html = d + "天" + timeS(h) + "时" + timeS(m) + "分" + timeS(s) + "秒";
+                    $("#time").html(t_html);
+                    if (differTime <= 0) {
+                        $("#time").html('团购已结束');
+                        clearInterval(timer);
+                    }
+                }
+                FreshTime();
+                var timer = setInterval(FreshTime, 1000);
+            })
+        </script>
+        <!--团购样式-->
+        <div class="Inside_pages clearfix">
+            <div class="Group_buy">
+                <div class="Group_title"><em></em>今日团购<span>GROUP-BUYING</span></div>
+                <div class="Group_list clearfix">
+                    <div class="left_Group">
+                        {% for g in g_id %}
+                            <div class="Group_prodcut">
+                                <div class="clearfix">
+                                    <div class="Group_info">
+                                        <a href=" {% url 'user_collect' %}?id={{ g.id }}" class="Collect"></a>
+                                        <ul>
+                                            <li class="Group_p_name"><a
+                                                    href="{% url 'product_detailed' %}?id= {{ g.id }}">{{ g.group_pro.name }}</a>
+                                            </li>
+                                            <li class="Group_p_about">{{ g.group_pro.title }}</li>
+                                            <Li>礼盒装 500g</Li>
+                                            <li class="Group_price"><span
+                                                    class="Current_price"><i>￥</i>{{ g.group_pro.price }}</span>
+                                                <span
+                                                        class="Group_List">原价：{{ g.group_pro.cost_price }}</span></li>
+                                            <li class="Group_p_buy">
+                                                <span class="Group_Number"><em></em>{{ g.group_pro.sales }}</span>
+                                                <span class="Group_button right"><a
+                                                        href="{% url 'product_detailed' %}?id={{ g.id }}"
+                                                        class="buy_button"></a></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="Group_img"><a href="{% url 'product_detailed' %}?id={{ g.id }}"><img
+                                            src="{% static g.group_pro.image.url %}" height="195" width="365"/></a></div>
+                                </div>
+                                <div class="Group_time"
+                                     end-time={{ g.ltime|date:'Y/m/d/H:i:s' }} start-time={{ g.stime|date:'Y/m/d/H:i:s' }}>
+                                    距离结束还有<span id="time"></span>
+                                </div>
                             </div>
-                            <div class="Group_img"><a href=""><img src="http://www.ytlgs.cn/goods.php?id=77"
-                                                                   height="195"
-                                                                   width="365"/></a></div>
-                        </div>
-                        <div class="Group_time">
-                            <em></em>距离结束还有2天4小时32分23秒
-                        </div>
+
+                        {% endfor %}
                     </div>
-                    <div class="Group_prodcut">
-                        <div class="clearfix">
-                            <div class="Group_info">
-                                <ul>
-                                    <li class="Group_p_name"><a href="#">浦江斗志红提</a></li>
-                                    <li class="Group_p_about">绿色有机无污染水果</li>
-                                    <Li>礼盒装 500g</Li>
-                                    <li class="Group_price"><span class="Current_price"><i>￥</i>15.00</span> <span
-                                            class="Group_List">原价：18.00</span></li>
-                                    <li class="Group_p_buy">
-                                        <span class="Group_Number"><em></em>234人购买</span>
-                                        <span class="Group_button right"><a href="#" class="buy_button"></a></span>
-                                    </li>
-                                </ul>
+                    <!--右侧团购样式-->
+                    <div class="right_Group">
+                        {% for p in p_id %}
+                            <div class="right_Group_p_style">
+                                <div class="clearfix">
+                                    <div class="left_Group_name">
+                                        <a href="{% url 'user_collect' %}?id={{ p.id }}" class="Collect"></a>
+                                        <ul>
+                                            <li class="Group_p_name"><a
+                                                    href="{% url 'product_detailed' %}?id={{ p.id }}">{{ p.group_pro.name }}</a>
+                                            </li>
+                                            <li class="Group_p_about">{{ p.group_pro.title }}</li>
+                                            <Li class="spacing">礼盒装 500g</Li>
+                                            <li class="Group_price"><span
+                                                    class="Current_price"><i>￥</i>{{ p.group_pro.price }}</span>
+                                                <span
+                                                        class="Group_List">原价：{{ p.group_pro.cost_price }}</span></li>
+                                            <li class="Group_p_buy">
+                                                <span class="Group_Number"><em></em>{{ p.group_pro.sales }}</span>
+                                                <span class="Group_button right"><a
+                                                        href="{% url 'product_detailed' %}?id={{ p.id }}"
+                                                        class="buy_button"></a></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="right_Group_img"><a
+                                            href="{% url 'product_detailed' %}?id={{ p.id }}"><img
+                                            src="{% static p.group_pro.image.url %}" height="370"
+                                            width="365"/></a></div>
+                                </div>
+                                <div class="Group_time"
+                                     end-time={{ p.ltime|date:'Y/m/d/H:i:s' }} start-time={{ p.stime|date:'Y/m/d/H:i:s' }}>
+                                    距离结束还有<span id="time"></span>
+                                </div>
                             </div>
-                            <div class="Group_img"><a href=""><img src="../../static/images/pic5.jpg" height="195"
-                                                                   width="365"/></a></div>
+
+                        {% endfor %}
+
+
+                        <!--团购列表-->
+                        <div class="other_Group clearfix">
+                            {% for c in c_id %}
+                                <div class="g_p_list">
+                                    <div class="g_p_style">
+                                        <div class="g_p_img"><a href="{% url "product_detailed" %}?id={{ c.id }}"><img
+                                                src="{% static c.group_pro.image.url %}" height="220"
+                                                width="274"/></a></div>
+                                        <ul>
+                                            <a href="{% url 'user_collect' %}?id={{ c.id }}" class="Collect"></a>
+                                            <li><a href="{% url 'product_detailed' %}?id={{ c.id }}"
+                                                   class="name">{{ c.group_pro.name }}</a></li>
+                                            <li>{{ right_food.title }}</li>
+                                            <li class="Group_price"><span
+                                                    class="Current_price"><i>￥</i>{{ c.group_pro.price }}</span>
+                                                <span
+                                                        class="Group_List">原价：{{ c.group_pro.cost_price }}</span></li>
+                                            <li class="Group_p_buy">
+                                                <span class="Group_Number">{{ c.group_pro.sales }}</span>
+                                                <span class="Group_button right"><a
+                                                        href="{% url 'product_detailed' %}?id={{ c.id }}"
+                                                        class="buy_button"></a></span>
+                                            </li>
+                                        </ul>
+                                        <div class="Group_time"
+                                             end-time={{ c.ltime|date:'Y/m/d/H:i:s' }} start-time={{ c.stime|date:'Y/m/d/H:i:s' }}>
+                                            距离结束还有<span id="time"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <!---->
                         </div>
-                        <div class="Group_time">
-                            <em></em>距离结束还有2天4小时32分23秒
-                        </div>
-                    </div>
-                    <div class="Group_prodcut">
-                        <div class="clearfix">
-                            <div class="Group_info">
-                                <ul>
-                                    <li class="Group_p_name"><a href="#">浦江斗志红提</a></li>
-                                    <li class="Group_p_about">绿色有机无污染水果</li>
-                                    <Li>礼盒装 500g</Li>
-                                    <li class="Group_price"><span class="Current_price"><i>￥</i>15.00</span> <span
-                                            class="Group_List">原价：18.00</span></li>
-                                    <li class="Group_p_buy">
-                                        <span class="Group_Number"><em></em>234人购买</span>
-                                        <span class="Group_button right"><a href="#" class="buy_button"></a></span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="Group_img"><a href=""><img src="../../static/images/pic5.jpg" height="195"
-                                                                   width="365"/></a></div>
-                        </div>
-                        <div class="Group_time">
-                            <em></em>距离结束还有2天4小时32分23秒
-                        </div>
-                    </div>
-                    <div class="Group_prodcut">
-                        <div class="clearfix">
-                            <div class="Group_info">
-                                <ul>
-                                    <li class="Group_p_name"><a href="#">浦江斗志红提</a></li>
-                                    <li class="Group_p_about">绿色有机无污染水果</li>
-                                    <Li>礼盒装 500g</Li>
-                                    <li class="Group_price"><span class="Current_price"><i>￥</i>15.00</span> <span
-                                            class="Group_List">原价：18.00</span></li>
-                                    <li class="Group_p_buy">
-                                        <span class="Group_Number"><em></em>234人购买</span>
-                                        <span class="Group_button right"><a href="#" class="buy_button"></a></span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="Group_img"><a href=""><img src="../../static/images/pic5.jpg" height="195"
-                                                                   width="365"/></a></div>
-                        </div>
-                        <div class="Group_time">
-                            <em></em>距离结束还有2天4小时32分23秒
-                        </div>
-                    </div>
-                    <div class="Group_prodcut">
-                        <div class="clearfix">
-                            <div class="Group_info">
-                                <ul>
-                                    <li class="Group_p_name"><a href="#">浦江斗志红提</a></li>
-                                    <li class="Group_p_about">绿色有机无污染水果</li>
-                                    <Li>礼盒装 500g</Li>
-                                    <li class="Group_price"><span class="Current_price"><i>￥</i>15.00</span> <span
-                                            class="Group_List">原价：18.00</span></li>
-                                    <li class="Group_p_buy">
-                                        <span class="Group_Number"><em></em>234人购买</span>
-                                        <span class="Group_button right"><a href="#" class="buy_button"></a></span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="Group_img"><a href=""><img src="../../static/images/pic5.jpg" height="195"
-                                                                   width="365"/></a></div>
-                        </div>
-                        <div class="Group_time">
-                            <em></em>距离结束还有2天4小时32分23秒
-                        </div>
-                    </div>
-                </div>
-                <!--右侧团购样式-->
-                <div class="right_Group">
-                    <div class="right_Group_p_style">
-                        <div class="clearfix">
-                            <div class="left_Group_name">
-                                <a href="#" class="Collect"></a>
-                                <ul>
-                                    <li class="Group_p_name"><a href="#">浦江斗志红提</a></li>
-                                    <li class="Group_p_about">绿色有机无污染水果,孝敬爸妈的理想选择</li>
-                                    <Li class="spacing">礼盒装 500g</Li>
-                                    <li class="Group_price"><span class="Current_price"><i>￥</i>15.00</span> <span
-                                            class="Group_List">原价：18.00</span></li>
-                                    <li class="Group_p_buy">
-                                        <span class="Group_Number"><em></em>234人购买</span>
-                                        <span class="Group_button right"><a href="#" class="buy_button"></a></span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="right_Group_img"><a href=""><img src="../../static/images/pic1.jpg" height="370"
-                                                                         width="365"/></a></div>
-                        </div>
-                        <div class="Group_time">
-                            <em></em>距离结束还有2天4小时32分23秒
-                        </div>
-                    </div>
-                    <!--团购列表-->
-                    <div class="other_Group clearfix">
-                        <div class="g_p_list">
-                            <div class="g_p_style">
-                                <div class="g_p_img"><a href="#"><img src="../../static/images/product_img_17.png"
-                                                                      height="220"
-                                                                      width="274"/></a></div>
-                                <ul>
-                                    <a href="#" class="Collect"></a>
-                                    <li><a href="" class="name">浦江斗志红提</a></li>
-                                    <li>绿色有机无污染水果</li>
-                                    <li class="Group_price"><span class="Current_price"><i>￥</i>15.00</span> <span
-                                            class="Group_List">原价：18.00</span></li>
-                                    <li class="Group_p_buy">
-                                        <span class="Group_Number">234人购买</span>
-                                        <span class="Group_button right"><a href="#" class="buy_button"></a></span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="g_p_list">
-                            <div class="g_p_style">
-                                <div class="g_p_img"><a href="#"><img src="../../static/images/product_img_17.png"
-                                                                      height="220"
-                                                                      width="274"/></a></div>
-                                <ul>
-                                    <a href="#" class="Collect"></a>
-                                    <li><a href="" class="name">浦江斗志红提</a></li>
-                                    <li>绿色有机无污染水果</li>
-                                    <li class="Group_price"><span class="Current_price"><i>￥</i>15.00</span> <span
-                                            class="Group_List">原价：18.00</span></li>
-                                    <li class="Group_p_buy">
-                                        <span class="Group_Number">234人购买</span>
-                                        <span class="Group_button right"><a href="#" class="buy_button"></a></span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="g_p_list">
-                            <div class="g_p_style">
-                                <div class="g_p_img"><a href="#"><img src="../../static/images/product_img_17.png"
-                                                                      height="220"
-                                                                      width="274"/></a></div>
-                                <ul>
-                                    <a href="#" class="Collect"></a>
-                                    <li><a href="" class="name">浦江斗志红提</a></li>
-                                    <li>绿色有机无污染水果</li>
-                                    <li class="Group_price"><span class="Current_price"><i>￥</i>15.00</span> <span
-                                            class="Group_List">原价：18.00</span></li>
-                                    <li class="Group_p_buy">
-                                        <span class="Group_Number">234人购买</span>
-                                        <span class="Group_button right"><a href="#" class="buy_button"></a></span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="g_p_list">
-                            <div class="g_p_style">
-                                <div class="g_p_img"><a href="#"><img src="../../static/images/product_img_17.png"
-                                                                      height="220"
-                                                                      width="274"/></a></div>
-                                <ul>
-                                    <a href="#" class="Collect"></a>
-                                    <li><a href="" class="name">浦江斗志红提</a></li>
-                                    <li>绿色有机无污染水果</li>
-                                    <li class="Group_price"><span class="Current_price"><i>￥</i>15.00</span> <span
-                                            class="Group_List">原价：18.00</span></li>
-                                    <li class="Group_p_buy">
-                                        <span class="Group_Number">234人购买</span>
-                                        <span class="Group_button right"><a href="#" class="buy_button"></a></span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <!---->
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-{% endblock %}
+    {% endblock %}
 
+
+{% endblock %}

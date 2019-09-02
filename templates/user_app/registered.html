@@ -1,26 +1,26 @@
-{% extends 'user_app/new_head.html' %}
+{% extends 'index.html' %}
 {% load static %}
 {% block title %}
     用户注册
 {% endblock %}
 {% block body %}
     <script language="javascript">
-    function agree() {
-        if (document.getElementById('cb').checked)
-            document.getElementById('tj').disabled = false;
-        else
-            document.getElementById('tj').disabled = 'disabled';
-    }
-</script>
+        function agree() {
+            if (document.getElementById('cb').checked)
+                document.getElementById('tj').disabled = false;
+            else
+                document.getElementById('tj').disabled = 'disabled';
+        }
+    </script>
     <!--注册样式-->
     <div class="Inside_pages clearfix">
         <div class="register">
             <div class="register_style" style="height: 500px;">
                 <form class="form-control" action="{% url 'registered' %}" method="post">
                     <div class="u_register">
-                        {% if message %}
+                        {% if errmsg %}
                             <div class="alert alert-warning"
-                                 style="text-align: center;color: red;height: 20px">{{ message }}</div>
+                                 style="text-align: center;color: red;height: 20px">{{ errmsg }}</div>
                         {% endif %}
                         {% csrf_token %}
                         <ul>
@@ -40,13 +40,17 @@
                                                                         class="text_Add"
                                                                         pattern="^(?![\d]+$)(?![a-zA-Z]+$)(?![!#$%^&*]+$)[\da-zA-Z!#$%^&*]{6,20}$"
                                                                         placeholder="请与密码保持一致"></li>
-                            <li><label class="name">验&nbsp;证&nbsp;码：</label>{{ register_form.captcha }}</li>
+                            <li><label class="name">邮箱：</label><input required="required" name="email" type="email"
+                                                                        class="text_Add"
+                                                                        placeholder="请输入您的邮箱……"
+                            ></li>
                         </ul>
                         <div class="auto-register"><label class="auto-label">
-                            <input name="confirm" type="checkbox" onclick="agree();" id="cb"><span>我已认真阅读并接受<a
+                            <input name="confirm" type="checkbox" id="cb"><span>我已认真阅读并接受<a
                                 href="#">《国际商贸城网站注册协议》</a></span></label></div>
-                        <div class="register-btn"><input type="submit" class="btn_register"
-                                                         value="注&nbsp;&nbsp;&nbsp;&nbsp;册" disabled="disabled" id="tj">
+                        <div class="register-btn">
+                            <input type="submit" class="btn_register"
+                                   value="注&nbsp;&nbsp;&nbsp;&nbsp;册" id="tj">
                         </div>
                     </div>
                 </form>

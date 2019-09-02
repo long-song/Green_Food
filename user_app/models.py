@@ -1,6 +1,4 @@
 from django.db import models
-
-
 # from integral_app.models import Pro_sku
 # Create your models here.
 
@@ -31,6 +29,7 @@ class UserInfo(models.Model):
     email = models.EmailField(null=True, unique=True, verbose_name='邮箱')
     birthday = models.DateField(verbose_name='生日', null=True)
     up_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name='注册时间')
+    is_active = models.IntegerField(verbose_name='是否激活',default=0)
     allow_order = models.IntegerField(verbose_name="订单管理权限", default=0)
     allow_data = models.IntegerField(verbose_name="数据管理权限", default=0)
     superuser = models.IntegerField(verbose_name="超级管理员", default=0)
@@ -152,17 +151,3 @@ class User_order(models.Model):
         verbose_name_plural = verbose_name
 
 
-# 收藏表
-class Collect(models.Model):
-    pro_id = models.IntegerField(null=True, verbose_name='商品id', unique=True)
-    image = models.ImageField(null=True, verbose_name='商品图片')
-    name = models.CharField(max_length=50, verbose_name='商品名(规格)')
-    size = models.CharField(max_length=10, default='500g', verbose_name='产品规格')
-    title = models.CharField(max_length=100, verbose_name='标签')
-    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='单价', default=40.00)
-    user = models.ForeignKey(UserInfo, on_delete=models.CASCADE, null=True)
-
-    class Meta:
-        # ordering = ['up_time']
-        verbose_name = '收藏管理'
-        verbose_name_plural = verbose_name
