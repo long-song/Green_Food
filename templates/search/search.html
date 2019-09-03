@@ -1,16 +1,15 @@
 {% extends 'integral_app/Group_buy.html' %}
-{% load filters %}
 {% load static %}
+{% load filters %}
 {% block title %}
-    所有果蔬
+    搜索结果页面
 {% endblock %}
-
 {% block img %}
-    <div><a href="#"><img src="{% static 'images/AD_page_img_02.png' %}" width="100%"/></a></div>
 {% endblock %}
 {% block bread %}
-    所有果蔬
+    搜索{{ query }}结果
 {% endblock %}
+
 {% block new_body %}
     <style>
         /* 分页样式 */
@@ -40,46 +39,51 @@
     <!--所有果蔬-->
     <div class="Inside_pages clearfix">
         <div class="integral_style">
-            <div class="integral_title"><em></em>所有果蔬<span>POINTS MALL</span></div>
+            <div class="integral_title"><em></em>搜索结果如下：<span>POINTS MALL</span></div>
             <!--列表样式-->
             <div class="integral_p_list">
                 <ul class="list_style">
-                    {% for foo in data_page %}
+                    {% for foo in page %}
                         <li class="clearfix" style="width: 310px;height: 400px;">
                             <div class="product_lists clearfix">
-                                <a href="{% url "product_detailed" %}?id={{ foo.id }}"><img
-                                        src="{% static foo.image.url %}" width="200" height="200"/></a>
+                                <a href="{% url "product_detailed" %}?id={{ foo.object.id }}"><img
+                                        src="{% static foo.object.image.url %}" width="200" height="200"/></a>
                                 <p class="title_p_name"><a
-                                        href="{% url "product_detailed" %}?id={{ foo.id }}">{{ foo.name }}</a></p>
-                                <p class="title_Profile" style="color: rosybrown"><a
-                                        href="#">{{ foo.title|mod_val }}</a></p>
-                                <p class="price"><b>￥</b><span>{{ foo.price }}</span></p>
-                                <p class="btn_style"><a href="{% url "product_detailed" %}?id={{ foo.id }}"
+                                        href="{% url "product_detailed" %}?id={{ foo.object.id }}">{{ foo.object.name }}</a>
+                                </p>
+                                <p class="title_Profile"><a href="#">{{ foo.object.title|mod_val }}</a></p>
+                                <p class="price"><b>￥</b><span>{{ foo.object.price }}</span></p>
+                                <p class="btn_style"><a href="{% url "product_detailed" %}?id={{ foo.object.id }}"
                                                         class="buy_btn"></a>
-                                    <a href="{% url "product_detailed" %}?id={{ foo.id }}" class="Join_btn"></a></p>
+                                    <a href="{% url "product_detailed" %}?id={{ foo.object.id }}" class="Join_btn"></a>
+                                </p>
                             </div>
                         </li>
                     {% endfor %}
                 </ul>
             </div>
             <div class="pagenation">
-                {% if data_page.has_previous %}
-                    <a href="{% url 'integral' %}?page={{ data_page.previous_page_number }}">&lt;上一页</a>
+                {% if page.has_previous %}
+                    <a href="/search?q={{ query }}&page={{ page.previous_page_number }}">&lt;上一页</a>
                 {% endif %}
-                {% for pindex in pages %}
-                    {% if pindex == data_page.number %}
+
+                {% for pindex in paginator.page_range %}
+                    {% if pindex == page.number %}
                         <a class="active">{{ pindex }}</a>
                     {% elif pindex == '...' %}
                         <a>{{ pindex }}</a>
                     {% else %}
-                        <a href="{% url 'integral' %}?page={{ pindex }}">{{ pindex }}</a>
+                        <a href="/search?q={{ query }}&page={{ pindex }}">{{ pindex }}</a>
                     {% endif %}
                 {% endfor %}
-                {% if data_page.has_next %}
-                    <a href="{% url 'integral' %}?page={{ data_page.next_page_number }}">下一页&gt;</a>
+                {% if page.has_next %}
+                    <a href="/search?q={{ query }}&page={{ page.next_page_number }}">下一页&gt;</a>
                 {% endif %}
             </div>
         </div>
     </div>
-{% endblock %}
+{% endblock new_body %}
+
+
+
 

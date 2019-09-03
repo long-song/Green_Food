@@ -13,12 +13,15 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('integral_app/', include('integral_app.urls')),  # 添加integral_app的urls
     path('', include('user_app.urls')),  # 添加user_app的urls
-    path('shop_app/', include('shop_app.urls'))  # 添加shop_app的urls
+    path('shop_app/', include('shop_app.urls')),  # 添加shop_app的urls
+    url(r'^search', include('haystack.urls')),  # 全文检索框架配置
 ]

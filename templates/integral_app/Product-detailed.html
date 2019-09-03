@@ -1,6 +1,6 @@
 {% extends 'integral_app/integral.html' %}
 {% load static %}
-
+{% load filters %}
 {% block title %}
     商品详细介绍
 {% endblock %}
@@ -99,14 +99,6 @@
                                         <div class="item"><b></b><a href="#" title="">{{ sku.name }}</a></div>
                                     </dd>
                                 </dl>
-{#                                <dl style="height: 35px;">#}
-{#                                    <dt style="font-size: 16px; line-height:25px ">包装：</dt>#}
-{#                                    <dd class="left">#}
-{#                                        <div class="item"><input type="radio" name="select">普通包装</div>#}
-{#                                        <div class="item"><input type="radio" name="select">小礼盒</div>#}
-{#                                        <div class="item"><input type="radio" name="select">大礼盒</div>#}
-{#                                    </dd>#}
-{#                                </dl>#}
                                 <dl style="height: 35px;">
                                     <dt style="font-size: 16px;line-height: 32px">数量：</dt>
                                     <dd class="left">

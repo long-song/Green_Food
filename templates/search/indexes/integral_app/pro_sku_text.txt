@@ -1,0 +1,6 @@
+# 指定根据表中哪些字段建立索引
+# object是固定写法；.后面是模型类的属性
+{{object.name}} # 根据商品的名称建立索引
+{{object.describe}} # 根据商品的简介建立索引
+{{object.title}} # 根据商品的标签建立索引
+{{object.type.title}} # 根据商品的分类名建立索引

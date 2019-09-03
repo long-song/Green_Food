@@ -1,5 +1,6 @@
 {% extends 'integral_app/integral.html' %}
 {% load static %}
+{% load filters %}
 {% block title %}
     水果馆
 {% endblock %}
@@ -52,10 +53,10 @@
                         <li class="clearfix" style="width: 310px;height: 400px;">
                             <div class="product_lists clearfix">
                                 <a href="{% url "product_detailed" %}?id={{ foo.id }}"><img
-                                        src="{% static foo.image.url %}"/></a>
+                                        src="{% static foo.image.url %}" width="200" height="200"/></a>
                                 <p class="title_p_name"><a
                                         href="{% url "product_detailed" %}?id={{ foo.id }}">{{ foo.name }}</a></p>
-                                <p class="title_Profile" style="color: rosybrown">{{ foo.title }}</p>
+                                <p class="title_Profile" style="color: rosybrown">{{ foo.title|mod_val }}</p>
                                 <p class="price"><b>￥</b>{{ foo.price }}</p>
                                 <a href="{% url "product_detailed" %}?id={{ foo.id }}" class="buy_btn"></a>
                                 <a class="Join_btn"></a>

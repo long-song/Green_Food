@@ -61,9 +61,9 @@ def mod_val(str):
     并添加到列表
     显示前三个
     '''
-    list = str.split(",")
+
+    list = str.split('，')
     print(list)
-    str1 = ''
-    for i in list[:2]:
-        str1 = str1+i
+    str1 = ' '.join(list[:3])
+    print(str1)
     return str1

@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'user_app.apps.UserAppConfig',
     'shop_app.apps.ShopAppConfig',
     'captcha',
-    'tinymce'
+    'tinymce',   # 注册富文本编辑器的应用
+    'haystack',  # 注册全文搜索框架的应用
 ]
 
 MIDDLEWARE = [
@@ -151,3 +152,20 @@ EMAIL_HOST_USER = 'hhj15001252139@163.com'
 EMAIL_HOST_PASSWORD = 'huangfu1105'
 #收件人看到的发件人
 EMAIL_FROM = '浦江县食品商城<hhj15001252139@163.com>'
+
+
+# 全文搜索框架的配置
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        #使用whoosh引擎
+        'ENGINE': 'haystack.backends.whoosh_cn_backend.WhooshEngine',
+        #索引文件路径
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    }
+}
+
+#当添加、修改、删除数据时，自动生成索引
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+# 控制没有显示的记录数，默认是20
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 1
