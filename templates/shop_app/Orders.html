@@ -1,8 +1,6 @@
+{% extends 'index.html' %}
 {% load static %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
+{% block link %}
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link href="{% static 'css/css.css' %}" rel="stylesheet" type="text/css"/>
     <link href="{% static 'css/common.css' %}" rel="stylesheet" type="text/css"/>
@@ -13,385 +11,210 @@
     <script src="{% static 'js/jquery.sumoselect.min.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/common_js.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/footer.js' %}" type="text/javascript"></script>
-    <title>确认订单界面</title>
-</head>
-<script type="text/javascript">
-    $(document).ready(function () {
-        window.asd = $('.SlectBox').SumoSelect({csvDispCount: 3});
-        window.test = $('.testsel').SumoSelect({okCancelInMulti: true});
-    });
-</script>
-<body>
-<!--顶部样式-->
-<div class="top_header">
-    <em class="left_img"></em>
-    <div class="header clearfix" id="header">
-        <a href="#" class="logo_img"><img src="{% static 'images/logo.png' %}"/></a>
-        <div class="header_Section">
-            <div class="shortcut">
-                <ul>
-                    {% if request.session.is_login %}
-                        <li class="hd_menu_tit"><em class="login_img"></em><a
-                                href="{% url 'user_info' %}">当前在线：{{ request.session.user_username }}</a></li>
-                        <li class="hd_menu_tit"><em class="registered_img"></em><a href="{% url 'logout' %}">注销</a></li>
-                    {% else %}
-                        <li class="hd_menu_tit"><em class="login_img"></em><a href="{% url 'login' %}">登录</a></li>
-                        <li class="hd_menu_tit"><em class="registered_img"></em><a href="{% url 'registered' %}">注册</a>
-                        </li>
-                    {% endif %}
-                    <li class="hd_menu_tit"><em class="Collect_img"></em><a href="{% url 'user_collect' %}">收藏夹</a></li>
-                    <li class="hd_menu_tit"><em class="cart_img"></em><a href="{% url 'shopping_cart' %}">购物车</a></li>
-                    <li class="hd_menu_tit list_name" data-addclass="hd_menu_hover"><a href="#">网站导航</a><em
-                            class="navigation_img"></em>
+{% endblock %}
+{% block title %}
+    确认订单界面
+{% endblock %}
+{% block body %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            window.asd = $('.SlectBox').SumoSelect({csvDispCount: 3});
+            window.test = $('.testsel').SumoSelect({okCancelInMulti: true});
+        });
+    </script>
 
-                        <div class="hd_menu_list">
-                            <span class="wire"></span>
+    <div id="Orders" class="Inside_pages  clearfix">
+        <div class="Orders_style clearfix">
+            <div class="address clearfix">
+                <div class="title">收货人信息</div>
+                <div class="adderss_list clearfix">
+                    <div class="title_name">选择收货地址
+                        <a href="{% url 'user_address' %}">管理地址</a>
+                        <a href="{% url 'user_address_add' %}">+添加地址</a>
+                    </div>
+                    <!--收货地址样式-->
+                    <div class="Shipping_address">
+                        {% for adr in uadress %}
+                            <ul class="detailed">
+                                <li style="width: 4%">
+                                    <input type="radio" id="address" name="check" style="margin: 15px 17px"
+                                           {% if adr.is_default %}checked{% endif %}>
+                                </li>
+                                <li style="width: 24%"><label>收件人</label><input type="text" value="{{ adr.aname }}"
+                                                                                readonly="readonly"
+                                                                                style="width: 201px;height: 34px;text-align: center">
+                                </li>
+                                <li style="width: 30%"><label>详细地址</label><input type="text"
+                                                                                 value="{{ adr.area }}{{ adr.ads }}"
+                                                                                 readonly="readonly"
+                                                                                 style="width: 274px;height: 34px;text-align: center">
+                                </li>
+                                <li style="width: 18%"><label>邮政编码</label><input type="text" value="{{ adr.postcode }}"
+                                                                                 readonly="readonly"
+                                                                                 style="width: 127px;height: 34px;text-align: center">
+                                </li>
+                                <li style="width: 24%"><label>电话</label><input type="text" value="{{ adr.aphone }}"
+                                                                               readonly="readonly"
+                                                                               style="width: 201px;height: 34px;text-align: center">
+                                </li>
+                                {#                        <li><label>固定电话</label><span></span></li>#}
+                            </ul>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <form class="form" method="post" action="{% url 'user' %}">
+                    <fieldset>
+                        <!--付款方式-->
+                        <div class="payment">
+                            <div class="title_name">支付方式</div>
                             <ul>
-                                <li><a href="#">常见问题</a></li>
-                                <li><a href="#">在线退换货</a></li>
-                                <li><a href="#">在线投诉</a></li>
-                                <li><a href="#">配送范围</a></li>
+                                <li><input type="radio" name="radio" class="labelauty" id="labelauty-1"
+                                           style="display: none;"><label for="labelauty-1"><span
+                                        class="labelauty-unchecked-image"></span><span
+                                        class="labelauty-unchecked">现金支付</span><span
+                                        class="labelauty-checked-image"></span><span
+                                        class="labelauty-checked">现金支付</span></label></li>
+                                <li><input type="radio" name="radio" class="labelauty" id="labelauty-2"
+                                           style="display: none;"><label for="labelauty-2"><span
+                                        class="labelauty-unchecked-image"></span><span
+                                        class="labelauty-unchecked">微信支付</span><span
+                                        class="labelauty-checked-image"></span><span
+                                        class="labelauty-checked">微信支付</span></label></li>
+                                <li><input type="radio" name="radio" class="labelauty" id="labelauty-3"
+                                           style="display: none;"><label for="labelauty-3"><span
+                                        class="labelauty-unchecked-image"></span><span
+                                        class="labelauty-unchecked">支付宝支付</span><span
+                                        class="labelauty-checked-image"></span><span
+                                        class="labelauty-checked">支付宝支付</span></label></li>
+                                <li><input type="radio" name="radio" class="labelauty" id="labelauty-4"
+                                           style="display: none;"><label for="labelauty-4"><span
+                                        class="labelauty-unchecked-image"></span><span
+                                        class="labelauty-unchecked">银联支付</span><span
+                                        class="labelauty-checked-image"></span><span
+                                        class="labelauty-checked">银联支付</span></label></li>
                             </ul>
                         </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="nav" id="Navigation">
-                <ul class="Navigation_name">
-                    <li class=""><a href="{% url 'index' %}">首页</a></li>
-                    <li class=""><a href="{% url 'integral' %}">所有果蔬</a></li>
-                    <li class=""><a href="{% url 'group_buy' %}">活动专区</a></li>
-                    <li class=""><a href="{% url 'products' %}">水果馆</a></li>
-                    <li class=""><a href="{% url 'products_list' %}">蔬菜馆</a></li>
-                    <li class=""><a href="{% url 'user_info' %}">会员中心</a></li>
-                    <li class=""><a href="#">联系我们</a></li>
-                </ul>
-            </div>
-            <script>$("#Navigation").slide({titCell: ".Navigation_name li"});</script>
-        </div>
-    </div>
-    <em class="right_img"></em>
-</div>
-<div id="Orders" class="Inside_pages  clearfix">
-    <div class="Orders_style clearfix">
-        <div class="address clearfix">
-            <div class="title">收货人信息</div>
-            <div class="adderss_list clearfix">
-                <div class="title_name">选择收货地址 <a href="{% url 'user_address' %}">+添加地址</a></div>
-                {#                <dl>#}
-                {#                    <dt>寄送到：</dt>#}
-                {#                    <span><input type="radio" name="" checked="checked"></span>#}
-                {#                    当前地址：<span class="user_info_check">{{ uadress.ads }}</span>#}
-                {#                    收件人：<span class="user_info_check">{{ uadress.aname }} </span>#}
-                {#                    电话：<span class="user_info_check">{{ uadress.aphone }}</span>#}
-                {#                </dl>#}
-                {#                <a href="{% url 'user_address' %}">+添加地址</a>#}
 
-                <!--收货地址样式-->
-                <div class="Shipping_address">
-                    <ul class="detailed">
-                        <li><label>收件人</label><input type="text" value="{{ uadress.aname }}"
-                                                     style="width: 521px;height: 34px"></li>
-                        {#                        <li><label>电子邮件</label><span>4567454@qq.com</span></li>#}
-                        <li><label>详细地址</label><input type="text" value="{{ uadress.ads }}"
-                                                      style="width: 521px;height: 34px"></li>
-                        <li><label>邮政编码</label><input type="text" value="{{ uadress.postcode }}"
-                                                      style="width: 521px;height: 34px"></li>
-                        <li><label>电话</label><input type="text" value="{{ uadress.aphone }}"
-                                                    style="width: 521px;height: 34px"></li>
-                        {#                        <li><label>固定电话</label><span></span></li>#}
-                    </ul>
-                </div>
-            </div>
+                        <!--产品列表-->
+                        <div class="Product_List">
 
-            <form class="form" method="post">
-                <fieldset>
-                    <!--快递选择-->
-                    <div class="express_delivery">
-                        <div class="title_name">选择快递方式</div>
-
-                        <ul class="dowebok">
-                            <li><input type="radio" name="radio" data-labelauty="圆通快递">
-                                <div class="description">
-                                    <em class="arrow"></em>
-                                    <p>到付价格=现付价格*1.25 ，不足1元按1元收取，到付最低15元起。此价格供参考，详情请咨询圆通当地营业网点</p>
-                                    <p>资费：15元</p>
-                                    <p class="Note">满68元包邮</p>
-                                    <p><a href="#">点击查看是否在配送范围内</a></p>
-                                </div>
-                            </li>
-                            <li><input type="radio" name="radio" data-labelauty="中通快递">
-                                <div class="description">
-                                    <em class="arrow"></em>
-                                    <p>到付价格=现付价格*1.25 ，不足1元按1元收取，到付最低15元起。此价格供参考，详情请咨询圆通当地营业网点</p>
-                                    <p>资费：15元</p>
-                                    <p class="Note">满68元包邮</p>
-                                </div>
-                            </li>
-                            <li><input type="radio" name="radio" data-labelauty="申通快递">
-                                <div class="description">
-                                    <em class="arrow"></em>
-                                    <p>到付价格=现付价格*1.25 ，不足1元按1元收取，到付最低15元起。此价格供参考，详情请咨询圆通当地营业网点</p>
-                                    <p>资费：15元</p>
-                                    <p class="Note">满68元包邮</p>
-                                </div>
-                            </li>
-                            <li><input type="radio" name="radio" data-labelauty="邮政EMS">
-                                <div class="description">
-                                    <em class="arrow"></em>
-                                    <p>到付价格=现付价格*1.25 ，不足1元按1元收取，到付最低15元起。此价格供参考，详情请咨询圆通当地营业网点</p>
-                                    <p>资费：15元</p>
-                                    <p class="Note">满68元包邮</p>
-                                </div>
-                            </li>
-                            <li><input type="radio" name="radio" data-labelauty="城际快递">
-                                <div class="description">
-                                    <em class="arrow"></em>
-                                    <p>到付价格=现付价格*1.25 ，不足1元按1元收取，到付最低15元起。此价格供参考，详情请咨询圆通当地营业网点</p>
-                                    <p>资费：同城包邮</p>
-
-                                </div>
-                            </li>
-                            <li><input type="radio" name="radio" data-labelauty="韵达快递">
-                                <div class="description">
-                                    <em class="arrow"></em>
-                                    <p>到付价格=现付价格*1.25 ，不足1元按1元收取，到付最低15元起。此价格供参考，详情请咨询圆通当地营业网点</p>
-                                    <p>资费：15元</p>
-                                    <p class="Note">满68元包邮</p>
-                                </div>
-                            </li>
-                            <li><input type="radio" name="radio" data-labelauty="国通快递">
-                                <div class="description">
-                                    <em class="arrow"></em>
-                                    <p>到付价格=现付价格*1.25 ，不足1元按1元收取，到付最低15元起。此价格供参考，详情请咨询圆通当地营业网点</p>
-                                    <p>资费：15元</p>
-                                    <p class="Note">满68元包邮</p>
-                                </div>
-                            </li>
-                            <li><input type="radio" name="radio" data-labelauty="顺丰快递">
-                                <div class="description">
-                                    <em class="arrow"></em>
-                                    <p>到付价格=现付价格*1.25 ，不足1元按1元收取，到付最低15元起。此价格供参考，详情请咨询圆通当地营业网点</p>
-                                    <p>资费：15元</p>
-                                    <p class="Note">满88元包邮</p>
-                                </div>
-                            </li>
-                            <li><input type="radio" name="radio" data-labelauty="邮政小包">
-                                <div class="description">
-                                    <em class="arrow"></em>
-                                    <p>到付价格=现付价格*1.25 ，不足1元按1元收取，到付最低15元起。此价格供参考，详情请咨询圆通当地营业网点</p>
-                                    <p>资费：15元</p>
-                                    <p class="Note">满68元包邮</p>
-                                </div>
-                            </li>
-                            <li><input type="radio" name="radio" data-labelauty="天天快递">
-                                <div class="description">
-                                    <em class="arrow"></em>
-                                    <p>到付价格=现付价格*1.25 ，不足1元按1元收取，到付最低15元起。此价格供参考，详情请咨询圆通当地营业网点</p>
-                                    <p>资费：15元</p>
-                                    <p class="Note">满68元包邮</p>
-                                </div>
-                            </li>
-                        </ul>
-
-                    </div>
-
-                    <!--付款方式-->
-                    <div class="payment">
-                        <div class="title_name">支付方式</div>
-                        <ul>
-                            <li><input type="radio" name="radio" data-labelauty="余额支付"></li>
-                            <li><input type="radio" name="radio" data-labelauty="支付宝"></li>
-                            <li><input type="radio" name="radio" data-labelauty="财付通"></li>
-                            <li><input type="radio" name="radio" data-labelauty="银联支付"></li>
-                            <li><input type="radio" name="radio" data-labelauty="货到付款"></li>
-                        </ul>
-                    </div>
-                    <!--发票样式-->
-                    <div class="invoice_style">
-                        <ul>
-                            <li class="invoice_left"><input name="" type="checkbox" value="" data-labelauty="是否开发票"/>
-                            </li>
-                            <li class="invoice_left"><select name="somename" class="SlectBox"
-                                                             onclick="console.log($(this).val())"
-                                                             onchange="console.log('change is firing')">
-                                <option disabled="disabled" selected="selected">发票类型</option>
-                                <option value="办公用品">办公用品</option>
-                                <option value="食品">食品</option>
-                                <option value="20元红包">20元红包</option>
-                                <option value="50元红包">50元红包</option>
-                                <option value="100元红包">100元红包</option>
-                                <option value="200元红包">200元红包</option>
-                            </select>
-                            </li>
-                            <li class="invoice_left">发票抬头
-                                <input name="" type="text" class="text_info"/></li>
-                            <li class="invoice_left">
-                                <select name="somename" class="SlectBox" onclick="console.log($(this).val())"
-                                        onchange="console.log('change is firing')">
-                                    <option disabled="disabled" selected="selected">发票内容</option>
-                                    <option value="办公用品">办公用品</option>
-                                    <option value="食品">食品</option>
-                                    <option value="数码配件">数码配件</option>
-                                    <option value="电脑">电脑</option>
-                                    <option value="手机">手机</option>
-                                    <option value="200元红包">200元红包</option>
-                                </select>
-
-                            </li>
-                        </ul>
-                    </div>
-                    <!--产品列表-->
-                    <div class="Product_List">
-                        <div class="envelopes">
-                            选择已有红包<select name="somename" class="SlectBox" onclick="console.log($(this).val())"
-                                          onchange="console.log('change is firing')">
-                            <option disabled="disabled" selected="selected">选择红包金额</option>
-                            <!--placeholder-->
-                            <option value="5元红包">5元红包</option>
-                            <option value="10元红包">10元红包</option>
-                            <option value="20元红包">20元红包</option>
-                            <option value="50元红包">50元红包</option>
-                            <option value="100元红包">100元红包</option>
-                            <option value="200元红包">200元红包</option>
-                        </select>
-                            或者输入红包序列号<input name="" type="text" class="text_number"/><input type="submit"
-                                                                                            class="verification_btn"
-                                                                                            value="验证序列号"/>
-
-
-                        </div>
-                        <table>
-                            <thead>
-                            <tr class="title">
-                                <td class="name">商品名称</td>
-                                <td class="price">商品价格</td>
-                                {#                                <td class="Preferential">优惠价</td>#}
-                                <td class="Quantity">购买数量</td>
-                                <td class="Money">金额</td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {#                            {% for cart in carts %}#}
-                            {#                                <tr>#}
-                            {#                                    <td class="checkbox"><input class="check-one check" type="checkbox"/></td>#}
-                            {#                                    <td class="goods"><a href="{% url 'product_detailed' %}?id={{ cart.pros_id }}"><img#}
-                            {#                                            src="{{ cart.pros.image }}" alt=""/><span>{{ cart.pros.name }}</span></a>#}
-                            {#                                    </td>#}
-                            {#                                    <td class="price">{{ cart.pros.price }}</td>#}
-                            {#                                    <td class="count"><span class="reduce"></span><input class="count-input" type="text"#}
-                            {#                                                                                         value="{{ cart.ccount }}"/><span#}
-                            {#                                            class="add">+</span></td>#}
-                            {#                                    <td class="subtotal">{{ cart.cprice }}</td>#}
-                            {#                                    <td class="operation"><span class="delete"#}
-                            {#                                                                onclick="cart_del({{ cart.id }});">删除</span></td>#}
-                            {#                                </tr>#}
-                            {#                            {% endfor %}#}
-                            <tr>
-                                <td class="Product_info">
-                                    <a href="#"><img src="{% static order.image.url %}" width="100px"
-                                                     height="100px"/></a>
-                                    <a href="#" class="product_name">{{ order.name }}</a>
-                                </td>
-                                <td class="price"><i>￥</i><em>{{ order.price }}</em></td>
-                                {#                                <td><i>￥</i>112.00</td>#}
-                                <td >
-                                    <div class="Numbers">
-                                        <a href="javascript:" class="jian " id="minus">-
-                                        </a>
-                                        <input name="number" type="text" value="1" class="number_text" style="width: 30px;text-align: center">
-                                        <a href="javascript:" class="jia " id="add">+
-                                        </a>
-                                    </div>
-                                </td>
-                                <td class="Moneys"><div class="total" style="font-size: 20px"><i>￥</i><em
-                                            style="color: #fd2a32">{{ order.price }}</em>元
-                                    </div></td>
-                            </tr>
-
-                            </tbody>
-                        </table>
-                        <div class="Pay_info">
-                            <label>订单留言</label>
-                            <input name="" type="text" onkeyup="checkLength(this);"
-                                                      class="text_name "/> <span class="wordage">剩余字数：<span id="sy"
-                                                                                                            style="color:Red;">50</span></span>
-                        </div>
-                        <!--价格-->
-                        <div class="price_style">
-                            <div class="right_direction">
-                                <ul>
-                                    <li><label>商品总价</label><span><div class="total" style="font-size: 20px"><i>￥</i><em
-                                            style="color: #fd2a32">{{ order.price }}</em>元
+                            <table>
+                                <thead>
+                                <tr class="title">
+                                    <td class="name">商品名称</td>
+                                    <td class="price">商品价格</td>
+                                    {#                                <td class="Preferential">优惠价</td>#}
+                                    <td class="Quantity">购买数量</td>
+                                    <td class="Money">金额</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if cart %}
+                                    {% for order in skus %}
+                                        <tr>
+                                            <td class="Product_info">
+                                                <a href="{% url 'product_detailed' %}?id={{ order.pros.id }}"><img
+                                                        src="{% static order.pros.image.url %}" width="100px"
+                                                        height="100px"/></a>
+                                                <a href="{% url 'product_detailed' %}?id={{ order.pros.id }}"
+                                                   class="product_name">{{ order.pros.name }}</a>
+                                            </td>
+                                            <td class="price"><i>￥</i><em>{{ order.pros.price }}</em></td>
+                                            <td>
+                                                <div class="Numbers">
+                                                    <em>{{ order.ccount }}</em>
+                                                </div>
+                                            </td>
+                                            <td class="Moneys">
+                                                <div class="total" style="font-size: 20px"><i>￥</i><em
+                                                        style="color: #fd2a32">{{ order.cprice }}</em>元
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                {% if uid %}
+                                    <tr>
+                                        <td class="Product_info">
+                                            <a href="{% url 'product_detailed' %}?id={{ order.id }}"><img
+                                                    src="{% static order.image.url %}" width="100px"
+                                                    height="100px"/></a>
+                                            <a href="{% url 'product_detailed' %}?id={{ order.id }}"
+                                               class="product_name">{{ order.name }}</a>
+                                        </td>
+                                        <td class="price"><i>￥</i><em>{{ order.price }}</em></td>
+                                        <td>
+                                            <div class="Numbers">
+                                                <em>{{ total_count }}</em>
+                                            </div>
+                                        </td>
+                                        <td class="Moneys">
+                                            <div class="total" style="font-size: 20px"><i>￥</i><em
+                                                    style="color: #fd2a32">{{ total_price }}</em>元
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                                </tbody>
+                            </table>
+                            <div class="Pay_info">
+                                <label>订单留言</label>
+                                <input name="" type="text" onkeyup="checkLength(this);"
+                                       class="text_name "/> <span class="wordage">剩余字数：<span id="sy"
+                                                                                             style="color:Red;">50</span></span>
+                            </div>
+                            <!--价格-->
+                            <div class="price_style">
+                                <div class="right_direction">
+                                    <ul>
+                                        <li><label>商品总价</label><span><div class="total" style="font-size: 20px"><i>￥</i><em
+                                                style="color: #fd2a32">{{ total_price }}</em>元
                                     </div></span></li>
-                                    <li><label>配&nbsp;&nbsp;送&nbsp;&nbsp;费</label><i>￥</i><span>0</span></li>
-                                    <li class="shiji_price"><label>实&nbsp;&nbsp;付&nbsp;&nbsp;款</label><span><div class="total" style="font-size: 20px"><i>￥</i><em
-                                            style="color: #fd2a32">{{ order.price }}</em>元
+                                        <li><label>配&nbsp;&nbsp;送&nbsp;&nbsp;费</label><i>￥</i><span>{{ transit_price }}</span></li>
+                                        <li class="shiji_price"><label>实&nbsp;&nbsp;付&nbsp;&nbsp;款</label><span><div
+                                                class="total" style="font-size: 20px"><i>￥</i><em
+                                                style="color: #fd2a32">{{ total_pay }}</em>元
                                     </div></span>
-                                    </li>
-                                </ul>
-                                <div class="btn"><a href="{% url 'user' %}"><input name="submit" type="submit" value="提交订单" class="submit_btn"/></a>
-                                    <a href="{% url 'shopping_cart' %}"><input name="" type="button" value="返回购物车" class="return_btn"/></a></div>
+                                        </li>
+                                        <li>
+                                            <div class="btn" style="margin: 10px 71px">
+                                                <input name="submit" type="submit" value="提交订单" class="submit_btn"/>
+                                            </div>
+                                            {% if cart %}
+                                                <div class="btn" style="margin: 10px 71px">
+                                                    <a href="{% url 'shopping_cart' %}"><input name="" type="button"
+                                                                                               value="返回购物车"
+                                                                                               class="return_btn"/></a>
+                                                </div>
+                                            {% endif %}
+                                        </li>
+                                    </ul>
+
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </fieldset>
-            </form>
+                    </fieldset>
+                </form>
+            </div>
         </div>
-    </div>
-    <script>
-        $("#add").click(function () {
-            var num_show = $(".number_text").val();
-            num_show = parseInt(num_show);
-            num_show += 1;
-            $(".number_text").val(num_show);
-            var price = $(".price>em").text();
-            price = parseFloat(price);
-            var total = price * num_show;
-            $(".total>em").text(total.toFixed(2));
-        });
-        $("#minus").click(function () {
-            var num_show = $(".number_text").val();
-            num_show = parseInt(num_show);
-            num_show -= 1;
-            if (num_show < 1) {
-                num_show = 1;
+        <script type="text/javascript">
+            function checkLength(which) {
+                var maxChars = 50; //
+                if (which.value.length > maxChars) {
+                    alert("您出入的字数超多限制!");
+                    // 超过限制的字数了就将 文本框中的内容按规定的字数 截取
+                    which.value = which.value.substring(0, maxChars);
+                    return false;
+                } else {
+                    var curr = maxChars - which.value.length; //250 减去 当前输入的
+                    document.getElementById("sy").innerHTML = curr.toString();
+                    return true;
+                }
             }
-            $(".number_text").val(num_show);
-            var price = $(".price>em").text();
-            price = parseFloat(price);
-            var total = price * num_show;
-            $(".total>em").text(total.toFixed(2));
-        });
-        $(function () {
-            num_show = $(".number_text").val();
-            var price = $(".price>em").text();
-            price = parseFloat(price);
-            var total = price * num_show;
-            $(".total>em").text(total.toFixed(2));
-        })
-    </script>
-    <script type="text/javascript">
-        function checkLength(which) {
-            var maxChars = 50; //
-            if (which.value.length > maxChars) {
-                alert("您出入的字数超多限制!");
-                // 超过限制的字数了就将 文本框中的内容按规定的字数 截取
-                which.value = which.value.substring(0, maxChars);
-                return false;
-            } else {
-                var curr = maxChars - which.value.length; //250 减去 当前输入的
-                document.getElementById("sy").innerHTML = curr.toString();
-                return true;
-            }
-        }
-    </script>
-    <script>
-        $(function () {
-            $(':input').labelauty();
-        });
-    </script>
-</div>
+        </script>
 
-</body>
-</html>
+    </div>
+{% endblock %}
+
+

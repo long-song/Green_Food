@@ -20,8 +20,14 @@ def index(request):
     :return:
     '''
     skus = Pro_sku.objects.filter(is_index=True)
-    # print(skus)
-    return render(request, 'index.html', {'index': 'index','skus':skus})
+    skuss = Pro_sku.objects.filter(id__gt=49)
+    print(skuss)
+    context = {
+        'index': 'index',
+        'skus': skus,
+        'skuss': skuss,
+    }
+    return render(request, 'index.html', context)
 
 
 # 登录验证函数
@@ -49,6 +55,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 @csrf_exempt
+# 获取手机号发送验证码
 def phone_code(request):
     '''
     获取手机号发送验证码
@@ -195,7 +202,7 @@ def registered(request):
         time.sleep(5)
         return redirect('index')  # 自动跳转到首页
 
-
+# 激活函数
 def active(request, token):
     """
     激活视图
@@ -233,8 +240,6 @@ def logout(request):
 # 我的订单函数
 # 导入生成唯一订单号函数
 from common.orderNo import get_order_code
-
-
 @login_required
 def user(request):
     '''

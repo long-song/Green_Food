@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from shop_app.models import *
 from common.data_page import pagination
-from integral_app.models import Collect,Group_buy
+from integral_app.models import Collect, Group_buy
 import random
 
 # 在发送ajax的post请求时解决跨网站请求
@@ -33,7 +33,8 @@ def group_buy(request):
     time = Group_buy.objects.all()
     # print(time)
 
-    return render(request, 'integral_app/Group_buy.html', {'group_buy':'group_buy',"g_id": g_id, "p_id": p_id, "c_id": c_id, "time": time})
+    return render(request, 'integral_app/Group_buy.html',
+                  {'group_buy': 'group_buy', "g_id": g_id, "p_id": p_id, "c_id": c_id, "time": time})
 
 
 def integral(request):
@@ -58,7 +59,7 @@ def products(request):
     :return:
     '''
     page = int(request.GET.get('page'))
-    fruits = Pro_sku.objects.filter(type=1,is_index=False)
+    fruits = Pro_sku.objects.filter(type=1, is_index=False)
     print(fruits)
     data_page, pages = pagination(fruits, page_size=8, page=page, page_type=2)
     return render(request, 'integral_app/Products.html',
@@ -72,7 +73,7 @@ def products_list(request):
     :return:
     '''
     page = int(request.GET.get('page'))
-    vegetables = Pro_sku.objects.filter(type=2,is_index=False)
+    vegetables = Pro_sku.objects.filter(type=2, is_index=False)
     data_page, pages = pagination(vegetables, page_size=8, page=page, page_type=1)
     return render(request, 'integral_app/Product-List.html',
                   {'products_list': 'products_list', 'vegetables': vegetables, 'data_page': data_page, 'pages': pages})
@@ -95,3 +96,34 @@ def product_detailed(request):
         else:
             return render(request, 'integral_app/Product-detailed.html',
                           {'sales': sales[:5], 'sku': sku, 'p_id': sku_id})
+    if request.method == 'POST':
+        # 产品id
+        sku_id = request.POST.get('sku_id')
+        # 用户id
+        uid = request.session['user_id']
+        # 数量
+        count = request.POST.get('number')
+        # 当前产品
+        order = Pro_sku.objects.get(id=sku_id)
+        # 金额
+        total_price = order.price * int(count)
+        # 运费
+        transit_price = 10
+        # 实付款
+        total_pay = total_price + transit_price
+        # 获取默认地址，如果没有则重定向到添加地址页面
+        try:
+            uadress = Adress.objects.filter(user=uid)
+        except:
+            return redirect('user_address_add')
+        # 组织上下文
+        context = {
+            'order': order,
+            'total_count': count,
+            'total_price': total_price,
+            'transit_price': transit_price,
+            'total_pay': total_pay,
+            'uadress': uadress,
+            'uid': 'uid'
+        }
+        return render(request, 'shop_app/Orders.html', context)

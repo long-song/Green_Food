@@ -63,7 +63,7 @@ def mod_val(str):
     '''
 
     list = str.split('，')
-    print(list)
+    # print(list)
     str1 = ' '.join(list[:3])
-    print(str1)
+    # print(str1)
     return str1

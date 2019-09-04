@@ -1,5 +1,6 @@
 {% extends 'user_app/new_head.html' %}
 {% load static %}
+{% load filters %}
 {% block title %}
     我的收藏
 {% endblock %}
@@ -37,7 +38,7 @@
                                             src="{% static foo.pro_sku.image.url %}"/></a>
                                     </p>
                                     <p>
-                                        <a href="{% url "product_detailed" %}?id={{ foo.pro_sku.id }}">{{ foo.pro_sku.name }}</a>
+                                        <a href="{% url "product_detailed" %}?id={{ foo.pro_sku.id }}">{{ foo.pro_sku.name|mod_val }}</a>
                                     </p>
                                     <p class="Collect_Standard">{{ foo.pro_sku.title }}</p>
                                     <p class="Collect_price">￥{{ foo.pro_sku.price }}</p>
@@ -53,16 +54,6 @@
                     </p>
 
                 {% endif %}
-
-                <!--分页-->
-                {#                    <div class="pages_Collect clearfix">#}
-                {#                        <a href="#" class="on">《</a>#}
-                {#                        <a href="#">1</a>#}
-                {#                        <a href="#">2</a>#}
-                {#                        <a href="#">3</a>#}
-                {#                        <a href="#">4</a>#}
-                {#                        <a href="#">》</a>#}
-                {#                    </div>#}
             </div>
         </div>
     </div>

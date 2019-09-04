@@ -3,15 +3,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link href="{% static 'css/css.css' %}" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'css/common.css' %}" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" type="text/css"/>
-    <script src="{% static 'js/jquery.min.1.8.2.js' %}" type="text/javascript"></script>
-    <script src="{% static 'js/jquery.SuperSlide.2.1.1.js' %}" type="text/javascript"></script>
-    <script type="text/javascript" src="{% static 'js/slider.js' %}"></script>
-    <script src="{% static 'js/common_js.js' %}" type="text/javascript"></script>
-    <script src="{% static 'js/jquery.foucs.js' %}" type="text/javascript"></script>
+    {% block link %}
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <link href="{% static 'css/css.css' %}" rel="stylesheet" type="text/css"/>
+        <link href="{% static 'css/common.css' %}" rel="stylesheet" type="text/css"/>
+        <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" type="text/css"/>
+        <script src="{% static 'js/jquery.min.1.8.2.js' %}" type="text/javascript"></script>
+        <script src="{% static 'js/jquery.SuperSlide.2.1.1.js' %}" type="text/javascript"></script>
+        <script type="text/javascript" src="{% static 'js/slider.js' %}"></script>
+        <script src="{% static 'js/common_js.js' %}" type="text/javascript"></script>
+        <script src="{% static 'js/jquery.foucs.js' %}" type="text/javascript"></script>
+    {% endblock %}
+
     <!--[if IE 7]>
 <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css">
 <![endif]-->
@@ -110,7 +113,8 @@
                     <div id="slider">
                         {% for sku in skus %}
                             <div class="slide">
-                                <a href="{% url "product_detailed" %}?id={{ sku.id }}" title="{{ sku.name }}" target="_self">
+                                <a href="{% url "product_detailed" %}?id={{ sku.id }}" title="{{ sku.name }}"
+                                   target="_self">
                                     <img class="diapo" border="0"
                                          src="{% static sku.image.url %}"
                                          style="opacity: 1; visibility: visible;"></a>
@@ -141,10 +145,10 @@
                     <div class="title_name"></div>
                     <div class="list_title">
                         <ul>
-                            <li><h3>01</h3><a href="{% url 'products' %}">水果</a></li>
-                            <li><h3>02</h3><a href="{% url 'products_list' %}">蔬菜</a></li>
-                            <li><h3>03</h3><a href="#">干果</a></li>
-                            <li><h3>04</h3><a href="#">其他</a></li>
+                            <li><h3>01</h3><a href="{% url 'products' %}?page=1">水果</a></li>
+                            <li><h3>02</h3><a href="{% url 'products_list' %}?page=1">蔬菜</a></li>
+                            <li><h3>03</h3><a>干果</a></li>
+                            <li><h3>04</h3><a>其他</a></li>
                         </ul>
                     </div>
                 </div>
@@ -155,32 +159,28 @@
                     </div>
                     <ul class="">
                         <li class="advertising">
-                            <div class="AD1"><a href="#"><img src="{% static 'images/product_AD_10.png' %}"/></a></div>
-                            <div class="AD2"><a href="#"><img src="{% static 'images/product_AD_14.png' %}"/></a><a
-                                    href="#"><img
+                            <div class="AD1"><a><img src="{% static 'images/product_AD_10.png' %}"/></a></div>
+                            <div class="AD2"><a><img src="{% static 'images/product_AD_14.png' %}"/></a><a><img
                                     src="{% static 'images/product_AD_07.png' %}"/></a></div>
-                            <div class="AD3"><a href="#"><img src="{% static 'images/product_AD_11.png' %}"/></a></div>
+                            <div class="AD3"><a><img src="{% static 'images/product_AD_11.png' %}"/></a></div>
                         </li>
                         <li class="advertising">
-                            <div class="AD1"><a href="#"><img src="{% static 'images/product_AD_10.png' %}"/></a></div>
-                            <div class="AD2"><a href="#"><img src="{% static 'images/product_AD_07.png' %}"/></a><a
-                                    href="#"><img
+                            <div class="AD1"><a><img src="{% static 'images/product_AD_10.png' %}"/></a></div>
+                            <div class="AD2"><a><img src="{% static 'images/product_AD_07.png' %}"/></a><a><img
                                     src="{% static 'images/product_AD_14.png' %}"/></a></div>
-                            <div class="AD3"><a href="#"><img src="{% static 'images/product_AD_11.png' %}"/></a></div>
+                            <div class="AD3"><a><img src="{% static 'images/product_AD_11.png' %}"/></a></div>
                         </li>
                         <li class="advertising">
-                            <div class="AD1"><a href="#"><img src="{% static 'images/product_AD_10.png' %}"/></a></div>
-                            <div class="AD2"><a href="#"><img src="{% static 'images/product_AD_14.png' %}"/></a><a
-                                    href="#"><img
+                            <div class="AD1"><a><img src="{% static 'images/product_AD_10.png' %}"/></a></div>
+                            <div class="AD2"><a><img src="{% static 'images/product_AD_14.png' %}"/></a><a><img
                                     src="{% static 'images/product_AD_07.png' %}"/></a></div>
-                            <div class="AD3"><a href="#"><img src="{% static 'images/product_AD_11.png' %}"/></a></div>
+                            <div class="AD3"><a><img src="{% static 'images/product_AD_11.png' %}"/></a></div>
                         </li>
                         <li class="advertising">
-                            <div class="AD1"><a href="#"><img src="{% static 'images/product_AD_10.png' %}"/></a></div>
-                            <div class="AD2"><a href="#"><img src="{% static 'images/product_AD_14.png' %}"/></a><a
-                                    href="#"><img
+                            <div class="AD1"><a><img src="{% static 'images/product_AD_10.png' %}"/></a></div>
+                            <div class="AD2"><a><img src="{% static 'images/product_AD_14.png' %}"/></a><a><img
                                     src="{% static 'images/product_AD_07.png' %}"/></a></div>
-                            <div class="AD3"><a href="#"><img src="{% static 'images/product_AD_11.png' %}"/></a></div>
+                            <div class="AD3"><a><img src="{% static 'images/product_AD_11.png' %}"/></a></div>
                         </li>
                     </ul>
                 </div>
@@ -194,9 +194,9 @@
             <div class="title_style">
                 <div class="title_img"></div>
                 <div class="title_link_name">
-                    <a href="#">火龙果</a>
-                    <a href="#">香蕉</a><a href="#">红心蜜柚</a><a href="#">柠檬</a><a href="#">火龙果</a><a href="#">猕猴桃</a><a
-                        href="#">红心蜜 </a><a href="#">柠檬火龙果</a><a href="#">西瓜 </a><a href="#">红心蜜柚</a>
+                    {% for skus1 in skuss %}
+                        <a href="{% url 'product_detailed' %}?id={{ skus1.id }}">{{ skus1.name }}</a>
+                    {% endfor %}
                 </div>
             </div>
         </div> <!--幻灯片样式-->
@@ -205,50 +205,19 @@
                 <div class="title_img"></div>
                 <div class="hero-wrap">
                     <ul class="heros clearfix">
-                        <li class="hero">
-                            <a href="#" target="_blank" title="第一张图的说明">
-                                <img src="{% static 'images/pic1.jpg' %}" class="thumb" alt=""/>
-                            </a>
-                            <div class="p_title_name">
-                                <div class="p_recommend_info">
-                                    <h3>南岭荔枝水嫩香甜礼盒装</h3>
-                                    <p>新鲜包邮价：￥<b class="p_recommend_price">999</b>元</p>
+                        {% for skus1 in skuss %}
+                            <li class="hero">
+                                <a href="{% url 'product_detailed' %}?id={{ skus1.id }}" target="_blank" title="第{{ forloop }}张图的说明">
+                                    <img src="{% static skus1.image.url %}" class="thumb" alt="{{ skus1.name }}"/>
+                                </a>
+                                <div class="p_title_name">
+                                    <div class="p_recommend_info">
+                                        <h3>{{ skus1.name }}</h3>
+                                        <p>新鲜包邮价：￥<b class="p_recommend_price">{{ skus1.price }}</b>元</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                        <li class="hero">
-                            <a href="#" target="_blank" title="第二张图的说明">
-                                <img src="{% static 'images/pic2.jpg' %}" class="thumb" alt=""/>
-                            </a>
-                            <div class="p_title_name">
-                                <div class="p_recommend_info">
-                                    <h3>南岭荔枝水嫩香甜礼盒装</h3>
-                                    <p>新鲜包邮价：￥<b class="p_recommend_price">999</b>元</p>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="hero">
-                            <a href="#" target="_blank" title="第三张图的说明">
-                                <img src="{% static 'images/pic3.jpg' %}" class="thumb" alt=""/>
-                            </a>
-                            <div class="p_title_name">
-                                <div class="p_recommend_info">
-                                    <h3>南岭荔枝水嫩香甜礼盒装</h3>
-                                    <p>新鲜包邮价：￥<b class="p_recommend_price">999</b>元</p>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="hero">
-                            <a href="#" target="_blank" title="第4张图的说明">
-                                <img src="{% static 'images/pic4.jpg' %}" class="thumb" alt=""/>
-                            </a>
-                            <div class="p_title_name">
-                                <div class="p_recommend_info">
-                                    <h3>南岭荔枝水嫩香甜礼盒装</h3>
-                                    <p>新鲜包邮价：￥<b class="p_recommend_price">999</b>元</p>
-                                </div>
-                            </div>
-                        </li>
+                            </li>
+                        {% endfor %}
                     </ul>
                 </div>
                 <div class="helper">

@@ -1,93 +1,107 @@
 {% extends 'index.html' %}
 {% load static %}
 {% block title %}
-购物车
+    购物车
 {% endblock %}
 {% block body %}
-<script src="{% static 'js/demo.js' %}" type="text/javascript"></script>
-<link rel="stylesheet" href="{% static 'style.css' %}">
-<script>
-    function cart_del(cart_id) {
-        del = confirm('确定删除');
-        {#            cart_id = $(this).parents('.cart_list_td').attr('id');#}
-        {#            alert(cart_id);#}
-        if (del) {
-            $.get('/shop_app/delete' + cart_id + '/', function (data) {
-                {#                    alert(data.ok);#}
-                if (data.ok == 1) {
-                    //删掉哪一行 商品  界面元素
-                    {#                        alert('删除');#}
-                    $('ul').remove('#' + cart_id);
-                    total();
-                }
-            })
+    <script src="{% static 'js/demo.js' %}" type="text/javascript"></script>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script>
+        function cart_del(cart_id) {
+            del = confirm('确定删除');
+            if (del) {
+                $.get('/shop_app/delete' + cart_id + '/', function (data) {
+                    {#                    alert(data.ok);#}
+                    if (data.ok == 1) {
+                        //删掉哪一行 商品  界面元素
+                        {#                        alert('删除');#}
+                        $('ul').remove('#' + cart_id);
+                        total();
+                    }
+                })
+            }
         }
-    }
-</script>
-<!---->
-<div><a href="#"><img src="../../static/images/AD_page_img_02.png" width="100%"/></a></div>
-<!--位置-->
-<div class="Bread_crumbs">
-    <div class="Inside_pages clearfix">
-        <div class="right Search">
-            <form>
-                <input name="" type="text" class="Search_Box"/>
-                <input name="" type="button" name="" class="Search_btn"/>
-            </form>
-        </div>
-    </div>
-</div>
-<!--购物车样式-->
-<div class="Narrow">
-    <div class="shop_cart">
-        <div class="schedule"></div>
-        <div class="cart_style">
-            <table id="cartTable">
-                <thead>
-                <tr>
-                    <th><label><input class="check-all check" type="checkbox"/>&nbsp;全选</label></th>
-                    <th>商品</th>
-                    <th>单价</th>
-                    <th>数量</th>
-                    <th>小计</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for cart in carts %}
-                    <tr>
-                        <td class="checkbox"><input class="check-one check" type="checkbox"/></td>
-                        <td class="goods"><a href="{% url 'product_detailed' %}?id={{ cart.pros_id }}"><img
-                                src="{% static cart.pros.image.url %}" alt=""/><span>{{ cart.pros.name }}</span></a>
-                        </td>
-                        <td class="price">{{ cart.pros.price }}</td>
-                        <td class="count"><span class="reduce"></span><input class="count-input" type="text"
-                                                                             value="{{ cart.ccount }}"/><span
-                                class="add">+</span></td>
-                        <td class="subtotal">{{ cart.cprice }}</td>
-                        <td class="operation"><span class="delete" onclick="cart_del({{ cart.id }});">删除</span></td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+    </script>
+    <style>
+        .th {
+            width: 170px;
+            text-align: center;
+        }
 
-            <div class="foot" id="foot">
-                <label class="fl select-all"><input type="checkbox" class="check-all check"/>&nbsp;全选</label>
-                <a class="fl delete" id="deleteAll" href="javascript:">删除</a>
-                <div class="fr closing"><a href="{% url 'Orders' %}">结 算</a></div>
-                <div class="fr total">合计：￥<span id="priceTotal">0.00</span></div>
-                <div class="fr selected" id="selected">已选商品<span id="selectedTotal">0</span>件<span
-                        class="arrow up">︽</span><span class="arrow down">︾</span></div>
-                <div class="selected-view">
-                    <div id="selectedViewList" class="clearfix">
-                        <div><img src="{{ cart.pros.image }}"><span>取消选择</span></div>
-                    </div>
-                    <span class="arrow">◆<span>◆</span></span>
-                </div>
+        td {
+            text-align: center;
+        }
+    </style>
+    <!---->
+    <div><a href="#"><img src="../../static/images/AD_page_img_02.png" width="100%"/></a></div>
+    <!--位置-->
+    <div class="Bread_crumbs">
+        <div class="Inside_pages clearfix">
+            <div class="right Search">
+                <form>
+                    <input name="" type="text" class="Search_Box"/>
+                    <input name="" type="button" name="" class="Search_btn"/>
+                </form>
             </div>
         </div>
     </div>
-</div>
+    <!--购物车样式-->
+    <div class="Narrow">
+        <div class="shop_cart">
+            <div class="schedule"></div>
+            <div class="cart_style">
+                <form action="{% url 'shopping_cart' %}" method="post">
+                    <table id="cartTable" style="font-size: 15px">
+                        <thead>
+                        <tr>
+                            <th><label><input class="check-all check" type="checkbox"/>&nbsp;全选</label></th>
+                            <th class="th">商品</th>
+                            <th class="th">单价</th>
+                            <th class="th">数量</th>
+                            <th class="th">小计</th>
+                            <th class="th">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for cart in carts %}
+                            <tr>
+                                <td class="checkbox"><input class="check-one check" type="checkbox" name="check" value="{{ cart.id }}"/></td>
+                                <td class="goods"><a href="{% url 'product_detailed' %}?id={{ cart.pros_id }}"><img
+                                        src="{% static cart.pros.image.url %}" alt=""/><span>{{ cart.pros.name }}</span></a>
+                                </td>
+                                <td class="price">{{ cart.pros.price }}</td>
+                                <td class="count">
+                                    <div style="margin-left: 41px"><span class="reduce">-</span>
+                                    <input class="count-input" type="text" name="count" value="{{ cart.ccount }}" readonly="readonly"/>
+                                    <span class="add">+</span></div>
+
+                                </td>
+                                <td class="subtotal">{{ cart.cprice }}</td>
+                                <td class="operation"><span class="delete" onclick="cart_del({{ cart.id }});">删除</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="foot" id="foot">
+                        <label class="fl select-all"><input type="checkbox" class="check-all check"/>&nbsp;全选</label>
+                        <a class="fl delete" id="deleteAll" href="javascript:">删除</a>
+                        <div class="fr closing"><input type="submit" value="结 算" style="width: 101px;height: 48px;font-size: 20px;font-family: 微软雅黑"></div>
+                        <div class="fr total">合计：￥<span id="priceTotal">0.00</span></div>
+                        <div class="fr selected" id="selected">已选商品<span id="selectedTotal">0</span>件<span
+                                class="arrow up">︽</span><span class="arrow down">︾</span></div>
+                        <div class="selected-view">
+                            <div id="selectedViewList" class="clearfix">
+                                <div><img src="{{ cart.pros.image }}"><span>取消选择</span></div>
+                            </div>
+                            <span class="arrow">◆<span>◆</span></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 

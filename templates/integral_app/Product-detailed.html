@@ -5,7 +5,7 @@
     商品详细介绍
 {% endblock %}
 {% block bread %}
-商品详情
+    商品详情
 {% endblock %}
 {% block new_body %}
     <script src="http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=402727"></script>
@@ -80,10 +80,10 @@
                         </div>
                     </div>
                     <!--购买信息-->
+                    <form action="{% url 'product_detailed' %}" method="post">
                     <div class="Buying_info" style="margin-left:80px;margin-top: 50px">
                         <form action="{% url 'Orders' %}" method="post">
-                            {#                        <a href="#"> <img src="{{ foo.image }}" width="400px"#}
-                            {#                                                  height="400px"/></a>#}
+                            <input type="text" value="{{ sku.id }}" name="sku_id" hidden>
                             <div class="product_name"><h2>{{ sku.name }}</h2><span>{{ sku.name }}</span></div>
                             <div class="product_price">
                                 <div class="price">
@@ -122,10 +122,10 @@
                             </div>
                             <div class="product_Quantity" style="height: 15px;">销量：{{ sku.sales }}</div>
                             <div class="operating">
-                                <a href="{% url "Orders" %}?p_id={{ sku.id }}"><input type="button"
-                                                                                      id="information"
-                                                                                      value="立即购买"
-                                                                                      style="color: #ffffff; width: 130px; height: 50px;background: #ee1526;font-size: 20px;border-radius: 5px"></a>
+                                <a><input type="submit"
+                                       id="information"
+                                       value="立即购买"
+                                       style="color: #ffffff; width: 130px; height: 50px;background: #ee1526;font-size: 20px;border-radius: 5px"></a>
                                 {% if fav %}
                                     <a><img id="fav1"
                                             src="{% static 'images/fav1.jpg' %}" alt="取消收藏"
@@ -141,6 +141,7 @@
                             </div>
                         </form>
                     </div>
+                    </form>
                 </div>
                 <script>
                     $(function f() {
