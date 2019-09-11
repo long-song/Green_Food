@@ -4,6 +4,8 @@ from django.db.models import F, Q
 from integral_app.models import *
 import datetime
 import time
+
+from shop_app.models import Order
 from user_app.models import *
 from django.core.mail import send_mail
 from celery_tasks.tasks import send_register_active_mail
@@ -133,7 +135,7 @@ def registered(request):
         phone = queryDict.get('phone')
         email = queryDict.get('email')
         confirm = queryDict.get('confirm')
-        print(locals())
+        # print(locals())
         # sex = register_form.cleaned_data['sex']
         # 2.校验数据的准确性
         # A: 校验数据是否输入内容:all([]):如果列表中所有的内容都不为空则返回True,否则返回False
@@ -176,17 +178,17 @@ def registered(request):
         # 3.完成注册的核心业务功能
         # 新办法
         user = UserInfo.objects.create(username=user_name, password=password1, email=email, phone=phone,
-                                            up_time=datetime.datetime.now())
+                                       up_time=datetime.datetime.now())
         user.is_active = 0
         user.save()
-        print('user=', user)
+        # print('user=', user)
 
         # 实现对指定数据的加密
         serializer = Serializer(settings.SECRET_KEY, 3600)
         info = {'confirm': user.id}
         token = serializer.dumps(info)
         token = token.decode()  # 默认是utf-8对字节进行解码
-        print('token=', token)
+        # print('token=', token)
 
         # 发送邮件，让用户激活自己的账号
         # 发送的激活链接如：http://127.0.0.1:8000/active/用户id
@@ -201,6 +203,7 @@ def registered(request):
         send_register_active_mail.delay(email, user_name, token)
         time.sleep(5)
         return redirect('index')  # 自动跳转到首页
+
 
 # 激活函数
 def active(request, token):
@@ -238,22 +241,45 @@ def logout(request):
 
 
 # 我的订单函数
-# 导入生成唯一订单号函数
-from common.orderNo import get_order_code
+# 导入分页
+from common.data_page import *
+
 @login_required
-def user(request):
+def user(request,page):
     '''
     访问我的订单
     :param request:
     :return:
     '''
+    # page = request.GET.get('page')
     a = request.session['user_id']
     user = UserInfo.objects.get(id=a)
     order = 'order'
     if request.method == 'GET':
-        order_No = get_order_code()
-        return render(request, 'user_app/user.html', locals())
-    return render(request, 'user_app/user.html', locals())
+        # 获取用户的订单信息
+        orders = User_order.objects.filter(user=user).order_by("-pay_time")
+
+        for order in orders:
+            # 根据订单id查询订单商品信息
+            order_skus = Order.objects.filter(order_id=order.order_id)
+            # 动态给order增加属性，保存订单商品信息
+            order.order_skus = order_skus
+            # 增加动态属性存储订单状态名
+            order.status_name = User_order.ORDER_STATUS[order.order_status]
+            # 增加动态属性存储实付款
+            actual_payment = order.total_price + order.transit_price
+            order.actual_payment = actual_payment
+        # 分页
+        order_page, pages = pagination(orders,3,page,2)
+
+        # 组织上下文
+        context = {
+            'user':user,
+            'page1': 'order',
+            "order_page": order_page,
+            'pages': pages
+        }
+        return render(request, 'user_app/user.html', context)
 
 
 # 个人信息函数
@@ -281,7 +307,7 @@ def user_password(request):
     a = request.session['user_id']
     user = UserInfo.objects.get(id=a)
     if request.method == "GET":
-        return render(request, 'user_app/user_Password.html', {'user_password':'user_password','user': user})
+        return render(request, 'user_app/user_Password.html', {'user_password': 'user_password', 'user': user})
     if request.method == "POST":
         old_pwd = request.POST.get('old_pwd')
         new_pwd = request.POST.get('new_pwd')
@@ -301,7 +327,6 @@ def user_password(request):
         else:
             message = '原密码输入错误！'
         return render(request, 'user_app/user_Password.html', locals())
-
 
 
 # 我的收藏函数
@@ -358,7 +383,8 @@ def user_address(request):
         # addres = Adress.objects.get(user_id=a)
         addres = Adress.objects.filter(user_id=a)
         # print(addre.postcode)
-        return render(request, 'user_app/user_address.html', {'user_address':'user_address','user': user, 'addres': addres})
+        return render(request, 'user_app/user_address.html',
+                      {'user_address': 'user_address', 'user': user, 'addres': addres})
 
 
 # 设置默认地址
@@ -395,7 +421,7 @@ def user_address_add(request):
         user = UserInfo.objects.get(id=a)
         addre = Adress.objects.filter(user_id=a)
         # print(user.head_img)
-        return render(request, 'user_app/user_address_add.html', {'user_address':'user_address','user': user})
+        return render(request, 'user_app/user_address_add.html', {'user_address': 'user_address', 'user': user})
     if request.method == "POST":
         # 1.接收客户端发送过来的数据
         user = request.session['user_id']
@@ -459,7 +485,8 @@ def user_address_change(request, id):
         a = request.session['user_id']
         user = UserInfo.objects.get(id=a)
         addre2 = Adress.objects.get(id=id)
-        return render(request, 'user_app/user_address_change.html', {'user_address':'user_address','addre2': addre2, "user": user})
+        return render(request, 'user_app/user_address_change.html',
+                      {'user_address': 'user_address', 'addre2': addre2, "user": user})
     if request.method == "POST":
         # 1.接收客户端发送过来的数据
         user = request.session['user_id']
@@ -578,7 +605,7 @@ def user_info_set(request):
     if request.method == "GET":
         a = request.session['user_id']
         user = UserInfo.objects.get(id=a)
-        return render(request, 'user_app/user_info_set.html', {'user_info':'user_info','user': user})
+        return render(request, 'user_app/user_info_set.html', {'user_info': 'user_info', 'user': user})
     if request.method == "POST":
         # 1.接收客户端发送的信息
         a = request.session['user_id']
@@ -622,7 +649,7 @@ def new_head(request):
     if request.method == "GET":
         a = request.session['user_id']
         user = UserInfo.objects.get(id=a)
-        return render(request, 'user_app/new_head.html', {'user_info':'user_info','user': user})
+        return render(request, 'user_app/new_head.html', {'user_info': 'user_info', 'user': user})
     if request.method == "POST":
         new_head = request.FILES.get('new_head')
         a = request.session['user_id']

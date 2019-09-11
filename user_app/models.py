@@ -1,5 +1,6 @@
 from django.db import models
-# from integral_app.models import Pro_sku
+
+
 # Create your models here.
 
 # 用户表 UserInfo
@@ -17,8 +18,8 @@ from django.db import models
 
 class UserInfo(models.Model):
     sex = (
-        (1, '男',),
-        (2, '女',),
+        (1, '男'),
+        (2, '女'),
     )
     username = models.CharField(max_length=15, unique=True, verbose_name='用户名')
     password = models.CharField(max_length=256, verbose_name='密码')
@@ -29,13 +30,12 @@ class UserInfo(models.Model):
     email = models.EmailField(null=True, unique=True, verbose_name='邮箱')
     birthday = models.DateField(verbose_name='生日', null=True)
     up_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name='注册时间')
-    is_active = models.IntegerField(verbose_name='是否激活',default=0)
+    is_active = models.IntegerField(verbose_name='是否激活', default=0)
     allow_order = models.IntegerField(verbose_name="订单管理权限", default=0)
     allow_data = models.IntegerField(verbose_name="数据管理权限", default=0)
     superuser = models.IntegerField(verbose_name="超级管理员", default=0)
 
     class Meta:
-        # ordering = ['up_time']
         verbose_name = '用户管理'
         verbose_name_plural = verbose_name
 
@@ -100,13 +100,12 @@ class Adress(models.Model):
     city_name = models.ForeignKey('City', on_delete=models.CASCADE, default=1)
     county_name = models.ForeignKey('County', on_delete=models.CASCADE, default=1)
     aphone = models.CharField(verbose_name='电话', max_length=20, null=False)
-    user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserInfo, on_delete=models.CASCADE, verbose_name='用户')
     area = models.CharField(verbose_name='地区', max_length=50, null=True)
     postcode = models.CharField(verbose_name='邮编', max_length=20, null=True)
     is_default = models.BooleanField(default=False, verbose_name='是否默认')
 
     class Meta:
-        # ordering = ['up_time']
         verbose_name = '地址管理'
         verbose_name_plural = verbose_name
 
@@ -126,28 +125,57 @@ class Adress(models.Model):
 # acount 订单总价
 # orderstatus 状态
 class User_order(models.Model):
-    ORDERSTATUS = (
-        (1, '未支付',),
-        (2, '已支付',),
-        (3, '订单取消',),
+    PAY_METHODS = {
+        '1': '货到付款',
+        '2': '微信支付',
+        '3': '支付宝',
+        '4': '银联支付'
+    }
+    PAY_METHODS_ENUM = {
+        'CASH': 1,  # 现金
+        'ALIPAY': 2,  # 阿里支付
+    }
+    ORDER_STATUS__ENUM = {
+        'UNPAID': 1,  # 待支付
+        'UNSEND': 2,  # 代发货
+        'UNRECEIVED': 3,  # 待收货
+        'UNCOMMIT': 4,  # 待评价
+        'FINISHED': 5,  # 已完成
+    }
+    ORDER_STATUS = {
+        1: '待支付',  # 待支付
+        2: '代发货',  # 代发货
+        3: '待收货',  # 待收货
+        4: '待评价',  # 待评价
+        5: '已完成',  # 已完成
+    }
+    PAY_METHODS_CHOICES = (
+        (1, '货到付款'),
+        (2, '微信支付'),
+        (3, '支付宝'),
+        (4, '银联支付')
     )
-    orderNo = models.CharField(verbose_name='订单号', max_length=50)
-    orderdetail = models.TextField(verbose_name='订单详情')
-    adsname = models.CharField(verbose_name='收件人姓名', max_length=30, null=False)
-    adsphone = models.CharField(verbose_name='收件人电话', max_length=20, null=False)
-    ads = models.CharField(verbose_name='地址', max_length=300)
-    time = models.DateTimeField(auto_now=True, verbose_name='下单时间')
-    acot = models.IntegerField(verbose_name='总数', default=1)
-    acount = models.DecimalField(verbose_name='订单总价', max_digits=8, decimal_places=2)
-    orderstatus = models.IntegerField(verbose_name='订单状态', choices=ORDERSTATUS, default=1)
-    user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.orderNo
+    ORDER_STATUS_CHOICES = (
+        (1, '待支付'),
+        (2, '待发货'),
+        (3, '待收货'),
+        (4, '待评价'),
+        (5, '已完成'),
+    )
+    order_id = models.CharField(verbose_name='订单id', max_length=128, primary_key=True)
+    pay_No = models.CharField(verbose_name='支付编号', max_length=128, default='')
+    user = models.ForeignKey(UserInfo, on_delete=models.CASCADE, verbose_name='用户')
+    adress = models.ForeignKey(Adress, on_delete=models.CASCADE, blank=True, null=True, verbose_name='收货地址')
+    total_count = models.IntegerField(verbose_name='总数目', default=1)
+    total_price = models.DecimalField(verbose_name='订单总价', max_digits=8, decimal_places=2)
+    transit_price = models.DecimalField(verbose_name='运费', max_digits=8, decimal_places=2, default=10.00)
+    order_status = models.IntegerField(verbose_name='订单状态', choices=ORDER_STATUS_CHOICES, default=1)
+    pay_method = models.IntegerField(verbose_name='支付方式', choices=PAY_METHODS_CHOICES, default=3)
+    pay_time = models.DateTimeField(auto_now=True, verbose_name='下单时间')
 
     class Meta:
-        # ordering = ['up_time']
         verbose_name = '订单管理'
         verbose_name_plural = verbose_name
 
-
+    def __str__(self):
+        return '%s由%s下单，%s' % (self.pay_time, self.user.username, self.ORDER_STATUS[self.order_status])

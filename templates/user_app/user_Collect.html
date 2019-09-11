@@ -33,8 +33,8 @@
                                 <div class="Collect_pro_name">
                                     <a class="delete_Collect"><input type="hidden" id="delete"
                                                                      value="{{ foo.pro_sku.id }}"></a>
-                                    <p class="img center"><a
-                                            href="{% url "product_detailed" %}?id={{ foo.pro_sku.id }}"><img
+                                    <p class="img center">
+                                        <a href="{% url "product_detailed" %}?id={{ foo.pro_sku.id }}"><img
                                             src="{% static foo.pro_sku.image.url %}"/></a>
                                     </p>
                                     <p>

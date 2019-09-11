@@ -4,6 +4,35 @@
     用户中心
 {% endblock %}
 {% block nav %}
+    <style>
+        .Order_form_list table td {
+            padding: 10px 20px;
+        }
+
+        /* 分页样式 */
+
+        .pagenation {
+            height: 32px;
+            text-align: center;
+            font-size: 0;
+            margin: 30px auto;
+        }
+
+        .pagenation a {
+            display: inline-block;
+            border: 1px solid #d2d2d2;
+            background-color: #f8f6f7;
+            font-size: 12px;
+            padding: 7px 10px;
+            color: #666;
+            margin: 5px
+        }
+
+        .pagenation .active {
+            background-color: #fff;
+            color: #43a200
+        }
+    </style>
     <script type="text/javascript">
         $(document).ready(function () {
 
@@ -41,28 +70,6 @@
         })
     </script>
     <div class="user_right">
-        <div class="user_center_style">
-            <div class="user_time">
-                <h1></h1>
-                <h4 id="D"></h4>
-                <h4 id="y"></h4>
-            </div>
-            <ul class="user_center_info">
-                <li>
-                    <img src="../../static/images/user_img_05.png"/>
-                    <h4 class="Money">余额￥34</h4>
-                </li>
-                <li><img src="../../static/images/user_img_04.png"/>
-                    <a href="#">代收货（3）</a>
-                </li>
-                <li><img src="../../static/images/user_img_06.png"/>
-                    <a href="#">积分234分</a>
-                </li>
-                <li><img src="../../static/images/user_img_03.png"/>
-                    <a href="#">订单评价（5）</a>
-                </li>
-            </ul>
-        </div>
         <div class="Order_form">
             <div class="user_Borders">
                 <div class="title_name">
@@ -79,73 +86,57 @@
                         <td class="list_name_title5">订单状态</td>
                         <td class="list_name_title6">操作</td>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <td colspan="6" class="Order_form_time">2015-12-3 订单号：445454654654654</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">
-                                <table class="Order_product_style">
-                                    <tr>
-                                        <td>
-                                            <div class="product_name clearfix">
-                                                <a href="#"><img src="../../static/images/product_img_17.png"
-                                                                 width="80px" height="80px"/></a>
-                                                <a href="3">天然绿色多汁香甜无污染水蜜桃</a>
-                                                <p class="specification">礼盒装20个/盒</p>
-                                            </div>
-                                        </td>
-                                        <td>5</td>
-                                        <td>2</td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td class="split_line">100</td>
-                            <td class="split_line">已发货，待收货</td>
-                            <td></td>
-                        </tr>
-                        </tbody>
-                        <tbody>
-                        <tr>
-                            <td colspan="6" class="Order_form_time">2015-12-3 订单号：445454654654654</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">
-                                <table class="Order_product_style">
-                                    <tr>
-                                        <td>
-                                            <div class="product_name clearfix">
-                                                <a href="#"><img src="../../static/images/product_img_17.png"
-                                                                 width="80px" height="80px"/></a>
-                                                <a href="3">天然绿色多汁香甜无污染水蜜桃</a>
-                                                <p class="specification">礼盒装20个/盒</p>
-                                            </div>
-                                        </td>
-                                        <td>5</td>
-                                        <td>2</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="product_name clearfix">
-                                                <a href="#"><img src="../../static/images/product_img_17.png"
-                                                                 width="80px" height="80px"/></a>
-                                                <a href="3">天然绿色多汁香甜无污染水蜜桃</a>
-                                                <p class="specification">礼盒装20个/盒</p>
-                                            </div>
-                                        </td>
-                                        <td>5</td>
-                                        <td>2</td>
-                                    </tr>
-                                </table>
-                            </td>
+                        {% for order in order_page %}
+                            <tbody>
+                            <tr>
+                                <td colspan="6" class="Order_form_time">{{ order.pay_time }}
+                                    订单号：{{ order.order_id }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <table class="Order_product_style">
+                                        {% for order_sku in order.order_skus %}
+                                            <tr>
+                                                <td>
+                                                    <div class="product_name clearfix">
+                                                        <a href="#"><img src="{% static order_sku.pro_id.image.url %}"
+                                                                         width="80px" height="80px"/></a>
+                                                        <a href="3">{{ order_sku.pro_id.name }}</a>
+                                                        <p class="specification">{{ order_sku.pro_id.size }}</p>
+                                                    </div>
+                                                </td>
+                                                <td>{{ order_sku.pro_id.price }}</td>
+                                                <td>{{ order_sku.count }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </td>
+                                <td class="split_line">{{ order.actual_payment }}</td>
+                                <td class="split_line">{{ order.status_name }}</td>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        {% endfor %}
 
-                            <td class="split_line">100</td>
-                            <td class="split_line">已发货，待收货</td>
-                            <td></td>
-                        </tr>
-                        </tbody>
                     </table>
                 </div>
+
+            </div>
+            <div class="pagenation">
+                {% if order_page.has_previous %}
+                    <a href="{% url 'user' order_page.previous_page_number %}">&lt;上一页</a>
+                {% endif %}
+
+                {% for pindex in pages %}
+                    {% if pindex == order_page.number %}
+                        <a class="active">{{ pindex }}</a>
+                    {% else %}
+                        <a href="{% url 'user' pindex %}">{{ pindex }}</a>
+                    {% endif %}
+                {% endfor %}
+                {% if order_page.has_next %}
+                    <a href="{% url 'user' order_page.next_page_number %}">下一页&gt;</a>
+                {% endif %}
             </div>
         </div>
     </div>

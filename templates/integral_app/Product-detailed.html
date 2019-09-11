@@ -81,66 +81,66 @@
                     </div>
                     <!--购买信息-->
                     <form action="{% url 'product_detailed' %}" method="post">
-                    <div class="Buying_info" style="margin-left:80px;margin-top: 50px">
-                        <form action="{% url 'Orders' %}" method="post">
-                            <input type="text" value="{{ sku.id }}" name="sku_id" hidden>
-                            <div class="product_name"><h2>{{ sku.name }}</h2><span>{{ sku.name }}</span></div>
-                            <div class="product_price">
-                                <div class="price">
-                                    <label>商城价：</label><em>{{ sku.price }}</em><b>元/{{ sku.size }}</b>
-                                </div>
-                                <div class="jyScore-fra"><span><em style="width:60px;"></em></span><b>4.5</b><a
-                                        href="#">{{ sku.comments }}</a></div>
-                            </div>
-                            <div class="productDL" style="height: 180px;">
-                                <dl style="height: 35px;">
-                                    <dt style="font-size: 16px; line-height:35px">品种：</dt>
-                                    <dd class="left">
-                                        <div class="item"><b></b><a href="#" title="">{{ sku.name }}</a></div>
-                                    </dd>
-                                </dl>
-                                <dl style="height: 35px;">
-                                    <dt style="font-size: 16px;line-height: 32px">数量：</dt>
-                                    <dd class="left">
-                                        <div class="Numbers">
-                                            <a href="javascript:" class="jian " id="minus">-
-                                            </a>
-                                            <input name="number" type="text" value="1" class="number_text">
-                                            <a href="javascript:" class="jia " id="add">+
-                                            </a>
-                                        </div>
-                                    </dd>
-                                    <dd class="left Quantity">(库存：{{ sku.stock }})</dd>
-                                </dl>
-                                <d1>
-                                    <dt style="font-size: 16px ; line-height: 30px;">总价：</dt>
-                                    <div class="total" style="font-size: 20px"><em
-                                            style="color: #fd2a32">{{ sku.price }}</em>元
+                        <div class="Buying_info" style="margin-left:80px;margin-top: 50px">
+                            <form action="{% url 'Orders' %}" method="post">
+                                <input type="text" value="{{ sku.id }}" name="sku_id" hidden>
+                                <div class="product_name"><h2>{{ sku.name }}</h2><span>{{ sku.name }}</span></div>
+                                <div class="product_price">
+                                    <div class="price">
+                                        <label>商城价：</label><em>{{ sku.price }}</em><b>元/{{ sku.size }}</b>
                                     </div>
+                                    <div class="jyScore-fra"><span><em style="width:60px;"></em></span><b>4.5</b><a
+                                            href="#">{{ sku.comments }}</a></div>
+                                </div>
+                                <div class="productDL" style="height: 180px;">
+                                    <dl style="height: 35px;">
+                                        <dt style="font-size: 16px; line-height:35px">品种：</dt>
+                                        <dd class="left">
+                                            <div class="item"><b></b><a href="#" title="">{{ sku.name }}</a></div>
+                                        </dd>
+                                    </dl>
+                                    <dl style="height: 35px;">
+                                        <dt style="font-size: 16px;line-height: 32px">数量：</dt>
+                                        <dd class="left">
+                                            <div class="Numbers">
+                                                <a href="javascript:" class="jian " id="minus">-
+                                                </a>
+                                                <input name="number" type="text" value="1" class="number_text">
+                                                <a href="javascript:" class="jia " id="add">+
+                                                </a>
+                                            </div>
+                                        </dd>
+                                        <dd class="left Quantity">(库存：{{ sku.stock }})</dd>
+                                    </dl>
+                                    <d1>
+                                        <dt style="font-size: 16px ; line-height: 30px;">总价：</dt>
+                                        <div class="total" style="font-size: 20px"><em
+                                                style="color: #fd2a32">{{ sku.price }}</em>元
+                                        </div>
 
-                                </d1>
-                            </div>
-                            <div class="product_Quantity" style="height: 15px;">销量：{{ sku.sales }}</div>
-                            <div class="operating">
-                                <a><input type="submit"
-                                       id="information"
-                                       value="立即购买"
-                                       style="color: #ffffff; width: 130px; height: 50px;background: #ee1526;font-size: 20px;border-radius: 5px"></a>
-                                {% if fav %}
-                                    <a><img id="fav1"
-                                            src="{% static 'images/fav1.jpg' %}" alt="取消收藏"
-                                            style="width: 53px;height: 53px;" title="取消收藏"></a>
-                                {% else %}
-                                    <a><img id="fav"
-                                            src="{% static 'images/fav.jpg' %}" alt="收藏"
-                                            style="width: 53px;height: 53px;" title="收藏"></a>
-                                {% endif %}
-                                <a><input type="button" id='shop_cart'
-                                          style="color: #ffffff;width: 130px; height: 50px;background: #fe9c3f;font-size: 20px;border-radius: 5px"
-                                          value="加入购物车" onclick="f"></a>
-                            </div>
-                        </form>
-                    </div>
+                                    </d1>
+                                </div>
+                                <div class="product_Quantity" style="height: 15px;">销量：{{ sku.sales }}</div>
+                                <div class="operating">
+                                    <a><input type="submit"
+                                              id="information"
+                                              value="立即购买"
+                                              style="color: #ffffff; width: 130px; height: 50px;background: #ee1526;font-size: 20px;border-radius: 5px"></a>
+                                    {% if fav %}
+                                        <a><img id="fav1"
+                                                src="{% static 'images/fav1.jpg' %}" alt="取消收藏"
+                                                style="width: 53px;height: 53px;" title="取消收藏"></a>
+                                    {% else %}
+                                        <a><img id="fav"
+                                                src="{% static 'images/fav.jpg' %}" alt="收藏"
+                                                style="width: 53px;height: 53px;" title="收藏"></a>
+                                    {% endif %}
+                                    <a><input type="button" id='shop_cart'
+                                              style="color: #ffffff;width: 130px; height: 50px;background: #fe9c3f;font-size: 20px;border-radius: 5px"
+                                              value="加入购物车" onclick="f"></a>
+                                </div>
+                            </form>
+                        </div>
                     </form>
                 </div>
                 <script>
@@ -168,7 +168,7 @@
                             $('#fav').click(function () {
                                 $.post({% url 'user_collect' %}, {'fav': 0, 'id': id},
                                     function (data) {
-                                        alert(data.message)
+                                        alert(data.message);
                                         window.location.reload();
                                     }
                                 )
@@ -217,14 +217,33 @@
                 <!--信息展示-->
                 <div class="mainListRight" id="status1">
                     <ul class="fixed_bar">
-                        <li class="status_on active"><a href="#status1">产品介绍</a></li>
-                        <li class="status_on"><a href="#status2">商品评价<span>(0)</span></a></li>
-                        <li class="status_on"><a href="#shbz">售后服务</a></li>
-                        <div class="statusBtn" style="display: none;"><a href="javascript:addToCart_bak(77)"
-                                                                         class="statusBtn1" title="加入购物车"></a></div>
+                        <li class="status_on active" id="tag_detail"><a>产品介绍</a></li>
+                        <li class="status_on" id="tag_comment"><a>商品评价<span>(0)</span></a></li>
                     </ul>
+                </div>
+                <div class="tab_detail">
+
+                        <h1 style="color: #E70012">商品详情：</h1>
+                        <h2 style="text-indent: 39px;font-family: 楷体">{{ sku.describe|safe }} </h2>
 
                 </div>
+                <div class="tab_comment" style="display: none">
+                    <p>我是评论区</p>
+                </div>
+                <script>
+                    $('#tag_detail').click(function () {
+                        $(this).removeClass().addClass('status_on active')
+                        $('#tag_comment').removeClass().addClass('status_on')
+                        $('.tab_comment').css({"display": "none"})
+                        $('.tab_detail').css({"display": "block"})
+                    })
+                    $('#tag_comment').click(function () {
+                        $(this).removeClass().addClass('status_on active')
+                        $('#tag_detail').removeClass().addClass('status_on')
+                        $('.tab_detail').css({"display": "none"})
+                        $('.tab_comment').css({"display": "block"})
+                    })
+                </script>
             </div>
         </div>
     </div>

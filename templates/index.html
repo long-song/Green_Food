@@ -41,18 +41,7 @@
                     {% endif %}
                     <li class="hd_menu_tit"><em class="Collect_img"></em><a href="{% url 'user_collect' %}">收藏夹</a></li>
                     <li class="hd_menu_tit"><em class="cart_img"></em><a href="{% url 'shopping_cart' %}">购物车</a></li>
-                    <li class="hd_menu_tit list_name" data-addclass="hd_menu_hover"><a href="#">网站导航</a><em
-                            class="navigation_img"></em>
-
-                        <div class="hd_menu_list">
-                            <span class="wire"></span>
-                            <ul>
-                                <li><a href="#">常见问题</a></li>
-                                <li><a href="#">在线退换货</a></li>
-                                <li><a href="#">在线投诉</a></li>
-                                <li><a href="#">配送范围</a></li>
-                            </ul>
-                        </div>
+                    <li class="hd_menu_tit"><a href="{% url 'user' 1 %}">我的订单</a>
                     </li>
                 </ul>
             </div>
@@ -60,7 +49,7 @@
                 <ul class="Navigation_name">
                     <li {% if index %} class="on" {% endif %}><a href="{% url 'index' %}">首页</a></li>
                     <li {% if integral %} class="on" {% endif %}><a href="{% url 'integral' %}?page=1">所有果蔬</a></li>
-                    <li {% if group_buy %} class="on" {% endif %}><a href="{% url 'group_buy' %}">活动专区</a></li>
+{#                    <li {% if group_buy %} class="on" {% endif %}><a href="{% url 'group_buy' %}">活动专区</a></li>#}
                     <li {% if products %} class="on" {% endif %}><a href="{% url 'products' %}?page=1">水果馆</a></li>
                     <li {% if products_list %} class="on" {% endif %}><a href="{% url 'products_list' %}?page=1">蔬菜馆</a>
                     </li>
@@ -68,7 +57,7 @@
                     <li class=""><a href="#">联系我们</a></li>
                 </ul>
             </div>
-            {#            <script>$("#Navigation").slide({titCell: ".Navigation_name li"});</script>#}
+
         </div>
     </div>
     <em class="right_img"></em>
@@ -268,7 +257,7 @@
                 </div>
             </div>
         </div>
-        <div class=" Copyright ">
+        <div class=" Copyright " style="margin-left:526px;text-align:left">
             @2019 四川浦江特色馆版权所有
         </div>
     </div>

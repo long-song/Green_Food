@@ -13,7 +13,7 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),  # 访问注销路由
     path('captcha/', include('captcha.urls')),  # 访问验证码路由
 
-    path('user/', views.user, name='user'),  # 访问我的订单路由
+    path('user/<int:page>', views.user, name='user'),  # 访问我的订单路由
 
     path('user_info/', views.user_info, name='user_info'),  # 访问个人信息路由
     path('user_info_set/', views.user_info_set, name='user_info_set'),  # 访问个人信息修改路由

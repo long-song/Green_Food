@@ -25,69 +25,70 @@
 
     <div id="Orders" class="Inside_pages  clearfix">
         <div class="Orders_style clearfix">
-            <div class="address clearfix">
-                <div class="title">收货人信息</div>
-                <div class="adderss_list clearfix">
-                    <div class="title_name">选择收货地址
-                        <a href="{% url 'user_address' %}">管理地址</a>
-                        <a href="{% url 'user_address_add' %}">+添加地址</a>
+            <form class="form" method="post" action="{% url 'Orders' %}">
+                <div class="address clearfix">
+                    <div class="title">收货人信息</div>
+                    <div class="adderss_list clearfix">
+                        <div class="title_name">选择收货地址
+                            <a href="{% url 'user_address' %}">管理地址</a>
+                            <a href="{% url 'user_address_add' %}">+添加地址</a>
+                        </div>
+                        <!--收货地址样式-->
+                        <div class="Shipping_address">
+                            {% for adr in uadress %}
+                                <ul class="detailed">
+                                    <li style="width: 4%">
+                                        <input type="radio" name="adress" value="{{ adr.id }}"
+                                               style="margin: 15px 17px"
+                                               {% if adr.is_default %}checked{% endif %}/>
+                                    </li>
+                                    <li style="width: 24%"><label>收件人</label><input type="text" value="{{ adr.aname }}"
+                                                                                    readonly="readonly"
+                                                                                    style="width: 201px;height: 34px;text-align: center">
+                                    </li>
+                                    <li style="width: 30%"><label>详细地址</label><input type="text"
+                                                                                     value="{{ adr.area }}{{ adr.ads }}"
+                                                                                     readonly="readonly"
+                                                                                     style="width: 274px;height: 34px;text-align: center">
+                                    </li>
+                                    <li style="width: 18%"><label>邮政编码</label><input type="text"
+                                                                                     value="{{ adr.postcode }}"
+                                                                                     readonly="readonly"
+                                                                                     style="width: 127px;height: 34px;text-align: center">
+                                    </li>
+                                    <li style="width: 24%"><label>电话</label><input type="text" value="{{ adr.aphone }}"
+                                                                                   readonly="readonly"
+                                                                                   style="width: 201px;height: 34px;text-align: center">
+                                    </li>
+                                    {#                        <li><label>固定电话</label><span></span></li>#}
+                                </ul>
+                            {% endfor %}
+                        </div>
                     </div>
-                    <!--收货地址样式-->
-                    <div class="Shipping_address">
-                        {% for adr in uadress %}
-                            <ul class="detailed">
-                                <li style="width: 4%">
-                                    <input type="radio" id="address" name="check" style="margin: 15px 17px"
-                                           {% if adr.is_default %}checked{% endif %}>
-                                </li>
-                                <li style="width: 24%"><label>收件人</label><input type="text" value="{{ adr.aname }}"
-                                                                                readonly="readonly"
-                                                                                style="width: 201px;height: 34px;text-align: center">
-                                </li>
-                                <li style="width: 30%"><label>详细地址</label><input type="text"
-                                                                                 value="{{ adr.area }}{{ adr.ads }}"
-                                                                                 readonly="readonly"
-                                                                                 style="width: 274px;height: 34px;text-align: center">
-                                </li>
-                                <li style="width: 18%"><label>邮政编码</label><input type="text" value="{{ adr.postcode }}"
-                                                                                 readonly="readonly"
-                                                                                 style="width: 127px;height: 34px;text-align: center">
-                                </li>
-                                <li style="width: 24%"><label>电话</label><input type="text" value="{{ adr.aphone }}"
-                                                                               readonly="readonly"
-                                                                               style="width: 201px;height: 34px;text-align: center">
-                                </li>
-                                {#                        <li><label>固定电话</label><span></span></li>#}
-                            </ul>
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <form class="form" method="post" action="{% url 'user' %}">
                     <fieldset>
                         <!--付款方式-->
                         <div class="payment">
                             <div class="title_name">支付方式</div>
                             <ul>
-                                <li><input type="radio" name="radio" class="labelauty" id="labelauty-1"
+                                <li><input type="radio" name="pay_method" value="1" class="labelauty" id="labelauty-1"
                                            style="display: none;"><label for="labelauty-1"><span
                                         class="labelauty-unchecked-image"></span><span
-                                        class="labelauty-unchecked">现金支付</span><span
+                                        class="labelauty-unchecked">货到付款</span><span
                                         class="labelauty-checked-image"></span><span
-                                        class="labelauty-checked">现金支付</span></label></li>
-                                <li><input type="radio" name="radio" class="labelauty" id="labelauty-2"
+                                        class="labelauty-checked">货到付款</span></label></li>
+                                <li><input type="radio" name="pay_method" value="2" class="labelauty" id="labelauty-2"
                                            style="display: none;"><label for="labelauty-2"><span
                                         class="labelauty-unchecked-image"></span><span
                                         class="labelauty-unchecked">微信支付</span><span
                                         class="labelauty-checked-image"></span><span
                                         class="labelauty-checked">微信支付</span></label></li>
-                                <li><input type="radio" name="radio" class="labelauty" id="labelauty-3"
+                                <li><input type="radio" checked name="pay_method" value="3" class="labelauty" id="labelauty-3"
                                            style="display: none;"><label for="labelauty-3"><span
                                         class="labelauty-unchecked-image"></span><span
                                         class="labelauty-unchecked">支付宝支付</span><span
                                         class="labelauty-checked-image"></span><span
                                         class="labelauty-checked">支付宝支付</span></label></li>
-                                <li><input type="radio" name="radio" class="labelauty" id="labelauty-4"
+                                <li><input type="radio" name="pay_method" value="4" class="labelauty" id="labelauty-4"
                                            style="display: none;"><label for="labelauty-4"><span
                                         class="labelauty-unchecked-image"></span><span
                                         class="labelauty-unchecked">银联支付</span><span
@@ -114,6 +115,7 @@
                                     {% for order in skus %}
                                         <tr>
                                             <td class="Product_info">
+                                                <input type="hidden" value="{{ order.pros.id }}" name="ids">
                                                 <a href="{% url 'product_detailed' %}?id={{ order.pros.id }}"><img
                                                         src="{% static order.pros.image.url %}" width="100px"
                                                         height="100px"/></a>
@@ -123,12 +125,18 @@
                                             <td class="price"><i>￥</i><em>{{ order.pros.price }}</em></td>
                                             <td>
                                                 <div class="Numbers">
-                                                    <em>{{ order.ccount }}</em>
+                                                    <em>
+                                                        <input type="hidden" value="{{ order.count }}"
+                                                               name="count">
+                                                        {{ order.count }}
+                                                    </em>
                                                 </div>
                                             </td>
                                             <td class="Moneys">
                                                 <div class="total" style="font-size: 20px"><i>￥</i><em
-                                                        style="color: #fd2a32">{{ order.cprice }}</em>元
+                                                        style="color: #fd2a32">
+                                                    <input type="hidden" name="amount" value="{{ order.amount }}">
+                                                    {{ order.amount }}</em>元
                                                 </div>
                                             </td>
                                         </tr>
@@ -137,6 +145,7 @@
                                 {% if uid %}
                                     <tr>
                                         <td class="Product_info">
+                                            <input type="hidden" value="{{ order.id }}" name="ids">
                                             <a href="{% url 'product_detailed' %}?id={{ order.id }}"><img
                                                     src="{% static order.image.url %}" width="100px"
                                                     height="100px"/></a>
@@ -146,12 +155,18 @@
                                         <td class="price"><i>￥</i><em>{{ order.price }}</em></td>
                                         <td>
                                             <div class="Numbers">
-                                                <em>{{ total_count }}</em>
+                                                <em>
+                                                    <input type="hidden" value="{{ total_count }}"
+                                                           name="count">
+                                                    {{ total_count }}
+                                                </em>
                                             </div>
                                         </td>
                                         <td class="Moneys">
                                             <div class="total" style="font-size: 20px"><i>￥</i><em
-                                                    style="color: #fd2a32">{{ total_price }}</em>元
+                                                    style="color: #fd2a32">
+                                                <input type="hidden" name="amount" value="{{ total_price }}">
+                                                {{ total_price }}</em>元
                                             </div>
                                         </td>
                                     </tr>
@@ -160,7 +175,7 @@
                             </table>
                             <div class="Pay_info">
                                 <label>订单留言</label>
-                                <input name="" type="text" onkeyup="checkLength(this);"
+                                <input name="comment" type="text" onkeyup="checkLength(this);"
                                        class="text_name "/> <span class="wordage">剩余字数：<span id="sy"
                                                                                              style="color:Red;">50</span></span>
                             </div>
@@ -171,17 +186,31 @@
                                         <li><label>商品总价</label><span><div class="total" style="font-size: 20px"><i>￥</i><em
                                                 style="color: #fd2a32">{{ total_price }}</em>元
                                     </div></span></li>
-                                        <li><label>配&nbsp;&nbsp;送&nbsp;&nbsp;费</label><i>￥</i><span>{{ transit_price }}</span></li>
+                                        <li>
+                                            <label>配&nbsp;&nbsp;送&nbsp;&nbsp;费</label><i>￥</i><span>{{ transit_price }}</span>
+                                        </li>
                                         <li class="shiji_price"><label>实&nbsp;&nbsp;付&nbsp;&nbsp;款</label><span><div
                                                 class="total" style="font-size: 20px"><i>￥</i><em
                                                 style="color: #fd2a32">{{ total_pay }}</em>元
                                     </div></span>
                                         </li>
                                         <li>
-                                            <div class="btn" style="margin: 10px 71px">
-                                                <input name="submit" type="submit" value="提交订单" class="submit_btn"/>
-                                            </div>
+                                            {% if uid %}
+                                                <div class="btn" style="margin: 10px 71px">
+                                                    <input type="text" value="提交订单"
+                                                           sku_ids="{{ order.id }}" count="{{ total_count }}"
+                                                           amount="{{ total_price }}" class="submit_btn"
+                                                           style="text-align: center"/>
+                                                </div>
+                                            {% endif %}
                                             {% if cart %}
+                                                <div class="btn" style="margin: 10px 71px">
+                                                    <input type="text" value="提交订单"
+                                                           sku_ids="{{ sku_ids }}" count="{{ count_list }}"
+                                                           amount="{{ amount }}" cart_ids="{{ cart_ids }}" class="submit_btn_cart"
+                                                           style="text-align: center"/>
+                                                </div>
+
                                                 <div class="btn" style="margin: 10px 71px">
                                                     <a href="{% url 'shopping_cart' %}"><input name="" type="button"
                                                                                                value="返回购物车"
@@ -190,13 +219,12 @@
                                             {% endif %}
                                         </li>
                                     </ul>
-
                                 </div>
                             </div>
                         </div>
                     </fieldset>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
         <script type="text/javascript">
             function checkLength(which) {
@@ -213,7 +241,65 @@
                 }
             }
         </script>
+        <script type="text/javascript">
+            $('.submit_btn').click(function () {
+                // 获取用户选择的地址id, 支付方式, 要购买的商品id字符串
+                adress = $('input[name="adress"]:checked').val()
+                pay_method = $('input[name="pay_method"]:checked').val()
+                sku_ids = $(this).attr('sku_ids')
+                count = $(this).attr('count')
+                amount = $(this).attr('amount')
+                csrf = $('input[name="csrfmiddlewaretoken"]').val()
+                alert(adress + ":" + pay_method + ':' + sku_ids + ':' + count + ':' + amount)
+                // 组织参数
+                params = {
+                    'adress': adress, 'pay_method': pay_method, 'sku_ids': sku_ids, 'count': count, 'amount': amount,
+                    'csrfmiddlewaretoken': csrf
+                }
+                {#// 发起ajax post请求，访问/order/commit, 传递的参数: addr_id pay_method, sku_ids#}
+                $.post('{% url 'Orders_one' %}', params, function (data) {
+                    if (data.res == 5) {
+                        alert(data.message)
+                        // 创建成功
+                        window.location.href = '{% url 'user' 1 %}';
+                    } else {
+                        alert(data.errmsg)
+                    }
+                })
 
+
+            });
+        </script>
+        <script type="text/javascript">
+            $('.submit_btn_cart').click(function () {
+                // 获取用户选择的地址id, 支付方式, 要购买的商品id字符串
+                adress = $('input[name="adress"]:checked').val()
+                pay_method = $('input[name="pay_method"]:checked').val()
+                sku_ids = $(this).attr('sku_ids')
+                count = $(this).attr('count')
+                amount = $(this).attr('amount')
+                cart_ids = $(this).attr('cart_ids')
+                csrf = $('input[name="csrfmiddlewaretoken"]').val()
+                // alert(adress + ":" + pay_method + ':' + sku_ids + ':' + count + ':' + amount+ ':' + cart_ids)
+                // 组织参数
+                params = {
+                    'adress': adress, 'pay_method': pay_method, 'sku_ids': sku_ids, 'count': count, 'amount': amount,
+                    'csrfmiddlewaretoken': csrf
+                }
+                // 发起ajax post请求，访问/order/commit, 传递的参数: addr_id pay_method, sku_ids
+                $.post('{% url 'Orders' %}', params, function (data) {
+                    if (data.res == 5) {
+                        alert(data.message)
+                        // 创建成功
+                        window.location.href = '{% url 'user' 1 %}';
+                    } else {
+                        alert(data.errmsg)
+                    }
+                })
+
+
+            });
+        </script>
     </div>
 {% endblock %}
 

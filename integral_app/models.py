@@ -24,15 +24,15 @@ class Pro_sku(models.Model):
     '''
     image = models.ImageField(upload_to='static/images', default='images/product_AD_07.png', null=True,
                               verbose_name='商品图片')
-    name = models.CharField(max_length=20, verbose_name='商品名(规格)')
+    name = models.CharField(max_length=50, verbose_name='商品名(规格)', null=True)
     describe = models.CharField(max_length=600, verbose_name='产品介绍', null=True)
     size = models.CharField(max_length=10, default='500g', verbose_name='产品规格')
-    title = models.CharField(max_length=20, verbose_name='标签')
+    title = models.CharField(max_length=30, verbose_name='标签')
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='本店价')
     cost_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='市场价')
     stock = models.IntegerField(default=0, verbose_name='库存')
     sales = models.IntegerField(default=0, verbose_name='销量')
-    type = models.ForeignKey(Pro_Type, on_delete=models.CASCADE)
+    type = models.ForeignKey('Pro_Type', on_delete=models.CASCADE)
     comments = models.IntegerField(default=0, verbose_name='评价数')
     is_index = models.BooleanField(default=False, verbose_name='是否促销首页')
     is_putaway = models.BooleanField(default=True, verbose_name='是否上架销售')
@@ -45,6 +45,7 @@ class Pro_sku(models.Model):
     def __str__(self):
         return '%s: %s' % (self.id, self.name)
 
+
 # 收藏表
 class Collect(models.Model):
     pro_sku = models.ForeignKey(Pro_sku, on_delete=models.CASCADE, null=True)
@@ -53,6 +54,10 @@ class Collect(models.Model):
     class Meta:
         verbose_name = '收藏管理'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return "'%s' 由用户 '%s' 收藏"%(self.pro_sku.name,self.user.username)
+
 
 # 商品评论表
 # dis_pro : 评论的目标商品
@@ -87,8 +92,8 @@ class Group_buy(models.Model):
     商品团购表
     '''
     group_pro = models.ForeignKey(Pro_sku, on_delete=models.CASCADE)
-    stime = models.DateTimeField(default='2019-7-20 15:30:30')
-    ltime = models.DateTimeField(default='2019-7-30 15:30:30')
+    stime = models.DateTimeField(default='2019-9-8 15:30:30')
+    ltime = models.DateTimeField(default='2019-10-10 15:30:30')
 
     class Meta:
         db_table = 'group_buy'

@@ -85,7 +85,7 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'green_food',  # 数据库名
+        'NAME': 'green_food_new',  # 数据库名
         'USER': 'root',  # 用户名
         'PASSWORD': 'root',  # 密码
         'HOST': '172.16.43.160',  # 主机名

@@ -39,7 +39,7 @@
                         }
                     </style>
 
-                    <li {% if order %}class="active"{% endif %}><a href="{% url 'user' %}"><em></em><span {% if order %}class="active0"{% endif %}>我的订单</span></a></li>
+                    <li {% if order %}class="active"{% endif %}><a href="{% url 'user' 1 %}"><em></em><span {% if order %}class="active0"{% endif %}>我的订单</span></a></li>
                     <li {% if user_info %}class="active"{% endif %}><a href="{% url 'user_info' %}"><em></em><span {% if user_info %}class="active0"{% endif %}>个人信息</span></a></li>
                     <li {% if user_password %}class="active"{% endif %}><a href="{% url 'user_password' %}"><em></em><span {% if user_password %}class="active0"{% endif %}>修改密码</span></a></li>
 {#                    <li {% if user_collect %}class="active"{% endif %}><a href="{% url 'user_collect' %}"><em></em><span {% if user_collect %}class="active0"{% endif %}>我的评论</span></a></li>#}

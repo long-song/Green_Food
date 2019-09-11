@@ -58,8 +58,9 @@
                                         href="{% url "product_detailed" %}?id={{ foo.id }}">{{ foo.name }}</a></p>
                                 <p class="title_Profile" style="color: rosybrown">{{ foo.title|mod_val }}</p>
                                 <p class="price"><b>￥</b>{{ foo.price }}</p>
-                                <a href="{% url "product_detailed" %}?id={{ foo.id }}" class="buy_btn"></a>
-                                <a class="Join_btn"></a>
+                                <p class="btn_style"><a href="{% url "product_detailed" %}?id={{ foo.id }}"
+                                                        class="buy_btn"></a><a
+                                        href="{% url "product_detailed" %}?id={{ foo.id }}" class="Join_btn"></a></p>
                             </div>
                         </li>
                     {% endfor %}
