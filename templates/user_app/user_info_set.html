@@ -66,9 +66,7 @@
                               enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="row">
-                                <div class="text-right"><span>用户名:<input type="text"
-                                                                         value="{{ user.username }}"
-                                                                         name="new_name"></span>
+                                <div class="text-right"><span>用户名:{{ user.username }}</span>
                                 </div>
                             </div>
                             <div class="row">

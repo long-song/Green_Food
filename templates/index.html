@@ -183,8 +183,8 @@
             <div class="title_style">
                 <div class="title_img"></div>
                 <div class="title_link_name">
-                    {% for skus1 in skuss %}
-                        <a href="{% url 'product_detailed' %}?id={{ skus1.id }}">{{ skus1.name }}</a>
+                    {% for sku in skus %}
+                        <a href="{% url 'product_detailed' %}?id={{ sku.id }}">{{ sku.name }}</a>
                     {% endfor %}
                 </div>
             </div>
@@ -194,15 +194,15 @@
                 <div class="title_img"></div>
                 <div class="hero-wrap">
                     <ul class="heros clearfix">
-                        {% for skus1 in skuss %}
+                        {% for sku in skus %}
                             <li class="hero">
-                                <a href="{% url 'product_detailed' %}?id={{ skus1.id }}" target="_blank" title="第{{ forloop }}张图的说明">
-                                    <img src="{% static skus1.image.url %}" class="thumb" alt="{{ skus1.name }}"/>
+                                <a href="{% url 'product_detailed' %}?id={{ sku.id }}" target="_blank" title="第{{ forloop }}张图的说明">
+                                    <img src="{% static sku.image.url %}" class="thumb" alt="{{ sku.name }}"/>
                                 </a>
                                 <div class="p_title_name">
                                     <div class="p_recommend_info">
-                                        <h3>{{ skus1.name }}</h3>
-                                        <p>新鲜包邮价：￥<b class="p_recommend_price">{{ skus1.price }}</b>元</p>
+                                        <h3>{{ sku.name }}</h3>
+                                        <p>新鲜包邮价：￥<b class="p_recommend_price">{{ sku.price }}</b>元</p>
                                     </div>
                                 </div>
                             </li>

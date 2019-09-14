@@ -1,0 +1,93 @@
+{% extends 'user_app/new_head.html' %}
+{% load static %}
+{% block title %}
+    用户中心
+{% endblock %}
+{% block nav %}
+    <div class="user_right">
+        <div class="Order_form">
+            <div class="user_Borders">
+                <div class="title_name">
+                    <span class="name">我的订单</span>
+                    <a href="#">更多订单&gt;&gt;</a>
+                </div>
+                <form method="post">
+                    <div class="Order_form_list">
+                        <table>
+                            <thead>
+                            <td class="list_name_title0">商品</td>
+                            <td class="list_name_title1">单价(元)</td>
+                            <td class="list_name_title2">数量</td>
+                            <td class="list_name_title4">实付款(元)</td>
+                            <td class="list_name_title5">订单状态</td>
+                            <td class="list_name_title6">操作</td>
+                            </thead>
+                            {% csrf_token %}
+                            {% for order in order_page %}
+                                <tbody>
+                                <tr>
+                                    <td colspan="6" class="Order_form_time">{{ order.pay_time }}
+                                        订单号：{{ order.order_id }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <table class="Order_product_style">
+                                            {% for order_sku in order.order_skus %}
+                                                <tr>
+                                                    <td>
+                                                        <div class="product_name clearfix">
+                                                            <a href="#"><img
+                                                                    src="{% static order_sku.pro_id.image.url %}"
+                                                                    width="80px" height="80px"/></a>
+                                                            <a href="3">{{ order_sku.pro_id.name }}</a>
+                                                            <p class="specification">{{ order_sku.pro_id.size }}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{ order_sku.pro_id.price }}</td>
+                                                    <td>{{ order_sku.count }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </table>
+                                    </td>
+                                    <td class="split_line">{{ order.actual_payment }}</td>
+                                    <td class="split_line">{{ order.status_name }}</td>
+                                    <td class="split_line">
+                                        <button order_id="{{ order.order_id }}"
+                                                status="{{ order.order_status }}" class="oper_btn">去付款
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <div class="site_con">
+                                    <input type="hidden" name="sku_{{ forloop.counter }}"
+                                           value="{{ order_sku.sku.id }}">
+                                    <div class="form_group form_group2">
+                                        <label>评价内容：</label>
+                                        <textarea class="site_area" name="content_{{ forloop.counter }}"></textarea>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </table>
+                        <input type="submit" name="" value="提交" class="info_submit">
+                    </div>
+                </form>
+            </div>
+            <div class="pagenation">
+                {% if order_page.has_previous %}
+                    <a href="{% url 'user' order_page.previous_page_number %}">&lt;上一页</a>
+                {% endif %}
+
+                {% for pindex in pages %}
+                    {% if pindex == order_page.number %}
+                        <a class="active">{{ pindex }}</a>
+                    {% else %}
+                        <a href="{% url 'user' pindex %}">{{ pindex }}</a>
+                    {% endif %}
+                {% endfor %}
+                {% if order_page.has_next %}
+                    <a href="{% url 'user' order_page.next_page_number %}">下一页&gt;</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

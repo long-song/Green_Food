@@ -22,12 +22,9 @@ def index(request):
     :return:
     '''
     skus = Pro_sku.objects.filter(is_index=True)
-    skuss = Pro_sku.objects.filter(id__gt=49)
-    print(skuss)
     context = {
         'index': 'index',
         'skus': skus,
-        'skuss': skuss,
     }
     return render(request, 'index.html', context)
 
@@ -244,8 +241,9 @@ def logout(request):
 # 导入分页
 from common.data_page import *
 
+
 @login_required
-def user(request,page):
+def user(request, page):
     '''
     访问我的订单
     :param request:
@@ -257,7 +255,7 @@ def user(request,page):
     order = 'order'
     if request.method == 'GET':
         # 获取用户的订单信息
-        orders = User_order.objects.filter(user=user).order_by("-pay_time")
+        orders = User_order.objects.filter(user=user).order_by("-pay_time", 'order_status')
 
         for order in orders:
             # 根据订单id查询订单商品信息
@@ -270,12 +268,12 @@ def user(request,page):
             actual_payment = order.total_price + order.transit_price
             order.actual_payment = actual_payment
         # 分页
-        order_page, pages = pagination(orders,3,page,2)
+        order_page, pages = pagination(orders, 3, page, 2)
 
         # 组织上下文
         context = {
-            'user':user,
-            'page1': 'order',
+            'user': user,
+            'user_order': 'order',
             "order_page": order_page,
             'pages': pages
         }
@@ -341,7 +339,7 @@ def user_collect(request):
         a = request.session['user_id']
         user = UserInfo.objects.get(id=a)
         collect = Collect.objects.filter(user=a)
-        print('user', user, 'collect', collect)
+        # print('user', user, 'collect', collect)
         return render(request, 'user_app/user_Collect.html', {'user': user, 'collect': collect})
     if request.method == 'POST':
         if request.session.has_key('is_login'):
@@ -351,7 +349,7 @@ def user_collect(request):
         pro_id = request.POST.get("id")
         fav = request.POST.get("fav")
         pro_id = Pro_sku.objects.get(id=int(pro_id))
-        print('pro_id', pro_id, type(pro_id), 'fav', fav)
+        # print('pro_id', pro_id, type(pro_id), 'fav', fav)
         if pro_id != None:
             if fav == "0":
                 # pro = Pro_sku.objects.get(id=pro_id)
@@ -610,7 +608,6 @@ def user_info_set(request):
         # 1.接收客户端发送的信息
         a = request.session['user_id']
         user = UserInfo.objects.get(id=a)
-        new_username = request.POST.get('new_name')
         new_t_name = request.POST.get('new_t_name')
         new_gender = request.POST.get('1')
         new_email = request.POST.get('new_email')
@@ -618,16 +615,15 @@ def user_info_set(request):
         new_phone = request.POST.get('new_phone')
 
         # 2.检验数据
-        if not all([new_username, new_t_name, new_gender, new_email, new_birthday, new_phone]):
+        if not all([new_t_name, new_gender, new_email, new_birthday, new_phone]):
             return render(request, 'user_app/user_info_set.html', {'user': user, 'res': 0, 'errmsg': '请务必填写正确信息！'})
         phone_n = phone_num(new_phone)
         if phone_n == '请输入正确的手机号':
             return render(request, 'user_app/user_info_set.html', {'user': user, 'res': 1, 'errmsg': '手机号输入不正确'})
 
-        print(new_gender, new_username, new_birthday, new_email, new_phone, new_t_name)
+        print(new_gender, new_birthday, new_email, new_phone, new_t_name)
         a = request.session['user_id']
         user = UserInfo.objects.get(id=a)
-        user.username = new_username
         user.t_name = new_t_name
         user.phone = new_phone
         user.gender = new_gender

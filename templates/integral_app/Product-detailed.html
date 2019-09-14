@@ -9,6 +9,316 @@
 {% endblock %}
 {% block new_body %}
     <script src="http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=402727"></script>
+    <style>
+        .m-quk-1 {
+            margin-bottom: 15px;
+        }
+
+        .m-quk {
+            margin-left: 60px;
+            border: 1px solid #d9d9d9;
+            border-radius: 2px;
+        }
+
+        .m-quk .iner {
+            padding: 28px;
+            background: #f8f8f8;
+            border: 1px solid #fcfcfc;
+            border-radius: 2px;
+            display: none;
+        }
+
+        .m-quk-1 .corr {
+            right: 5px;
+        }
+
+        .m-quk .corr {
+            position: absolute;
+            top: -8px;
+            right: 23px;
+        }
+
+        .u-arr-1 {
+            width: 14px;
+        }
+
+        .u-arr {
+            width: 13px;
+            height: 14px;
+            overflow: hidden;
+        }
+
+        div.holder-parent {
+            position: relative;
+            zoom: 1;
+        }
+
+        .u-txtwrap {
+            padding-right: 14px;
+        }
+
+        .m-cmmtipt-1 .area {
+            height: 20px;
+        }
+
+        .m-cmmtipt .area {
+            height: 50px;
+            display: block;
+        }
+
+        textarea.u-txt, div.u-txt {
+            width: 100%;
+            margin-right: -20px;
+        }
+
+        .m-cmmtipt .btns .zs {
+            float: right;
+            margin-right: 10px;
+            line-height: 25px;
+        }
+
+        .s-fc4, a.s-fc4:hover {
+            color: #999;
+        }
+
+
+        .m-cmmtipt .btns {
+            clear: both;
+            padding-top: 10px;
+        }
+
+        .m-cmmt .iptarea .m-cmmtipt {
+            margin-left: 62px;
+        }
+
+        .f-pr {
+            position: relative;
+            zoom: 1;
+        }
+
+        .m-cmmtipt .btns {
+            clear: both;
+            padding-top: 10px;
+        }
+
+        .m-cmmtipt .btns .btn {
+            float: right;
+        }
+
+        .u-btn, div.u-page a, div.u-page a.js-selected, div.u-page a.znxt.js-disabled, div.u-page a.zprv.js-disabled {
+            background: orangered;
+        }
+
+        a, a *, .f-hand, .f-hand * {
+            cursor: pointer;
+        }
+
+        a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .u-btn-1 {
+            width: 46px;
+            height: 25px;
+            background-position: -84px -64px;
+            color: #fff;
+            text-align: center;
+            line-height: 25px;
+        }
+
+        .u-btn {
+            display: inline-block;
+        }
+
+        .m-cmmtipt .area {
+            height: 50px;
+            display: block;
+        }
+
+        textarea.u-txt, div.u-txt {
+            width: 100%;
+            margin-right: -20px;
+        }
+
+        .u-txt {
+            height: 19px;
+            margin: 0;
+            padding: 5px 6px 6px;
+            border: 1px solid #cdcdcd;
+            border-radius: 2px;
+            line-height: 19px;
+        }
+
+        textarea {
+            resize: none;
+            overflow: auto;
+        }
+
+        div.holder-parent {
+            position: relative;
+            zoom: 1;
+        }
+
+        .u-txtwrap {
+            padding-right: 14px;
+        }
+
+        .m-cmmtipt .corr {
+            position: absolute;
+            top: 11px;
+            left: -7px;
+        }
+
+        .u-arr {
+            width: 13px;
+            height: 14px;
+            overflow: hidden;
+        }
+
+        .u-arr .arrline {
+            color: #cdcdcd;
+        }
+
+        .u-arr .arrline, .u-arr .arrclr, .u-arr .arriner {
+            display: block;
+            font-family: "SimSun";
+            font-size: 15px;
+            font-style: normal;
+            font-weight: normal;
+            height: 10px;
+            line-height: normal;
+        }
+
+        .u-arr .arrclr {
+            margin: -10px 0 0 1px;
+            _margin-top: -17px;
+            color: #fff;
+        }
+
+        .u-arr .arrline, .u-arr .arrclr, .u-arr .arriner {
+            display: block;
+            font-family: "SimSun";
+            font-size: 15px;
+            font-style: normal;
+            font-weight: normal;
+            height: 10px;
+            line-height: normal;
+        }
+
+        .m-cmmt .head, .m-cmmt .head img {
+            float: left;
+            width: 50px;
+            height: 50px;
+            margin-right: -100px;
+        }
+
+        img, .txt {
+            border: 0;
+        }
+
+        .m-cmmtipt .btns .zs {
+            float: right;
+            margin-right: 10px;
+            line-height: 25px;
+        }
+
+        .s-fc4, a.s-fc4:hover {
+            color: #999;
+        }
+
+        .u-hd4 {
+            position: relative;
+            top: 1px;
+            height: 20px;
+            border-bottom: 1px solid #cfcfcf;
+        }
+
+        h3, h4, h5, h6 {
+            font-size: 100%;
+        }
+
+        .m-cmmt .cmmts .itm {
+            padding: 15px 0;
+            border-top: 1px dotted #ccc;
+        }
+
+        .m-cmmt .head, .m-cmmt .head img {
+            float: left;
+            width: 50px;
+            height: 50px;
+            margin-right: -100px;
+        }
+
+        .m-cmmt .cmmts .cntwrap {
+            margin-left: 60px;
+        }
+
+        .m-cmmt .cmmts .cntwrap .f-brk, .m-cmmt .cmmts .cnt.f-brk {
+            word-break: break-word;
+        }
+
+        .m-cmmt .cmmts .cnt {
+            width: 100%;
+            overflow: hidden;
+            line-height: 20px;
+        }
+
+        .f-brk {
+            word-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
+        }
+
+        .m-cmmt .cmmts div.rp {
+            margin-top: 15px;
+            text-align: right;
+        }
+
+        .m-cmmt .cmmts .time {
+            float: left;
+            margin: 0 !important;
+        }
+
+        .s-fc4, a.s-fc4:hover {
+            color: #999;
+        }
+
+        a, a *, .f-hand, .f-hand * {
+            cursor: pointer;
+        }
+
+        a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .m-cmmt .cmmts .sep {
+            margin: 0 8px;
+            color: #ccc;
+        }
+
+        .s-fc3, a.s-fc3:hover {
+            color: #666;
+        }
+
+        a, a *, .f-hand, .f-hand * {
+            cursor: pointer;
+        }
+
+        .m-cmmt .iptarea {
+            margin-bottom: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .m-cmmt {
+            margin-top: 20px;
+        }
+    </style>
     <!--商品详细介绍-->
     <div class="Inside_pages clearfix">
         <div class="left_style" style="width:18%;">
@@ -213,24 +523,161 @@
                         $(".total>em").text(total.toFixed(2));
                     })
                 </script>
-
                 <!--信息展示-->
                 <div class="mainListRight" id="status1">
                     <ul class="fixed_bar">
                         <li class="status_on active" id="tag_detail"><a>产品介绍</a></li>
-                        <li class="status_on" id="tag_comment"><a>商品评价<span>(0)</span></a></li>
+                        <li class="status_on" id="tag_comment"><a>商品评价<span>(
+                            {% if comment_len %}
+                                {{ comment_len }}
+                            {% else %}
+                                0
+                            {% endif %})</span></a></li>
                     </ul>
                 </div>
                 <div class="tab_detail">
 
-                        <h1 style="color: #E70012">商品详情：</h1>
-                        <h2 style="text-indent: 39px;font-family: 楷体">{{ sku.describe|safe }} </h2>
+                    <h1 style="color: #E70012">商品详情：</h1>
+                    <h2 style="text-indent: 39px;font-family: 楷体">{{ sku.describe|safe }} </h2>
 
                 </div>
                 <div class="tab_comment" style="display: none">
-                    <p>我是评论区</p>
+                    <div class="m-cmmt">
+                        <div class="iptarea">
+                            <div class="head"><img
+                                    src="{% static user.head_img.url %}">
+                            </div>
+                            <div class="j-flag">
+                                <div>
+                                    <div class="m-cmmtipt f-cb f-pr">
+                                        <div class="u-txtwrap holder-parent f-pr" style="display: block;">
+                                            <textarea class="u-txt area j-flag" data-type="0" placeholder="评论"
+                                                      id="auto-id-swV51Qs5r0hlWSTX"
+                                                      onkeyup="checkLength(this);"></textarea></div>
+                                        <div class="btns f-cb f-pr">
+                                            <a class="btn u-btn u-btn-1 j-flag"
+                                               id="auto-id-xXyODgrV0sgOMmI6">评论</a><span
+                                                class="zs s-fc4 j-flag" id="sy1">140</span></div>
+                                        <div class="corr u-arr"><em class="arrline">◆</em><span class="arrclr">◆</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if sku_comment %}
+                            <div class="cmmts j-flag" id="auto-id-nTbdovg4kmT0MT9b">
+                                <h3 class="u-hd4">精彩评论</h3>
+                                {% for dis in sku_comment %}
+                                    <div id="{{ dis.id }}" class="itm" data-id="{{ dis.id }}">
+                                        <div class="head"><a><img
+                                                src="{% static dis.dis_user.head_img.url %}"></a>
+                                        </div>
+                                        <div class="cntwrap">
+                                            <div class="">
+                                                <div class="cnt f-brk"><a
+                                                        class="s-fc7">{{ dis.dis_user.username }}</a>：{{ dis.dis_content }}
+                                                </div>
+                                            </div>
+                                            <div class="rp">
+                                                <div class="time s-fc4">{{ dis.dis_time }}</div>
+                                                <a data-id="19420450" data-type="like" href="javascript:void(0)"><i
+                                                        class="zan u-icn2 u-icn2-12"></i> ({{ dis.dis_like }})</a><span
+                                                    class="sep">|</span><a
+                                                    class="s-fc3" data-id="{{ dis.id }}"
+                                                    data-type="reply">回复</a></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <div class="rept m-quk m-quk-1 f-pr">
+                                                <div class="iner" id="iner{{ dis.id }}">
+                                                    <div class="m-cmmtipt m-cmmtipt-1 f-cb f-pr">
+                                                        <div class="u-txtwrap holder-parent f-pr j-wrap"
+                                                             style="display: block;">
+                                                        <textarea class="u-txt area j-flag"
+                                                                  placeholder="回复{{ dis.dis_user.username }}:"
+                                                                  id="text{{ dis.id }}"
+                                                                  onkeyup="checkLength2(this);"
+                                                                  style="overflow: hidden;"></textarea>
+                                                        </div>
+                                                        <div class="btns f-cb f-pr">
+                                                            <a class="btn u-btn u-btn-1 j-flag"
+                                                               reply-dis='{{ dis.id }}'
+                                                               id="reply">回复</a>
+                                                            <span class="zs s-fc4 j-flag" id="sy2">130</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
+                <script type="text/javascript">
+                    function checkLength(which) {
+                        var maxChars = 140; //
+                        if (which.value.length > maxChars) {
+                            alert("您的评论的字数超多限制!");
+                            // 超过限制的字数了就将 文本框中的内容按规定的字数 截取
+                            which.value = which.value.substring(0, maxChars);
+                            return false;
+                        } else {
+                            var curr = maxChars - which.value.length; // 减去 当前输入的
+                            document.getElementById("sy1").innerHTML = curr.toString();
+                            return true;
+                        }
+                    }
+                </script>
+                <script type="text/javascript">
+                    function checkLength2(which) {
+                        var maxChars = 130; //
+                        if (which.value.length > maxChars) {
+                            alert("您的评论的字数超多限制!");
+                            // 超过限制的字数了就将 文本框中的内容按规定的字数 截取
+                            which.value = which.value.substring(0, maxChars);
+                            return false;
+                        } else {
+                            var curr = maxChars - which.value.length; // 减去 当前输入的
+                            document.getElementById("sy2").innerHTML = curr.toString();
+                            return true;
+                        }
+                    }
+                </script>
                 <script>
+                    $('#auto-id-xXyODgrV0sgOMmI6').click(function () {
+                        sku_id = '{{ sku.id }}'
+                        comment = $('#auto-id-swV51Qs5r0hlWSTX').val()
+                        // alert(comment+','+sku_id)
+                        pamars = {'sku_id': sku_id, 'comment': comment}
+                        $.post('{% url 'dis_comment' %}', pamars,
+                            function (data) {
+                                if (data.res == 3) {
+                                    alert(data.message)
+                                    window.location.reload()
+                                } else {
+                                    alert(data.errmsg)
+                                }
+                            })
+                    })
+                    $('#reply').click(function () {
+                        reply_dis = $(this).attr('reply-dis');
+                        text = 'text' + reply_dis
+                        comment = document.getElementById(text).value;
+                        // alert(reply_dis+','+comment)
+                        pamars = {'reply_dis': reply_dis, 'comment': comment}
+                        $.post('{% url 'reply_comment' %}', pamars,
+                            function (data) {
+                                if (data.res == 3) {
+                                    alert(data.message)
+                                    window.location.reload()
+                                } else {
+                                    alert(data.errmsg)
+                                }
+                            })
+                    })
                     $('#tag_detail').click(function () {
                         $(this).removeClass().addClass('status_on active')
                         $('#tag_comment').removeClass().addClass('status_on')
@@ -242,6 +689,20 @@
                         $('#tag_detail').removeClass().addClass('status_on')
                         $('.tab_detail').css({"display": "none"})
                         $('.tab_comment').css({"display": "block"})
+                    })
+                    $('.s-fc3').click(function () {
+                        data_type = $(this).attr('data-type');
+                        data_id = $(this).attr('data-id');
+                        iner = 'iner' + data_id
+                        iner1 = document.getElementById(iner);
+                        if (data_type == 'reply') {
+                            $(this).attr('data-type', 'no_reply')
+                            iner1.style.display = "block"
+                        } else {
+                            $(this).attr('data-type', 'reply')
+                            iner1.style.display = "none"
+                        }
+
                     })
                 </script>
             </div>

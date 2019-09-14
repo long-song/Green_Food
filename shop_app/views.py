@@ -273,14 +273,19 @@ def Orders(request):
         return JsonResponse({'res': 5, 'message': '创建成功'})
 
 
-# ajax post
-# 前端传递的参数:订单id(order_id)
+# 客户端的提交方式：post
 # /order/pay
-def Order_Pay(request):
-    '''订单支付'''
+# 客户端传递的参数：order_id
+def order_pay(request):
+    """订单支付"""
+
     if request.method == 'POST':
-        '''订单支付'''
-        # 用户是否登录
+        """
+        去付款
+        :param request:
+        :return:
+        """
+        # 1.判断用户是否登录
         user = request.session['user_id']
         user = UserInfo.objects.get(id=user)
         if not user:
@@ -301,14 +306,14 @@ def Order_Pay(request):
                                            order_status=1)
         except User_order.DoesNotExist:
             return JsonResponse({'res': 2, 'errmsg': '订单错误'})
-
+        print('1')
         # 业务处理:使用python sdk调用支付宝的支付接口
         # 初始化
         alipay = AliPay(
-            appid="2016090800464054",  # 应用id
+            appid="2016101000649581",  # 应用id
             app_notify_url=None,  # 默认回调url
-            app_private_key_path=os.path.join(settings.BASE_DIR, 'apps/order/app_private_key.pem'),
-            alipay_public_key_path=os.path.join(settings.BASE_DIR, 'apps/order/alipay_public_key.pem'),
+            app_private_key_path=os.path.join(settings.BASE_DIR, 'shop_app/app_private_key.pem'),
+            alipay_public_key_path=os.path.join(settings.BASE_DIR, 'shop_app/alipay_public_key.pem'),
             # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
             sign_type="RSA2",  # RSA 或者 RSA2
             debug=True  # 默认False
@@ -322,12 +327,173 @@ def Order_Pay(request):
             total_amount=str(total_pay),  # 支付总金额
             subject='浦江食品商城%s' % order_id,
             return_url=None,
-            notify_url=None  # 可选, 不填则使用默认notify url
+            notify_url=None
         )
 
         # 返回应答
         pay_url = 'https://openapi.alipaydev.com/gateway.do?' + order_string
         return JsonResponse({'res': 3, 'pay_url': pay_url})
+
+
+# ajax post
+# 前端传递的参数:订单id(order_id)
+# /order/check
+def Order_Check(request):
+    """查询交易结果"""
+
+    if request.method == 'POST':
+        """
+        查询交易结果
+        :param request:
+        :return:
+        """
+        # 1.判断用户是否登录
+        user = request.session['user_id']
+        user = UserInfo.objects.get(id=user)
+        if not user:
+            # 用户未登录
+            return JsonResponse({'res': 0, 'errmsg': '用户未登录'})
+        # 2.接收参数
+        order_id = request.POST.get('order_id')
+        # 3.校验参数
+        if not order_id:
+            return JsonResponse({'res': 1, 'errmsg': '无效的订单Id'})
+
+        try:
+            order = User_order.objects.get(order_id=order_id,
+                                           user=user,
+                                           pay_method=3,
+                                           order_status=1)
+        except User_order.DoesNotExist:
+            return JsonResponse({'res': 2, 'errmsg': '订单不存在！'})
+
+        # 4.业务处理：使用pythonsdk 调用支付宝的支付接口
+        # 初始化
+        alipay = AliPay(
+            appid="2016101000649581",  # 使用沙箱的appid
+            # appid="2016101602198783",# 使用真实环境的appid
+            app_notify_url=None,  # 默认回调url
+            app_private_key_path=os.path.join(settings.BASE_DIR, 'shop_app/app_private_key.pem'),
+            # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
+            alipay_public_key_path=os.path.join(settings.BASE_DIR, 'shop_app/alipay_public_key.pem'),
+            sign_type="RSA2",  # RSA 或者 RSA2
+            debug=True  # 默认False,当前是沙箱环境，改为True
+            # debug=False # 默认False,当前是真实环境，改为False
+        )
+
+        # 调用支付宝交易查询接口
+        while True:
+            response = alipay.api_alipay_trade_query(order_id)
+            """
+             response = {
+            "trade_no": "2017032121001004070200176844",
+            "code": "10000",
+            "invoice_amount": "20.00",
+            "open_id": "20880072506750308812798160715407",
+            "buyer_logon_id": "csq***@sandbox.com",
+            "send_pay_date": "2017-03-21 13:29:17",
+            "receipt_amount": "20.00",
+            "out_trade_no": "out_trade_no15",
+            "buyer_pay_amount": "20.00",
+            "buyer_user_id": "2088102169481075",
+            "msg": "Success",
+            "point_amount": "0.00",
+            "trade_status": "TRADE_SUCCESS",
+            "total_amount": "20.00"
+            }
+            """
+            code = response.get("code")
+            if code == "10000" and response.get("trade_status") == "TRADE_SUCCESS":
+                # 支付成功
+                # 获取支付宝交易号
+                trade_no = response.get('trade_no')
+                # 更新订单状态
+                order.trade_no = trade_no
+                order.order_status = 4  # 待评价
+                order.save()
+                # 返回结果
+                return JsonResponse({'res': 3, 'message': '支付成功'})
+            elif code == "40004" or (code == "10000" and response.get("trade_status") == "WAIT_BUYER_PAY"):
+                # 等待买家付款
+                # 40004：业务处理失败，可能一会就会成功
+                import time
+                time.sleep(5)
+                continue
+            else:
+                # 支付出错
+                print('code=', code)
+                return JsonResponse({'res': 4, 'errmsg': '支付失败'})
+
+
+# /order/comment
+@login_required
+def order_comment(request,order_id):
+    """评论视图"""
+
+    if request.method == 'GET':
+        """
+        显示评论页面
+        :param request:
+        :return:
+        """
+        # 校验数据
+        user = request.session['user_id']
+        user = UserInfo.objects.get(id=user)
+        if not order_id:
+            return redirect(reverse('user'))
+
+        try:
+            order = User_order.objects.get(order_id=order_id, user=user)
+        except User_order.DoesNotExist:
+            return redirect(reverse('user'))
+
+        # 根据订单的状态获取订单的状态标题
+        order.status_name = User_order.ORDER_STATUS[order.order_status]
+        # 获取订单商品信息
+        order_skus = Order.objects.filter(order_id=order_id)
+        order.order_skus = order_skus
+
+        # 使用模板
+        return render(request, "user_app/order_comment.html", {"order": order})
+
+    if request.method == 'POST':
+        """
+        提交用户评论的内容
+        :param request:
+        :return:
+        """
+        user = request.user
+        # 校验数据
+        if not order_id:
+            return redirect(reverse('user:order'))
+
+        try:
+            order = User_order.objects.get(order_id=order_id, user=user)
+        except User_order.DoesNotExist:
+            return redirect(reverse("user:order"))
+
+        # 获取评论条数
+        total_count = request.POST.get("total_count")
+        total_count = int(total_count)
+
+        # 循环获取订单中商品的评论内容
+        for i in range(1, total_count + 1):
+            # 获取评论的商品的id
+            sku_id = request.POST.get("sku_%d" % i)  # sku_1 sku_2
+            # 获取评论的商品的内容
+            content = request.POST.get('content_%d' % i, '')  # cotent_1 content_2 content_3
+            try:
+                order_goods = User_order.objects.get(order=order, sku_id=sku_id)
+            except User_order.DoesNotExist:
+                continue
+
+            order_goods.comment = content
+            order_goods.save()
+
+        order.order_status = 5  # 已完成
+        order.save()
+
+        return redirect(reverse("user", kwargs={"page": 1}))
 
 
 @login_required

@@ -1,7 +1,8 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from shop_app.models import *
 from common.data_page import pagination
-from integral_app.models import Collect, Group_buy
+from integral_app.models import Collect, Group_buy, Pro_discass,Reply_dis
 import random
 
 # 在发送ajax的post请求时解决跨网站请求
@@ -86,16 +87,30 @@ def product_detailed(request):
     :return:
     '''
     if request.method == 'GET':
+        # 获取信息
+        user = request.session['user_id']
+        user = UserInfo.objects.get(id=user)
+        # 获取销量排行
         sales = Pro_sku.objects.all().order_by('-sales')
+        # 获取产品
         sku_id = request.GET.get("id")
         sku = Pro_sku.objects.get(id=sku_id)
-        collect = Collect.objects.filter(pro_sku=sku_id)
+        # 查看是否收藏
+        collect = Collect.objects.filter(user=user, pro_sku=sku_id)
+        # 获取评论
+        sku_comment = Pro_discass.objects.filter(dis_pro=sku).order_by('-dis_like')
+        context = {'sales': sales[:5],
+                   'sku': sku,
+                   'p_id': sku_id,
+                   'user': user}
+        # 如果有收藏则添加fav参数
         if collect:
-            return render(request, 'integral_app/Product-detailed.html',
-                          {'sales': sales[:5], 'sku': sku, 'p_id': sku_id, 'fav': 'fav'})
-        else:
-            return render(request, 'integral_app/Product-detailed.html',
-                          {'sales': sales[:5], 'sku': sku, 'p_id': sku_id})
+            context.update({'fav': 'fav'})
+        # 如果有评价则添加评价信息
+        if sku_comment:
+            context.update({'sku_comment': sku_comment[:10],'comment_len':len(sku_comment)})
+        return render(request, 'integral_app/Product-detailed.html', context)
+
     if request.method == 'POST':
         # 产品id
         sku_id = request.POST.get('sku_id')
@@ -127,3 +142,68 @@ def product_detailed(request):
             'uid': 'uid'
         }
         return render(request, 'shop_app/Orders.html', context)
+
+
+def dis_comment(request):
+    '''
+    产品评论
+    :param request:
+    :return:
+    '''
+    if request.method == 'POST':
+        # 判断用户是否登录
+        user = request.session['user_id']
+        user = UserInfo.objects.get(id=user)
+        if not user:
+            # 用户未登录
+            return JsonResponse({'res': 0, 'errmsg': '用户未登录'})
+
+        # 接收参数
+        sku_id = request.POST.get('sku_id')
+        comment = request.POST.get('comment')
+
+        # 检验数据
+        if not all([sku_id, comment]):
+            return JsonResponse({'res': 1, 'errmsg': '数据不完整'})
+
+        try:
+            sku = Pro_sku.objects.get(id=sku_id)
+        except:
+            return JsonResponse({'res': 2, 'errmsg': '产品不存在'})
+
+        # 完成核心业务：
+        Pro_discass.objects.create(dis_pro=sku, dis_user=user, dis_content=comment)
+
+        return JsonResponse({'res': 3, 'message': '评论成功'})
+
+def reply_comment(request):
+    '''
+    产品评论
+    :param request:
+    :return:
+    '''
+    if request.method == 'POST':
+        # 判断用户是否登录
+        user = request.session['user_id']
+        user = UserInfo.objects.get(id=user)
+        if not user:
+            # 用户未登录
+            return JsonResponse({'res': 0, 'errmsg': '用户未登录'})
+
+        # 接收参数
+        reply_dis = request.POST.get('reply_dis')
+        comment = request.POST.get('comment')
+
+        # 检验数据
+        if not all([reply_dis, comment]):
+            return JsonResponse({'res': 1, 'errmsg': '数据不完整'})
+
+        try:
+            reply_dis = Pro_discass.objects.get(id=reply_dis)
+        except:
+            return JsonResponse({'res': 2, 'errmsg': '此评论不存在'})
+
+        # 完成核心业务：
+        Reply_dis.objects.create(reply_dis=reply_dis,reply_content=comment,reply_user=user)
+
+        return JsonResponse({'res': 3, 'message': '回复成功'})

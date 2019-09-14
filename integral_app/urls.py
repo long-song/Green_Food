@@ -8,4 +8,7 @@ urlpatterns = [
     path('products/', views.products, name='products'),  # 访问水果馆活动页面
     path('products_list/', views.products_list, name='products_list'),  # 访问蔬菜馆页面
     path('product_detailed/', views.product_detailed, name='product_detailed'),  # 访问商品详情页面
+    path('dis_comment/', views.dis_comment, name='dis_comment'),  # 访问评论路由
+    path('reply_comment/', views.reply_comment, name='reply_comment'),  # 访问回复路由
+
 ]

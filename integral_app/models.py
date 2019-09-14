@@ -56,7 +56,7 @@ class Collect(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return "'%s' 由用户 '%s' 收藏"%(self.pro_sku.name,self.user.username)
+        return "'%s' 由用户 '%s' 收藏" % (self.pro_sku.name, self.user.username)
 
 
 # 商品评论表
@@ -64,13 +64,18 @@ class Collect(models.Model):
 # dis_content ：评论内容
 # dis_user : 评论用户
 class Pro_discass(models.Model):
-    dis_pro = models.ForeignKey(Pro_sku, on_delete=models.CASCADE)
-    dis_content = models.CharField(max_length=200, verbose_name="评论内容")
-    dis_user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+    dis_pro = models.ForeignKey(Pro_sku, on_delete=models.CASCADE,verbose_name='评论商品')
+    dis_content = models.CharField("评论内容",max_length=200)
+    dis_user = models.ForeignKey(UserInfo, on_delete=models.CASCADE,verbose_name='评论用户')
+    dis_time = models.DateField('评论日期', auto_now_add=True, null=True)
+    dis_like = models.IntegerField('获赞数', default=0)
 
     class Meta:
         verbose_name = '评论表'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return "'%s'评论了'%s'" % (self.dis_user.username, self.dis_pro.name)
 
 
 # 评论回复表
@@ -78,13 +83,18 @@ class Pro_discass(models.Model):
 # reply_content : 回复内容
 # reply_user ： 回复用户
 class Reply_dis(models.Model):
-    reply_dis = models.ForeignKey(Pro_discass, on_delete=models.CASCADE)
-    reply_content = models.CharField(max_length=200, verbose_name="回复内容")
-    reply_user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+    reply_dis = models.ForeignKey(Pro_discass, on_delete=models.CASCADE,verbose_name='回复评论')
+    reply_content = models.CharField("回复内容",max_length=200)
+    reply_user = models.ForeignKey( UserInfo, on_delete=models.CASCADE,verbose_name='回复用户')
+    reply_time = models.DateField('回复日期', auto_now_add=True, null=True)
+    reply_like = models.IntegerField('获赞数', default=0)
 
     class Meta:
         verbose_name = '回复表'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return "'%s'回复了'%s'" % (self.reply_user.username, self.reply_dis.dis_user.username)
 
 
 class Group_buy(models.Model):
