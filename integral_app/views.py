@@ -45,10 +45,8 @@ def integral(request):
     :return:
     '''
     page = int(request.GET.get('page'))
-    # print(page,type(page))
     own = Pro_sku.objects.all().exclude(is_index=True)
     data_page, pages = pagination(own, page_size=8, page=page, page_type=1)
-    print(data_page, pages)
     return render(request, 'integral_app/integral.html',
                   {'integral': 'integral', 'own': own, 'data_page': data_page, 'pages': pages})
 
@@ -61,7 +59,6 @@ def products(request):
     '''
     page = int(request.GET.get('page'))
     fruits = Pro_sku.objects.filter(type=1, is_index=False)
-    print(fruits)
     data_page, pages = pagination(fruits, page_size=8, page=page, page_type=2)
     return render(request, 'integral_app/Products.html',
                   {'products': 'products', 'fruits': fruits, 'data_page': data_page, 'pages': pages})
@@ -87,26 +84,29 @@ def product_detailed(request):
     :return:
     '''
     if request.method == 'GET':
-        # 获取信息
-        user = request.session['user_id']
-        user = UserInfo.objects.get(id=user)
         # 获取销量排行
         sales = Pro_sku.objects.all().order_by('-sales')
         # 获取产品
         sku_id = request.GET.get("id")
         sku = Pro_sku.objects.get(id=sku_id)
         # 查看是否收藏
-        collect = Collect.objects.filter(user=user, pro_sku=sku_id)
+        collect = Collect.objects.filter(pro_sku=sku_id)
         # 获取评论
         sku_comment = Pro_discass.objects.filter(dis_pro=sku).order_by('-dis_like')
         context = {'sales': sales[:5],
                    'sku': sku,
                    'p_id': sku_id,
-                   'user': user}
-        # 如果有收藏则添加fav参数
+                   }
+        # 判断用户是否登录
+        if request.session.has_key('is_login'):
+            user = request.session['user_id']
+            user = UserInfo.objects.get(id=user)
+            collect = Collect.objects.filter(user=user, pro_sku=sku_id)
+            context.update({'user': user})
+        # 判断如果有收藏则添加fav参数
         if collect:
             context.update({'fav': 'fav'})
-        # 如果有评价则添加评价信息
+        # 判断如果有评价则添加评价信息
         if sku_comment:
             context.update({'sku_comment': sku_comment[:10],'comment_len':len(sku_comment)})
         return render(request, 'integral_app/Product-detailed.html', context)
@@ -152,11 +152,12 @@ def dis_comment(request):
     '''
     if request.method == 'POST':
         # 判断用户是否登录
-        user = request.session['user_id']
-        user = UserInfo.objects.get(id=user)
-        if not user:
+        if request.session.has_key('is_login'):
+            user = request.session['user_id']
+            user = UserInfo.objects.get(id=user)
+        else:
             # 用户未登录
-            return JsonResponse({'res': 0, 'errmsg': '用户未登录'})
+            return JsonResponse({'res': 0, 'errmsg': '请先登录'})
 
         # 接收参数
         sku_id = request.POST.get('sku_id')
@@ -184,11 +185,12 @@ def reply_comment(request):
     '''
     if request.method == 'POST':
         # 判断用户是否登录
-        user = request.session['user_id']
-        user = UserInfo.objects.get(id=user)
-        if not user:
+        if request.session.has_key('is_login'):
+            user = request.session['user_id']
+            user = UserInfo.objects.get(id=user)
+        else:
             # 用户未登录
-            return JsonResponse({'res': 0, 'errmsg': '用户未登录'})
+            return JsonResponse({'res': 0, 'errmsg': '请先登录'})
 
         # 接收参数
         reply_dis = request.POST.get('reply_dis')

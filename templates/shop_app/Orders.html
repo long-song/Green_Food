@@ -197,7 +197,7 @@
                                         <li>
                                             {% if uid %}
                                                 <div class="btn" style="margin: 10px 71px">
-                                                    <input type="text" value="提交订单"
+                                                    <input type="button" value="提交订单"
                                                            sku_ids="{{ order.id }}" count="{{ total_count }}"
                                                            amount="{{ total_price }}" class="submit_btn"
                                                            style="text-align: center"/>
@@ -205,14 +205,14 @@
                                             {% endif %}
                                             {% if cart %}
                                                 <div class="btn" style="margin: 10px 71px">
-                                                    <input type="text" value="提交订单"
+                                                    <input type="button" value="提交订单"
                                                            sku_ids="{{ sku_ids }}" count="{{ count_list }}"
                                                            amount="{{ amount }}" cart_ids="{{ cart_ids }}" class="submit_btn_cart"
                                                            style="text-align: center"/>
                                                 </div>
 
                                                 <div class="btn" style="margin: 10px 71px">
-                                                    <a href="{% url 'shopping_cart' %}"><input name="" type="button"
+                                                    <a href="{% url 'shopping_cart' %}"><input type="button"
                                                                                                value="返回购物车"
                                                                                                class="return_btn"/></a>
                                                 </div>

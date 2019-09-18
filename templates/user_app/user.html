@@ -99,9 +99,10 @@
                                             <tr>
                                                 <td>
                                                     <div class="product_name clearfix">
-                                                        <a href="#"><img src="{% static order_sku.pro_id.image.url %}"
-                                                                         width="80px" height="80px"/></a>
-                                                        <a href="3">{{ order_sku.pro_id.name }}</a>
+                                                        <a href="{% url "product_detailed" %}?id={{ order_sku.pro_id.id }}"><img
+                                                                src="{% static order_sku.pro_id.image.url %}"
+                                                                width="80px" height="80px"/></a>
+                                                        <a href="{% url "product_detailed" %}?id={{ order_sku.pro_id.id }}">{{ order_sku.pro_id.name }}</a>
                                                         <p class="specification">{{ order_sku.pro_id.size }}</p>
                                                     </div>
                                                 </td>

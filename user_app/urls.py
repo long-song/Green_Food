@@ -21,6 +21,7 @@ urlpatterns = [
     path('user_password/', views.user_password, name='user_password'),  # 访问修改密码路由
 
     path('user_collect/', views.user_collect, name='user_collect'),  # 访问我的收藏路由
+    path('collect/', views.collect, name='collect'),  # 访问收藏添加/取消路由
 
     path('user_address/', views.user_address, name='user_address'),  # 访问收货地址管理路由
     path('user_address_default/<int:id>', views.user_address_default, name='user_address_default'),  # 访问收货地址管理路由

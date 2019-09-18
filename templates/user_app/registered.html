@@ -29,7 +29,8 @@
                                                                         pattern="^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$"
                                                                         placeholder="请输入您的手机号……"
                             ></li>
-                            <li><label class="name">用户名称：</label><input name="username" type="text" class="text_Add">
+                            <li><label class="name">用户名称：</label><input name="username" type="text" class="text_Add"
+                                                                         pattern="^[a-zA-Z0-9_-]{4,16}$">
                             </li>
                             <li><label class="name">设置密码：</label><input required="required" name="password1"
                                                                         type="password"
@@ -40,10 +41,10 @@
                                                                         class="text_Add"
                                                                         pattern="^(?![\d]+$)(?![a-zA-Z]+$)(?![!#$%^&*]+$)[\da-zA-Z!#$%^&*]{6,20}$"
                                                                         placeholder="请与密码保持一致"></li>
-                            <li><label class="name">邮箱：</label><input required="required" name="email" type="text"
-                                                                      class="text_Add"
-                                                                      placeholder="请输入您的邮箱……"
-                            ></li>
+{#                            <li><label class="name">邮箱：</label><input required="required" name="email" type="text"#}
+{#                                                                      class="text_Add"#}
+{#                                                                      placeholder="请输入您的邮箱……"#}
+{#                            ></li>#}
                         </ul>
                         <div class="auto-register">
                             <label class="auto-label">

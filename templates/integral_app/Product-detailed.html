@@ -284,15 +284,6 @@
             color: #999;
         }
 
-        a, a *, .f-hand, .f-hand * {
-            cursor: pointer;
-        }
-
-        a {
-            text-decoration: none;
-            color: #333;
-        }
-
         .m-cmmt .cmmts .sep {
             margin: 0 8px;
             color: #ccc;
@@ -302,17 +293,9 @@
             color: #666;
         }
 
-        a, a *, .f-hand, .f-hand * {
-            cursor: pointer;
-        }
 
         .m-cmmt .iptarea {
             margin-bottom: 20px;
-        }
-
-        a {
-            text-decoration: none;
-            color: #333;
         }
 
         .m-cmmt {
@@ -476,17 +459,25 @@
                     $(function () {
                         var id = {{ sku.id }}
                             $('#fav').click(function () {
-                                $.post({% url 'user_collect' %}, {'fav': 0, 'id': id},
-                                    function (data) {
-                                        alert(data.message);
-                                        window.location.reload();
+                                $.post({% url 'collect' %}, {'fav': 0, 'id': id}, function (data) {
+                                        if (data.res == 1) {
+                                            alert(data.errmsg)
+                                            window.location.reload();
+                                        } else {
+                                            alert(data.errmsg);
+                                        }
                                     }
                                 )
                             });
                         $('#fav1').click(function () {
-                            $.post({% url 'user_collect' %}, {'fav': 1, 'id': id},
+                            $.post({% url 'collect' %}, {'fav': 1, 'id': id},
                                 function (data) {
-                                    window.location.reload();
+                                    if (data.res == 2) {
+                                        alert(data.errmsg)
+                                        window.location.reload();
+                                    } else {
+                                        alert(data.errmsg);
+                                    }
                                 }
                             )
                         })
@@ -543,9 +534,14 @@
                 </div>
                 <div class="tab_comment" style="display: none">
                     <div class="m-cmmt">
+
                         <div class="iptarea">
-                            <div class="head"><img
-                                    src="{% static user.head_img.url %}">
+                            <div class="head">
+                                {% if request.session.is_login %}
+                                    <img src="{% static user.head_img.url %}">
+                                {% else %}
+                                    <img src="{% static 'media/static/images/product_img_17.png' %}" alt="">
+                                {% endif %}
                             </div>
                             <div class="j-flag">
                                 <div>
@@ -558,12 +554,14 @@
                                             <a class="btn u-btn u-btn-1 j-flag"
                                                id="auto-id-xXyODgrV0sgOMmI6">评论</a><span
                                                 class="zs s-fc4 j-flag" id="sy1">140</span></div>
-                                        <div class="corr u-arr"><em class="arrline">◆</em><span class="arrclr">◆</span>
+                                        <div class="corr u-arr"><em class="arrline">◆</em><span
+                                                class="arrclr">◆</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                         {% if sku_comment %}
                             <div class="cmmts j-flag" id="auto-id-nTbdovg4kmT0MT9b">
                                 <h3 class="u-hd4">精彩评论</h3>
@@ -580,8 +578,9 @@
                                             </div>
                                             <div class="rp">
                                                 <div class="time s-fc4">{{ dis.dis_time }}</div>
-                                                <a data-id="19420450" data-type="like" href="javascript:void(0)"><i
-                                                        class="zan u-icn2 u-icn2-12"></i> ({{ dis.dis_like }})</a><span
+                                                <a data-id="{{ dis.id }}2019" data-type="like"
+                                                   href="javascript:void(0)"><i
+                                                        class="zan u-icn2 u-icn2-12">❤</i> ({{ dis.dis_like }})</a><span
                                                     class="sep">|</span><a
                                                     class="s-fc3" data-id="{{ dis.id }}"
                                                     data-type="reply">回复</a></div>

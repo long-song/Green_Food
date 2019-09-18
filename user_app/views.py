@@ -130,20 +130,21 @@ def registered(request):
         password1 = queryDict.get('password1')
         password2 = queryDict.get('password2')
         phone = queryDict.get('phone')
-        email = queryDict.get('email')
+        # email = queryDict.get('email')
         confirm = queryDict.get('confirm')
         # print(locals())
         # sex = register_form.cleaned_data['sex']
         # 2.校验数据的准确性
         # A: 校验数据是否输入内容:all([]):如果列表中所有的内容都不为空则返回True,否则返回False
-        if not all([user_name, password1, password2, phone, email, confirm]):
+        # if not all([user_name, password1, password2, phone, email, confirm]):
+        if not all([user_name, password1, password2, phone, confirm]):
             return render(request, 'user_app/registered.html', {'errmsg': '请务必输入完整信息哦！'})
 
         if password1 != password2:
             return render(request, 'user_app/registered.html', {'errmsg': '密码输入不一致！'})
 
-        if not re.match('[a-z0-9][\w\.-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}', email):
-            return render(request, 'user_app/registered.html', {'errmsg': '邮箱格式非法！'})
+        # if not re.match('[a-z0-9][\w\.-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}', email):
+        #     return render(request, 'user_app/registered.html', {'errmsg': '邮箱格式非法！'})
 
         if confirm != 'on':
             return render(request, 'user_app/registered.html', {'errmsg': '请同意协议！'})
@@ -174,31 +175,31 @@ def registered(request):
 
         # 3.完成注册的核心业务功能
         # 新办法
-        user = UserInfo.objects.create(username=user_name, password=password1, email=email, phone=phone,
+        user = UserInfo.objects.create(username=user_name, password=password1, phone=phone,
                                        up_time=datetime.datetime.now())
-        user.is_active = 0
+        user.is_active = 1
         user.save()
         # print('user=', user)
 
-        # 实现对指定数据的加密
-        serializer = Serializer(settings.SECRET_KEY, 3600)
-        info = {'confirm': user.id}
-        token = serializer.dumps(info)
-        token = token.decode()  # 默认是utf-8对字节进行解码
-        # print('token=', token)
-
-        # 发送邮件，让用户激活自己的账号
-        # 发送的激活链接如：http://127.0.0.1:8000/active/用户id
-        # subject = "浦江县食品商城欢迎信息"  # 邮件标题
-        # message = "普通字符串"  # 邮件正文
-        # sender = settings.EMAIL_FROM  # 发件人
-        # receiver = [email]  # 收件人列表
-        # html_message = "<h1>%s,欢迎您成为浦江食品商城会员</h1>请点击下面的链接激活您的账户<br/><a href='http://127.0.0.1:8000/user_app/active/%s'>http://127.0.0.1:8000/user_app/active/%s</a>" % (
-        #     user_name, token, token)  # 邮件正文
-        # # 只有使用html_message传递的html字符串才会被正常解析
-        # send_mail(subject, message, sender, receiver, html_message=html_message)
-        send_register_active_mail.delay(email, user_name, token)
-        time.sleep(5)
+        # # 实现对指定数据的加密
+        # serializer = Serializer(settings.SECRET_KEY, 3600)
+        # info = {'confirm': user.id}
+        # token = serializer.dumps(info)
+        # token = token.decode()  # 默认是utf-8对字节进行解码
+        # # print('token=', token)
+        #
+        # # 发送邮件，让用户激活自己的账号
+        # # 发送的激活链接如：http://127.0.0.1:8000/active/用户id
+        # # subject = "浦江县食品商城欢迎信息"  # 邮件标题
+        # # message = "普通字符串"  # 邮件正文
+        # # sender = settings.EMAIL_FROM  # 发件人
+        # # receiver = [email]  # 收件人列表
+        # # html_message = "<h1>%s,欢迎您成为浦江食品商城会员</h1>请点击下面的链接激活您的账户<br/><a href='http://127.0.0.1:8000/user_app/active/%s'>http://127.0.0.1:8000/user_app/active/%s</a>" % (
+        # #     user_name, token, token)  # 邮件正文
+        # # # 只有使用html_message传递的html字符串才会被正常解析
+        # # send_mail(subject, message, sender, receiver, html_message=html_message)
+        # send_register_active_mail.delay(email, user_name, token)
+        # time.sleep(5)
         return redirect('index')  # 自动跳转到首页
 
 
@@ -207,7 +208,6 @@ def active(request, token):
     """
     激活视图
     """
-
     if request.method == 'GET':
         try:
             # 实例化解密对象
@@ -290,7 +290,6 @@ def user_info(request):
     '''
     a = request.session['user_id']
     user = UserInfo.objects.get(id=a)
-    # print(user.head_img)
     return render(request, 'user_app/user_info.html', {'user_info': 'user_info', 'user': user})
 
 
@@ -302,29 +301,54 @@ def user_password(request):
     :param request:
     :return:
     '''
-    a = request.session['user_id']
-    user = UserInfo.objects.get(id=a)
     if request.method == "GET":
+        a = request.session['user_id']
+        user = UserInfo.objects.get(id=a)
         return render(request, 'user_app/user_Password.html', {'user_password': 'user_password', 'user': user})
     if request.method == "POST":
+        if request.session.has_key('is_login'):
+            a = request.session['user_id']
+            user = UserInfo.objects.get(id=a)
+        else:
+            return JsonResponse({'res': 0, 'errmsg': '请先登录哦！'})
         old_pwd = request.POST.get('old_pwd')
         new_pwd = request.POST.get('new_pwd')
         new_pwd1 = request.POST.get('new_pwd1')
-        if old_pwd == user.password:
-            if new_pwd != old_pwd:
-                if new_pwd == new_pwd1:
-                    user.password = new_pwd
-                    user.save()
-                    request.session.flush()
-                    message = '您已成功修改密码，请重新登录！'
-                    return render(request, 'user_app/Login.html', {'meaasge': message})
-                else:
-                    message = '两次新密码输入不一致！'
-            else:
-                message = '新密码不能与原密码相同'
+        if not all([old_pwd,new_pwd,new_pwd1]):
+            return JsonResponse({'res': 1, 'errmsg': '请输入完整信息！'})
+        if old_pwd != user.password:
+            return JsonResponse({'res': 2, 'errmsg': '原密码输入错误！'})
+        if new_pwd == old_pwd:
+            return JsonResponse({'res': 3, 'errmsg': '新密码不能与原密码相同'})
+        if new_pwd != new_pwd1:
+            return JsonResponse({'res': 4, 'errmsg': '两次新密码输入不一致！'})
+        user.password = new_pwd
+        user.save()
+        return JsonResponse({'res': 5, 'errmsg': '您已成功修改密码！'})
+
+
+def collect(request):
+    if request.is_ajax():
+        pro_id = request.POST.get("id")
+        fav = request.POST.get("fav")
+        pro_id = Pro_sku.objects.get(id=int(pro_id))
+        if request.session.has_key('is_login'):
+            a = request.session['user_id']
         else:
-            message = '原密码输入错误！'
-        return render(request, 'user_app/user_Password.html', locals())
+            return JsonResponse({'res': 0, 'errmsg': '请先登录哦！'})
+        if pro_id != None:
+            if fav == "0":
+                collect = Collect.objects.create()
+                collect.pro_sku = pro_id
+                collect.user_id = a
+                collect.save()
+                return JsonResponse({'res': 1, 'errmsg': '收藏成功！'})
+            else:
+                collect = Collect.objects.filter(user=a, pro_sku=pro_id)
+                collect.delete()
+                return JsonResponse({'res': 2, 'errmsg': '取消收藏！'})
+        else:
+            return JsonResponse({'res': 3, 'errmsg': '没有产品可以收藏！'})
 
 
 # 我的收藏函数
@@ -341,29 +365,6 @@ def user_collect(request):
         collect = Collect.objects.filter(user=a)
         # print('user', user, 'collect', collect)
         return render(request, 'user_app/user_Collect.html', {'user': user, 'collect': collect})
-    if request.method == 'POST':
-        if request.session.has_key('is_login'):
-            a = request.session['user_id']
-        else:
-            return JsonResponse({'message': '请先登录哦！'})
-        pro_id = request.POST.get("id")
-        fav = request.POST.get("fav")
-        pro_id = Pro_sku.objects.get(id=int(pro_id))
-        # print('pro_id', pro_id, type(pro_id), 'fav', fav)
-        if pro_id != None:
-            if fav == "0":
-                # pro = Pro_sku.objects.get(id=pro_id)
-                collect = Collect.objects.create()
-                collect.pro_sku = pro_id
-                collect.user_id = a
-                collect.save()
-                return JsonResponse({'message': '收藏成功'})
-            else:
-                collect = Collect.objects.filter(user=a, pro_sku=pro_id)
-                collect.delete()
-                return JsonResponse({'message': '取消收藏'})
-        else:
-            return JsonResponse({'message': '没有产品可以收藏'})
 
 
 # 我的地址管理函数

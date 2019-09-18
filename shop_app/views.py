@@ -29,16 +29,20 @@ def Orders_one(request):
             return JsonResponse({'res': 0, 'errmsg': '用户未登录'})
 
         # 接收参数
-        adress = int(request.POST.get('adress'))
+        adress = request.POST.get('adress')
         pay_method = request.POST.get('pay_method')
         sku_ids = request.POST.get('sku_ids')  # 1,3
         count = request.POST.get('count')
         amount = request.POST.get('amount')
-        print(adress, type(adress), pay_method, type(pay_method), sku_ids, type(sku_ids), count, type(count),
-              amount, type(amount))
+        # print(adress, type(adress), pay_method, type(pay_method), sku_ids, type(sku_ids), count, type(count),
+        #       amount, type(amount))
         # 校验参数
-        if not all([adress, pay_method, sku_ids]):
-            return JsonResponse({'res': 1, 'errmsg': '参数不完整'})
+        if not adress:
+            return JsonResponse({'res': 1, 'errmsg': '请前往添加收货地址！'})
+        if not pay_method:
+            return JsonResponse({'res': 1, 'errmsg': '请前往选择支付方式！'})
+        if not sku_ids:
+            return JsonResponse({'res': 1, 'errmsg': '商品不存在'})
 
         # 校验支付方式
         if pay_method not in User_order.PAY_METHODS.keys():
@@ -427,7 +431,7 @@ def Order_Check(request):
 
 # /order/comment
 @login_required
-def order_comment(request,order_id):
+def order_comment(request, order_id):
     """评论视图"""
 
     if request.method == 'GET':
